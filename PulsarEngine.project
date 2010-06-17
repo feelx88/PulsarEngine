@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="PulsarEngine" InternalType="Console">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
+    </Plugin>
+  </Plugins>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="src">
+    <File Name="main.cpp"/>
+    <File Name="Build/main.lua"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="PulsarEngine">
+    <File Name="ContactPointStorage.cpp"/>
+    <File Name="LuaBinding.h"/>
+    <File Name="PulsarEngine.h"/>
+    <File Name="IObject.h"/>
+    <File Name="ContactPointStorage.h"/>
+    <File Name="ConfigStorage.cpp"/>
+    <File Name="ConfigStorage.h"/>
+    <File Name="Irrlicht_using.h"/>
+    <File Name="ValueFactory.cpp"/>
+    <File Name="PulsarEngine.cpp"/>
+    <File Name="ValueFactory.h"/>
+    <File Name="IObject.cpp"/>
+    <File Name="StandardTypes.h"/>
+    <File Name="changes.txt"/>
+    <File Name="ConstraintToolKit.cpp"/>
+    <File Name="Build/pulsar_defs.lua"/>
+    <File Name="Build/config.xml"/>
+    <VirtualDirectory Name="Entities">
+      <File Name="DynamicEntity.cpp"/>
+      <File Name="Entity.cpp"/>
+      <File Name="Entity.h"/>
+      <File Name="GhostSensorEntity.cpp"/>
+      <File Name="GhostSensorEntity.h"/>
+      <File Name="GraphicalEntity.cpp"/>
+      <File Name="GraphicalEntity.h"/>
+      <File Name="SensorEntity.cpp"/>
+      <File Name="SensorEntity.h"/>
+      <File Name="DynamicEntity.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="ToolKits">
+      <File Name="CameraToolKit.cpp"/>
+      <File Name="CameraToolKit.h"/>
+      <File Name="EntityToolKit.cpp"/>
+      <File Name="EntityToolKit.h"/>
+      <File Name="IToolKit.h"/>
+      <File Name="ConstraintToolKit.h"/>
+      <File Name="ScriptToolKit.cpp"/>
+      <File Name="PulsarEventReceiver.cpp"/>
+      <File Name="PulsarEventReceiver.h"/>
+      <File Name="ScriptToolKit.h"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Settings Type="Executable">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-W" Required="yes" PreCompiledHeader="">
+        <IncludePath Value="."/>
+        <IncludePath Value="../irrlicht/include"/>
+        <IncludePath Value="../bullet/src"/>
+        <IncludePath Value="../lua/src"/>
+      </Compiler>
+      <Linker Options="" Required="yes">
+        <LibraryPath Value="../bullet/lib"/>
+        <LibraryPath Value="../irrlicht/lib/Linux"/>
+        <LibraryPath Value="../lua/lib"/>
+        <LibraryPath Value="../boost/lib"/>
+        <Library Value="Irrlicht"/>
+        <Library Value="GL"/>
+        <Library Value="Xrandr"/>
+        <Library Value="lua"/>
+        <Library Value="BulletSoftBody"/>
+        <Library Value="BulletDynamics"/>
+        <Library Value="BulletCollision"/>
+        <Library Value="LinearMath"/>
+        <Library Value="boost_filesystem"/>
+        <Library Value="boost_system"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Build" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild>
+        <Command Enabled="no">doxygen doxyfile</Command>
+      </PostBuild>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="" Required="yes" PreCompiledHeader="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-O2" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+    </Configuration>
+    <GlobalSettings>
+      <Compiler Options="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+  </Settings>
+</CodeLite_Project>

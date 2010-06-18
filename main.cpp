@@ -83,8 +83,8 @@ int main( int argc, char **argv )
 		dynamic_cast<CameraToolKit*>( pEngine->getToolKit( "Camera" ) );
 
 	//add a camera
-	pCam->addCamera( 0 );
-	pCam->setCameraPosition( 0, Vector( 0, 15, -60 ) );
+	pCam->addCamera( 1 );
+	pCam->setCameraPosition( 1, Vector( 0, 15, -40 ) );
 
 	Value running = true;
 
@@ -103,23 +103,22 @@ int main( int argc, char **argv )
 	DynamicEntity *pE6 = new DynamicEntity();
 
 	//Create 4 spheres from a ConfigStorage
-	{
-		ConfigStorage *pConf = new ConfigStorage();
-		pConf->set<float>( "Mass", 15 )
-			->set<Vector>( "Position", Vector( 2, 25, 0 ) )
-			->set<String>( "Shape", "$Sphere" )
-			->set<Vector>( "Size", Vector( 2, 2, 2 ) );
 
-		pE3->loadFromValues( pConf );
-		pConf->set<Vector>( "Position", Vector( 2, 25, 5 ) );
-		pE4->loadFromValues( pConf );
-		pConf->set<Vector>( "Position", Vector( 2, 25, 10 ) );
-		pE5->loadFromValues( pConf );
-		pConf->set<Vector>( "Position", Vector( 2, 25, -5 ) );
-		pE6->loadFromValues( pConf );
+	ConfigStorage *pConf = new ConfigStorage();
+	pConf->set<float>( "Mass", 15 )
+		->set<Vector>( "Position", Vector( 2, 25, 0 ) )
+		->set<String>( "Shape", "$Sphere" )
+		->set<Vector>( "Size", Vector( 2, 2, 2 ) );
 
-		delete pConf;
-	}
+	pE3->loadFromValues( pConf );
+	pConf->set<Vector>( "Position", Vector( 2, 25, 5 ) );
+	pE4->loadFromValues( pConf );
+	pConf->set<Vector>( "Position", Vector( 2, 25, 10 ) );
+	pE5->loadFromValues( pConf );
+	pConf->set<Vector>( "Position", Vector( 2, 25, -5 ) );
+	pE6->loadFromValues( pConf );
+
+	delete pConf;
 
 	ConfigStorage p;
 	p.parseXMLFile( "../main.cpp", "Extras" );

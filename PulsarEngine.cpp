@@ -229,7 +229,11 @@ void PulsarEngine::setGravity( irr::core::vector3df direction )
 
 bool PulsarEngine::run()
 {
-	m_iStartTime = m_pTimer->getRealTime();
+	if( !m_iStartTime || !m_GameLoopTime )
+	{
+		if( m_pTimer )
+			m_iStartTime = m_GameLoopTime = m_pTimer->getRealTime();
+	}
 
 	if ( m_pDevice )
 		return m_pDevice->run();
@@ -254,8 +258,19 @@ void PulsarEngine::endDrawing()
 
 	m_pVideoDriver->endScene();
 
+	unsigned int curTime = m_pTimer->getRealTime();
+
 	if ( m_bSimulate )
-		m_pBulletWorld->stepSimulation( ( m_pTimer->getRealTime() - m_iStartTime ) / 1000.0f, 15 );
+		m_pBulletWorld->stepSimulation( (float)( curTime - m_iStartTime ) / 1000.0f, 15 );
+
+	m_iStartTime = curTime;
+
+	int dt = m_pTimer->getRealTime() - m_GameLoopTime;
+	while( dt >= 32 )
+	{
+		dt -= 32;
+		m_GameLoopTime += 32;
+	}
 
 	m_iOldMouseX = m_iMouseX;
 	m_iOldMouseY = m_iMouseY;

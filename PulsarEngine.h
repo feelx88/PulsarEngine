@@ -153,6 +153,7 @@ protected:
 
 	//needed to let Irrlicht Calculate it's fps
 	unsigned int m_iStartTime;
+	unsigned int m_GameLoopTime;
 
 	ConfigStorage *m_pMainConfiguration;
 

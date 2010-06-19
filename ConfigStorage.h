@@ -143,6 +143,33 @@ public:
 	}
 
 	template <class T>
+	ConfigStorage *setCopy( String sName, T &value )
+	{
+		String sOperation = "Adding: ";
+		if( !m_bAllowDuplicates && varExists( sName ) )
+		{
+			m_mValues.erase( sName );
+			sOperation = "Changing: ";
+		}
+
+		Value *val = new Value( 0, Value::getTypeName<T>() );
+		T *tmp = new T( value );
+		val->set( *tmp );
+
+		m_mValues.insert( std::make_pair( sName, val ) );
+
+		String sConverted = val->toString();
+		if( sConverted != "" )
+			sConverted = String( " = " ) + sConverted;
+
+		std::cout << sOperation.c_str() << sName.c_str() << " ("
+			<< val->getTypeName() << ")" << sConverted << std::endl;
+
+		this->m_qReadQueue.push_back( sName );
+		return this;
+	}
+
+	template <class T>
 	ConfigStorage *set( String sName, const T& value )
 	{
 		String sOperation = "Adding: ";

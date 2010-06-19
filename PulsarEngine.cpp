@@ -247,7 +247,6 @@ void PulsarEngine::beginDrawing()
 	m_pSceneManager->drawAll();
 	m_pGUI->drawAll();
 
-
 	for( std::map<String, IToolKit*>::iterator x = m_mToolKits.begin();
 		x != m_mToolKits.end(); x++ )
 		x->second->update();
@@ -255,7 +254,6 @@ void PulsarEngine::beginDrawing()
 
 void PulsarEngine::endDrawing()
 {
-
 	m_pVideoDriver->endScene();
 
 	unsigned int curTime = m_pTimer->getRealTime();

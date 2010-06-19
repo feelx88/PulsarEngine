@@ -160,7 +160,7 @@ int main( int argc, char **argv )
 		}
 	} backsensorCB;
 
-	sensor->setCallback( &sensorCB );
+	//sensor->setCallback( &sensorCB );
 	p.get<GhostSensorEntity>( "LeftSensor" ).setCallback( &leftsensorCB );
 	p.get<GhostSensorEntity>( "RightSensor" ).setCallback( &rightsensorCB );
 	p.get<GhostSensorEntity>( "FrontSensor" ).setCallback( &frontsensorCB );

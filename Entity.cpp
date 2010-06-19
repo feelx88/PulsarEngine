@@ -20,8 +20,8 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 {
 	setClassName( "Entity" );
 	m_pConfig = new ConfigStorage();
-	m_pConfig->set<Vector>( "Position", position );
-	m_pConfig->set<Vector>( "Rotation", rotation );
+	m_pConfig->setCopy<Vector>( "Position", position );
+	m_pConfig->setCopy<Vector>( "Rotation", rotation );
 
 	getWorld()->addAction( this );
 

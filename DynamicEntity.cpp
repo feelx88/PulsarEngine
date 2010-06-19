@@ -4,11 +4,11 @@ using namespace pulsar;
 
 #include "Irrlicht_using.h"
 
-DynamicEntity::DynamicEntity( unsigned int iID, const float& fMass, vector3df pos,
+DynamicEntity::DynamicEntity( unsigned int iID, float fMass, vector3df pos,
 	vector3df rot ) : GraphicalEntity( iID, pos, rot ), m_pRigidBody( 0 )
 {
 	setClassName( "DynamicEntity" );
-	m_pConfig->set<float>( "Mass", fMass );
+	m_pConfig->setCopy<float>( "Mass", fMass );
 	m_pConfig->set<bool>( "Dynamic", true );
 }
 
@@ -42,7 +42,7 @@ void DynamicEntity::loadRigidBodyFromFile( String sFileName )
 	m_pCollisionShape = new btBoxShape( btVector3( 1.0f, 1.0f, 1.0f ) );
 
 	if( m_pConfig->get<String>( "ModelFileName" ) != sFileName )
-		m_pConfig->set<String>( "CollisionModelFileName", sFileName );
+		m_pConfig->setCopy<String>( "CollisionModelFileName", sFileName );
 
 	createRigidBody();
 }
@@ -77,7 +77,7 @@ void DynamicEntity::createRigidBodyFromPrimitive(
 			return;
 	}
 
-	m_pConfig->set<Vector>( "Size", size );
+	m_pConfig->setCopy<Vector>( "Size", size );
 
 	createRigidBody();
 }
@@ -249,7 +249,7 @@ void DynamicEntity::freeze( bool bFreeze )
 	if( bFreeze == m_pConfig->get<bool>( "Frozen" ) )
 		return;
 
-	m_pConfig->set( "Frozen", bFreeze );
+	m_pConfig->setCopy( "Frozen", bFreeze );
 
 	btVector3 linvel = m_pRigidBody->getLinearVelocity();
 	btVector3 angvel = m_pRigidBody->getAngularVelocity();

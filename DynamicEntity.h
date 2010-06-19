@@ -11,7 +11,7 @@ class DynamicEntity : public GraphicalEntity
 {
 
 public:
-	DynamicEntity( unsigned int iID = 0, const float& fMass = 0.0f, Vector pos = Vector(), Vector rot = Vector() );
+	DynamicEntity( unsigned int iID = 0, float fMass = 0.0f, Vector pos = Vector(), Vector rot = Vector() );
 	virtual ~DynamicEntity();
 
 	void loadFromValues( ConfigStorage *pConf );

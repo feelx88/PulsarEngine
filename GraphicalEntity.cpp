@@ -108,7 +108,7 @@ void GraphicalEntity::createSceneNode()
 	String sPrimtive = m_pConfig->get<String>( "Shape", "" );
 
 	//Primitive?
-	if( sPrimtive != "" )
+	if( sPrimtive != "" && !m_pConfig->varExists( "ModelFileName" ) )
 	{
 		if( sPrimtive == "$Box" )
 			m_pSceneNode = getSceneManager()->addCubeSceneNode( 1.0f );

@@ -6,27 +6,28 @@
 namespace pulsar
 {
 
-struct StandardSensorCallbacks
+namespace StandardSensorCallbacks
 {
-	struct ApplyImpulseSensorCallback : public SensorCallback
+
+struct ApplyImpulseSensorCallback : public SensorCallback
+{
+	ApplyImpulseSensorCallback( Vector direction, Vector offset = Vector() )
+		: m_Direction( direction ), m_Offset( offset )
 	{
-		ApplyImpulseSensorCallback( Vector direction, Vector offset = Vector() )
-			: m_Direction( direction ), m_Offset( offset )
-		{
-		}
+	}
 
-		void onTrigger( Entity* entity )
+	void onTrigger( Entity* entity )
+	{
+		DynamicEntity *dyn = dynamic_cast<DynamicEntity*>( entity );
+		if( dyn )
 		{
-			DynamicEntity *dyn = dynamic_cast<DynamicEntity*>( entity );
-			if( dyn )
-			{
-				dyn->applyImpulse( m_Direction, m_Offset );
-			}
+			dyn->applyImpulse( m_Direction, m_Offset );
 		}
+	}
 
-	protected:
-		Vector m_Direction, m_Offset;
-	};
+protected:
+	Vector m_Direction, m_Offset;
+};
 };
 
 }

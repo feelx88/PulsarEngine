@@ -18,6 +18,7 @@ Test entities:
 			<Float Name="Z">10.5</Float>
 		</Vector>
 		<String Name="Shape">$Sphere</String>
+		<String Name="ModelFileName">models/testship1/testship1.b3d</String>
 		<Vector Name="Size">
 			<Float Name="X">2.000000</Float>
 			<Float Name="Y">2.000005</Float>
@@ -27,7 +28,7 @@ Test entities:
 	<GhostSensorEntity Name="Sensor">
 		<Int Name="ID">42</Int>
 		<String Name="Shape">$Box</String>
-		<Vector Name="Size">15,5,15</Vector>
+		<Vector Name="Size">5,5,5</Vector>
 		<Vector Name="Position">0,5,0</Vector>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="LeftSensor">
@@ -44,6 +45,10 @@ Test entities:
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">50,20,5</Vector>
 		<Vector Name="Position">0,10,25</Vector>
+		<ApplyImpulseSensorCallback Name="Callback">
+			<Vector Name="Direction">0,0,-50</Vector>
+		<Int Name="SensorID">1337</Int>
+	</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="BackSensor">
 		<String Name="Shape">$Box</String>
@@ -131,8 +136,8 @@ int main( int argc, char **argv )
 		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 50, 0, 0 ) ) );
 	p.get<GhostSensorEntity>( "RightSensor" ).setCallback(
 		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( -50, 0, 0 ) ) );
-	p.get<GhostSensorEntity>( "FrontSensor" ).setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, -50 ) ) );
+	/*p.get<GhostSensorEntity>( "FrontSensor" ).setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, -50 ) ) );*/
 	p.get<GhostSensorEntity>( "BackSensor" ).setCallback(
 		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, 50 ) ) );
 

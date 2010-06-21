@@ -27,7 +27,7 @@ Test entities:
 	<GhostSensorEntity Name="Sensor">
 		<Int Name="ID">42</Int>
 		<String Name="Shape">$Box</String>
-		<Vector Name="Size">5,5,5</Vector>
+		<Vector Name="Size">15,5,15</Vector>
 		<Vector Name="Position">0,5,0</Vector>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="LeftSensor">
@@ -125,46 +125,16 @@ int main( int argc, char **argv )
 
 	GhostSensorEntity *sensor = &p.get<GhostSensorEntity>( "Sensor" );
 
-	struct : SensorCallback {
-		void onTrigger( Entity *pE ) {
-			if( pE->isDynamic() )
-				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 5, 0 ) );
-		}
-	} sensorCB;
-
-	struct : SensorCallback {
-		void onTrigger( Entity *pE ) {
-			if( pE->isDynamic() )
-				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 50, 0, 0 ) );
-		}
-	} leftsensorCB;
-
-	struct : SensorCallback {
-		void onTrigger( Entity *pE ) {
-			if( pE->isDynamic() )
-				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( -50, 0, 0 ) );
-		}
-	} rightsensorCB;
-
-	struct : SensorCallback {
-		void onTrigger( Entity *pE ) {
-			if( pE->isDynamic() )
-				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 0, -50 ) );
-		}
-	} frontsensorCB;
-
-	struct : SensorCallback {
-		void onTrigger( Entity *pE ) {
-			if( pE->isDynamic() )
-				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 0, 50 ) );
-		}
-	} backsensorCB;
-
-	//sensor->setCallback( &sensorCB );
-	p.get<GhostSensorEntity>( "LeftSensor" ).setCallback( &leftsensorCB );
-	p.get<GhostSensorEntity>( "RightSensor" ).setCallback( &rightsensorCB );
-	p.get<GhostSensorEntity>( "FrontSensor" ).setCallback( &frontsensorCB );
-	p.get<GhostSensorEntity>( "BackSensor" ).setCallback( &backsensorCB );
+	sensor->setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 5, 0 ) ) );
+	p.get<GhostSensorEntity>( "LeftSensor" ).setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 50, 0, 0 ) ) );
+	p.get<GhostSensorEntity>( "RightSensor" ).setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( -50, 0, 0 ) ) );
+	p.get<GhostSensorEntity>( "FrontSensor" ).setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, -50 ) ) );
+	p.get<GhostSensorEntity>( "BackSensor" ).setCallback(
+		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, 50 ) ) );
 
 	//start simulation
 	pEngine->setSimulationState( true );

@@ -5,7 +5,7 @@
 
 //Engine includes
 #include "ValueFactory.h"
-#include "StandardTypes.h"
+#include "StandardConverters.h"
 #include "ConfigStorage.h"
 #include "ContactPointStorage.h"
 
@@ -14,6 +14,8 @@
 #include "DynamicEntity.h"
 #include "SensorEntity.h"
 #include "GhostSensorEntity.h"
+
+#include "StandardSensorCallbacks.h"
 
 #include "IToolKit.h"
 #include "PulsarEventReceiver.h"

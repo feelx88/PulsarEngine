@@ -204,21 +204,21 @@ void PulsarEngine::registerTypes()
 	Value::registerType<Value*>( "ValuePtr", 0 );
 
 	//Register types with converters
-	Value::registerType<int>( P_INTEGER, new StandardTypes::IntConverter() );
-	Value::registerType<float>( P_FLOAT, new StandardTypes::FloatConverter() );
-	Value::registerType<bool>( P_BOOL, new StandardTypes::BoolConverter() );
-	Value::registerType<String>( P_STRING, new StandardTypes::StringConverter() );
-	Value::registerType<Vector>( P_VECTOR, new StandardTypes::VectorConverter() );
+	Value::registerType<int>( P_INTEGER, new StandardConverters::IntConverter() );
+	Value::registerType<float>( P_FLOAT, new StandardConverters::FloatConverter() );
+	Value::registerType<bool>( P_BOOL, new StandardConverters::BoolConverter() );
+	Value::registerType<String>( P_STRING, new StandardConverters::StringConverter() );
+	Value::registerType<Vector>( P_VECTOR, new StandardConverters::VectorConverter() );
 
 	Value::registerType<ConfigStorage*>( "ConfigStorage", 0 );
 
 	//Register Standard Entitys
 	Value::registerType<GraphicalEntity>( "GraphicalEntity",
-		new StandardTypes::EntityTypesConverter<GraphicalEntity>() );
+		new StandardConverters::EntityTypesConverter<GraphicalEntity>() );
 	Value::registerType<DynamicEntity>( "DynamicEntity",
-		new StandardTypes::EntityTypesConverter<DynamicEntity>() );
+		new StandardConverters::EntityTypesConverter<DynamicEntity>() );
 	Value::registerType<GhostSensorEntity>( "GhostSensorEntity",
-		new StandardTypes::EntityTypesConverter<GhostSensorEntity>() );
+		new StandardConverters::EntityTypesConverter<GhostSensorEntity>() );
 
 }
 

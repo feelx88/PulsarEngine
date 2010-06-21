@@ -9,7 +9,7 @@
 namespace pulsar
 {
 
-struct StandardTypes
+struct StandardConverters
 {
 
 	struct IntConverter : public IValueConverter

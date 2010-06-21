@@ -59,12 +59,12 @@ Entity *Entity::getEntity( ISceneNode *sceneNode )
 	return s_nodeEntityRelations[sceneNode];
 }
 
-vector3df Entity::convert( btVector3 in )
+vector3df Entity::convert( const btVector3 &in )
 {
-	return vector3df( in.getX(), in.getY(), in.getZ() );
+	return Vector( in.getX(), in.getY(), in.getZ() );
 }
 
-btVector3 Entity::convert( vector3df in )
+btVector3 Entity::convert( const vector3df &in )
 {
 	return btVector3( in.X, in.Y, in.Z );
 }

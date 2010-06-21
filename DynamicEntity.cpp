@@ -112,6 +112,7 @@ void DynamicEntity::applyForce( Vector direction, Vector offset )
 	if( !this->m_pRigidBody )
 		return;
 
+	m_pRigidBody->activate();
 	this->m_pRigidBody->applyForce( convert( direction ), convert( offset ) );
 }
 
@@ -120,6 +121,7 @@ void DynamicEntity::applyTorque( Vector direction )
 	if( !this->m_pRigidBody )
 		return;
 
+	m_pRigidBody->activate();
 	this->m_pRigidBody->applyTorque( convert( direction ) );
 }
 

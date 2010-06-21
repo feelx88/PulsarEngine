@@ -67,8 +67,8 @@ public:
 	virtual void updateAction( btCollisionWorld *collisionWorld, btScalar deltaTimeStep ){};
 	virtual void debugDraw( btIDebugDraw*){};
 
-	static Vector convert( btVector3 in );
-	static btVector3 convert( Vector );
+	static Vector convert( const btVector3 &in );
+	static btVector3 convert( const Vector &in );
 
 protected:
 

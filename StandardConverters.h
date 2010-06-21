@@ -198,7 +198,7 @@ struct SensorEntityTypesConverter : public IValueConverter
 	}
 };
 
-//AddImpulseSensorCallback
+//ApplyImpulseSensorCallback
 struct ApplyImpulseSensorCallbackConverter : public IValueConverter
 {
 	void *parseValues( ConfigStorage *pConf )
@@ -207,14 +207,15 @@ struct ApplyImpulseSensorCallbackConverter : public IValueConverter
 			return 0;
 
 		StandardSensorCallbacks::ApplyImpulseSensorCallback *cb = new
-		StandardSensorCallbacks::ApplyImpulseSensorCallback(
-		    pConf->get<Vector>( "Direction", Vector() ) );
+			StandardSensorCallbacks::ApplyImpulseSensorCallback(
+				pConf->get<Vector>( "Direction", Vector() ),
+				pConf->get<Vector>( "Offset", Vector() ) );
 
 		return static_cast<void*>( cb );
 	}
 };
 
-};
+}
 
 }
 

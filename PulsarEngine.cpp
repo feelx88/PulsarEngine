@@ -123,6 +123,11 @@ void PulsarEngine::initIrrlicht()
 	m_pTimer = m_pDevice->getTimer();
 	m_pTimer->start();
 
+	//Set window title
+	this->m_pDevice->setWindowCaption( stringw(
+		this->m_pMainConfiguration->get<String>(
+			"WindowTitle", "PulsarEngine" ) ).c_str() );
+
 	//add the event receiver as ToolKit
 	addToolKit( "EventReceiver", pEvt );
 

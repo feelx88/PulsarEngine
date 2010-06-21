@@ -105,7 +105,7 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 	for( std::set<Entity*>::iterator x = m_TriggeringEntities.begin();
 		x != m_TriggeringEntities.end(); x++ )
 	{
-		if( this->m_onEnterCallback )
+		if( this->m_onLeaveCallback )
 			this->m_onLeaveCallback->onTrigger( *x );
 	}
 
@@ -139,6 +139,16 @@ void GhostSensorEntity::createSensor()
 
 	setPosition( this->m_pConfig->get<Vector>( "Position", Vector() ) );
 	setRotation( this->m_pConfig->get<Vector>( "Rotation", Vector() ) );
+
+	if( this->m_pConfig->varExists( "OnTrigger" ) )
+		this->setCallback(
+			&this->m_pConfig->get<SensorCallback>( "OnTrigger" ) );
+	if( this->m_pConfig->varExists( "OnEnter" ) )
+		this->setOnEnterCallback(
+			&this->m_pConfig->get<SensorCallback>( "OnEnter" ) );
+	if( this->m_pConfig->varExists( "OnLeave" ) )
+		this->setOnLeaveCallback(
+			&this->m_pConfig->get<SensorCallback>( "OnLeave" ) );
 
 	getWorld()->addCollisionObject( this->m_pSensor );
 

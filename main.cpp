@@ -25,35 +25,51 @@ Test entities:
 			<Float Name="Z">2.000000</Float>
 		</Vector>
 	</DynamicEntity>
-	<GhostSensorEntity Name="Sensor">
-		<Int Name="ID">42</Int>
+	<DynamicEntity Name="Ramp">
+		<Float Name="Mass">0</Float>
+		<Vector Name="Rotation">50,0,0</Vector>
 		<String Name="Shape">$Box</String>
-		<Vector Name="Size">5,5,5</Vector>
-		<Vector Name="Position">0,5,0</Vector>
+		<Vector Name="Size">5,5,0.5</Vector>
+	</DynamicEntity>
+	<GhostSensorEntity Name="AntigravSensor">
+		<String Name="Shape">$Box</String>
+		<Vector Name="Size">5,10,5</Vector>
+		<Vector Name="Position">0,10,0</Vector>
+		<ApplyImpulseSensorCallback Name="OnTrigger">
+			<Vector Name="Direction">0,3,0</Vector>
+		</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="LeftSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">5,20,50</Vector>
 		<Vector Name="Position">-25,10,0</Vector>
+		<ApplyImpulseSensorCallback Name="OnEnter">
+			<Vector Name="Direction">300,0,0</Vector>
+		</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="RightSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">5,20,50</Vector>
 		<Vector Name="Position">25,10,0</Vector>
+		<ApplyImpulseSensorCallback Name="OnEnter">
+			<Vector Name="Direction">-300,0,0</Vector>
+		</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="FrontSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">50,20,5</Vector>
 		<Vector Name="Position">0,10,25</Vector>
-		<ApplyImpulseSensorCallback Name="Callback">
-			<Vector Name="Direction">0,0,-50</Vector>
-		<Int Name="SensorID">1337</Int>
-	</ApplyImpulseSensorCallback>
+		<ApplyImpulseSensorCallback Name="OnEnter">
+			<Vector Name="Direction">0,0,-300</Vector>
+		</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="BackSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">50,20,5</Vector>
 		<Vector Name="Position">0,10,-25</Vector>
+		<ApplyImpulseSensorCallback Name="OnEnter">
+			<Vector Name="Direction">0,0,300</Vector>
+		</ApplyImpulseSensorCallback>
 	</GhostSensorEntity>
 </Section>
 */
@@ -110,9 +126,10 @@ int main( int argc, char **argv )
 	//Create 4 spheres from a ConfigStorage
 
 	ConfigStorage *pConf = new ConfigStorage();
-	pConf->set<float>( "Mass", 15 )
+	pConf->set<float>( "Mass", 10 )
 		->set<Vector>( "Position", Vector( 2, 25, 0 ) )
-		->set<String>( "Shape", "$Sphere" )
+		->set<String>( "ModelFileName", "models/testship1/testship1.b3d" )
+		->set<String>( "CollisionShape", "$Sphere" )
 		->set<Vector>( "Size", Vector( 2, 2, 2 ) );
 
 	pE3->loadFromValues( pConf );
@@ -128,21 +145,10 @@ int main( int argc, char **argv )
 	ConfigStorage p;
 	p.parseXMLFile( "../main.cpp", "Extras" );
 
-	GhostSensorEntity *sensor = &p.get<GhostSensorEntity>( "Sensor" );
-
-	sensor->setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 5, 0 ) ) );
-	p.get<GhostSensorEntity>( "LeftSensor" ).setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 50, 0, 0 ) ) );
-	p.get<GhostSensorEntity>( "RightSensor" ).setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( -50, 0, 0 ) ) );
-	/*p.get<GhostSensorEntity>( "FrontSensor" ).setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, -50 ) ) );*/
-	p.get<GhostSensorEntity>( "BackSensor" ).setCallback(
-		new StandardSensorCallbacks::ApplyImpulseSensorCallback( Vector( 0, 0, 50 ) ) );
-
 	//start simulation
 	pEngine->setSimulationState( true );
+
+	float angle = 180.0f;
 
 	//main loop
 	while( pEngine->run() && running.getAs<bool>() )
@@ -156,6 +162,14 @@ int main( int argc, char **argv )
 		//test other stuff
 		if( pEvent->keyState( KEY_KEY_X ) )
 			pE2->applyForce( Vector( 0, 100, 0 ) );
+
+		//rotate camera
+		angle += 0.0005f;
+		if( angle > 360.0f )
+			angle = 0.0f;
+
+		pCam->setCameraPosition( 1, Vector( sin( angle ) * 20, 15, cos( angle ) * 20  ) );
+		pCam->setCameraTarget( 1, Vector() );
 
 		pEngine->endDrawing();
 	}

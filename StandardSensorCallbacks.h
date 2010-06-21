@@ -28,7 +28,8 @@ struct ApplyImpulseSensorCallback : public SensorCallback
 protected:
 	Vector m_Direction, m_Offset;
 };
-};
+
+}
 
 }
 

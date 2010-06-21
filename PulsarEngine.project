@@ -24,7 +24,6 @@
     <File Name="PulsarEngine.cpp"/>
     <File Name="ValueFactory.h"/>
     <File Name="IObject.cpp"/>
-    <File Name="StandardTypes.h"/>
     <File Name="changes.txt"/>
     <File Name="ConstraintToolKit.cpp"/>
     <File Name="Build/pulsar_defs.lua"/>
@@ -53,6 +52,7 @@
       <File Name="PulsarEventReceiver.h"/>
       <File Name="ScriptToolKit.h"/>
     </VirtualDirectory>
+    <File Name="StandardConverters.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Settings Type="Executable">

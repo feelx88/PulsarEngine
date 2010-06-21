@@ -4,7 +4,8 @@
 using namespace pulsar;
 
 GhostSensorEntity::GhostSensorEntity( unsigned int id, Vector pos, Vector rot )
-	: SensorEntity( id, pos, rot ), m_pSensor( 0 )
+	: SensorEntity( id, pos, rot ), m_pSensor( 0 ), m_onEnterCallback( 0 ),
+		m_onLeaveCallback( 0 )
 {
 	setClassName( "GhostSensorEntity" );
 }
@@ -78,7 +79,7 @@ bool GhostSensorEntity::isEntityTriggering(Entity* pE)
 
 void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
-	if( !this->m_Callback || !this->m_pSensor )
+	if( !this->m_pSensor )
 		return;
 
 	std::set<Entity*> currentTriggers;
@@ -90,10 +91,12 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 		{
 			currentTriggers.insert( entity );
 
-			this->m_Callback->onSensorActivated( entity );
+			if( this->m_Callback )
+				this->m_Callback->onTrigger( entity );
 
-			if( m_TriggeringEntities.find( entity ) == m_TriggeringEntities.end() )
-				this->m_Callback->onSensorEntered( entity );
+			if( m_TriggeringEntities.find( entity ) == m_TriggeringEntities.end()
+				&& this->m_onEnterCallback )
+				this->m_onEnterCallback->onTrigger( entity );
 
 			m_TriggeringEntities.erase( entity );
 		}
@@ -102,10 +105,21 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 	for( std::set<Entity*>::iterator x = m_TriggeringEntities.begin();
 		x != m_TriggeringEntities.end(); x++ )
 	{
-		m_Callback->onSensorLeft( *x );
+		if( this->m_onEnterCallback )
+			this->m_onLeaveCallback->onTrigger( *x );
 	}
 
 	m_TriggeringEntities.swap( currentTriggers );
+}
+
+void GhostSensorEntity::setOnEnterCallback( SensorCallback *onEnterCallback )
+{
+	this->m_onEnterCallback = onEnterCallback;
+}
+
+void GhostSensorEntity::setOnLeaveCallback( SensorCallback *onLeaveCallback )
+{
+	this->m_onLeaveCallback = onLeaveCallback;
 }
 
 void GhostSensorEntity::createSensor()

@@ -25,9 +25,14 @@ public:
 	virtual bool isEntityTriggering(Entity* pE);
 	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 
+	void setOnEnterCallback( SensorCallback *onEnterCallback );
+	void setOnLeaveCallback( SensorCallback *onLeaveCallback );
+
 protected:
 	virtual void createSensor();
 	btGhostObject *m_pSensor;
+
+	SensorCallback *m_onEnterCallback, *m_onLeaveCallback;
 };
 
 }

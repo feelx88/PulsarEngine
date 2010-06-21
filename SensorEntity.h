@@ -20,9 +20,7 @@ struct SensorCallback
 	 * @brief This method gets called if an Entity activates the sensor.
 	 * @param pE The triggering Entity.
 	 */
-	virtual void onSensorActivated( Entity *pE ){};
-	virtual void onSensorEntered( Entity *pE ){};
-	virtual void onSensorLeft( Entity *pE ){};
+	virtual void onTrigger( Entity *pE ) = 0;
 };
 
 class SensorEntity : public pulsar::Entity

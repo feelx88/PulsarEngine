@@ -126,35 +126,35 @@ int main( int argc, char **argv )
 	GhostSensorEntity *sensor = &p.get<GhostSensorEntity>( "Sensor" );
 
 	struct : SensorCallback {
-		void onSensorActivated( Entity *pE ) {
+		void onTrigger( Entity *pE ) {
 			if( pE->isDynamic() )
 				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 5, 0 ) );
 		}
 	} sensorCB;
 
 	struct : SensorCallback {
-		void onSensorActivated( Entity *pE ) {
+		void onTrigger( Entity *pE ) {
 			if( pE->isDynamic() )
 				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 50, 0, 0 ) );
 		}
 	} leftsensorCB;
 
 	struct : SensorCallback {
-		void onSensorActivated( Entity *pE ) {
+		void onTrigger( Entity *pE ) {
 			if( pE->isDynamic() )
 				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( -50, 0, 0 ) );
 		}
 	} rightsensorCB;
 
 	struct : SensorCallback {
-		void onSensorActivated( Entity *pE ) {
+		void onTrigger( Entity *pE ) {
 			if( pE->isDynamic() )
 				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 0, -50 ) );
 		}
 	} frontsensorCB;
 
 	struct : SensorCallback {
-		void onSensorActivated( Entity *pE ) {
+		void onTrigger( Entity *pE ) {
 			if( pE->isDynamic() )
 				dynamic_cast<DynamicEntity*>( pE )->applyImpulse( Vector( 0, 0, 50 ) );
 		}

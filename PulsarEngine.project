@@ -53,7 +53,8 @@
       <File Name="ScriptToolKit.h"/>
     </VirtualDirectory>
     <File Name="StandardConverters.h"/>
-    <File Name="StandardSensorCallbacks.h"/>
+    <File Name="ICallback.h"/>
+    <File Name="StandardCallbacks.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Settings Type="Executable">

@@ -2,6 +2,7 @@
 #define __entity__
 
 #include "IObject.h"
+#include "ICallback.h"
 #include "ConfigStorage.h"
 #include <irrlicht.h>
 

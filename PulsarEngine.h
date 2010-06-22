@@ -15,7 +15,7 @@
 #include "SensorEntity.h"
 #include "GhostSensorEntity.h"
 
-#include "StandardSensorCallbacks.h"
+#include "StandardCallbacks.h"
 
 #include "IToolKit.h"
 #include "PulsarEventReceiver.h"

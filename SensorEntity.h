@@ -7,22 +7,6 @@
 namespace pulsar
 {
 
-/**
- * @class SensorCallback
- * @author Felix Müller
- * @date 09.06.2010
- * @file SensorEntity.h
- * @brief Callback class for SensorEntities.
- */
-struct SensorCallback
-{
-	/**
-	 * @brief This method gets called if an Entity activates the sensor.
-	 * @param pE The triggering Entity.
-	 */
-	virtual void onTrigger( Entity *pE ) = 0;
-};
-
 class SensorEntity : public pulsar::Entity
 {
 
@@ -40,7 +24,7 @@ public:
 
 	virtual bool isEntityTriggering( Entity *pE ) = 0;
 
-	void setCallback( SensorCallback *pCB )
+	void setCallback( ICallback *pCB )
 	{
 		m_Callback = pCB;
 	}
@@ -48,7 +32,7 @@ public:
 protected:
 
 	virtual void createSensor() = 0;
-	SensorCallback *m_Callback;
+	ICallback *m_Callback;
 
 	std::set<Entity*> m_TriggeringEntities;
 

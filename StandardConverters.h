@@ -5,7 +5,7 @@
 #include "ValueFactory.h"
 #include "ConfigStorage.h"
 #include "DynamicEntity.h"
-#include "StandardSensorCallbacks.h"
+#include "StandardCallbacks.h"
 
 namespace pulsar
 {
@@ -191,23 +191,23 @@ struct SensorEntityTypesConverter : public IValueConverter
 
 		if( pConf->varExists( "Callback" ) )
 		{
-			pE->setCallback( &pConf->get<SensorCallback>( "Callback" ) );
+			pE->setCallback( &pConf->get<ICallback>( "Callback" ) );
 		}
 
 		return static_cast<void*>( pE );
 	}
 };
 
-//ApplyImpulseSensorCallback
-struct ApplyImpulseSensorCallbackConverter : public IValueConverter
+//ApplyImpulseCallback
+struct ApplyImpulseCallbackConverter : public IValueConverter
 {
 	void *parseValues( ConfigStorage *pConf )
 	{
 		if( !pConf )
 			return 0;
 
-		StandardSensorCallbacks::ApplyImpulseSensorCallback *cb = new
-			StandardSensorCallbacks::ApplyImpulseSensorCallback(
+		StandardCallbacks::ApplyImpulseCallback *cb = new
+			StandardCallbacks::ApplyImpulseCallback(
 				pConf->get<Vector>( "Direction", Vector() ),
 				pConf->get<Vector>( "Offset", Vector() ) );
 

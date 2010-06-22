@@ -112,12 +112,12 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 	m_TriggeringEntities.swap( currentTriggers );
 }
 
-void GhostSensorEntity::setOnEnterCallback( SensorCallback *onEnterCallback )
+void GhostSensorEntity::setOnEnterCallback( ICallback *onEnterCallback )
 {
 	this->m_onEnterCallback = onEnterCallback;
 }
 
-void GhostSensorEntity::setOnLeaveCallback( SensorCallback *onLeaveCallback )
+void GhostSensorEntity::setOnLeaveCallback( ICallback *onLeaveCallback )
 {
 	this->m_onLeaveCallback = onLeaveCallback;
 }
@@ -142,13 +142,13 @@ void GhostSensorEntity::createSensor()
 
 	if( this->m_pConfig->varExists( "OnTrigger" ) )
 		this->setCallback(
-			&this->m_pConfig->get<SensorCallback>( "OnTrigger" ) );
+			&this->m_pConfig->get<ICallback>( "OnTrigger" ) );
 	if( this->m_pConfig->varExists( "OnEnter" ) )
 		this->setOnEnterCallback(
-			&this->m_pConfig->get<SensorCallback>( "OnEnter" ) );
+			&this->m_pConfig->get<ICallback>( "OnEnter" ) );
 	if( this->m_pConfig->varExists( "OnLeave" ) )
 		this->setOnLeaveCallback(
-			&this->m_pConfig->get<SensorCallback>( "OnLeave" ) );
+			&this->m_pConfig->get<ICallback>( "OnLeave" ) );
 
 	getWorld()->addCollisionObject( this->m_pSensor );
 

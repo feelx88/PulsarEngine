@@ -35,41 +35,41 @@ Test entities:
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">5,10,5</Vector>
 		<Vector Name="Position">0,10,0</Vector>
-		<ApplyImpulseSensorCallback Name="OnTrigger">
+		<ApplyImpulseCallback Name="OnTrigger">
 			<Vector Name="Direction">0,3,0</Vector>
-		</ApplyImpulseSensorCallback>
+		</ApplyImpulseCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="LeftSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">5,20,50</Vector>
 		<Vector Name="Position">-25,10,0</Vector>
-		<ApplyImpulseSensorCallback Name="OnEnter">
+		<ApplyImpulseCallback Name="OnEnter">
 			<Vector Name="Direction">300,0,0</Vector>
-		</ApplyImpulseSensorCallback>
+		</ApplyImpulseCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="RightSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">5,20,50</Vector>
 		<Vector Name="Position">25,10,0</Vector>
-		<ApplyImpulseSensorCallback Name="OnEnter">
+		<ApplyImpulseCallback Name="OnEnter">
 			<Vector Name="Direction">-300,0,0</Vector>
-		</ApplyImpulseSensorCallback>
+		</ApplyImpulseCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="FrontSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">50,20,5</Vector>
 		<Vector Name="Position">0,10,25</Vector>
-		<ApplyImpulseSensorCallback Name="OnEnter">
+		<ApplyImpulseCallback Name="OnEnter">
 			<Vector Name="Direction">0,0,-300</Vector>
-		</ApplyImpulseSensorCallback>
+		</ApplyImpulseCallback>
 	</GhostSensorEntity>
 	<GhostSensorEntity Name="BackSensor">
 		<String Name="Shape">$Box</String>
 		<Vector Name="Size">50,20,5</Vector>
 		<Vector Name="Position">0,10,-25</Vector>
-		<ApplyImpulseSensorCallback Name="OnEnter">
+		<ApplyImpulseCallback Name="OnEnter">
 			<Vector Name="Direction">0,0,300</Vector>
-		</ApplyImpulseSensorCallback>
+		</ApplyImpulseCallback>
 	</GhostSensorEntity>
 </Section>
 */

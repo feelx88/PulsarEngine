@@ -207,7 +207,7 @@ void PulsarEngine::initStandardToolKits()
 void PulsarEngine::registerTypes()
 {
 	using namespace StandardConverters;
-	using namespace StandardSensorCallbacks;
+	using namespace StandardCallbacks;
 
 	Value::registerType<Value*>( "ValuePtr", 0 );
 
@@ -230,9 +230,9 @@ void PulsarEngine::registerTypes()
 	Value::registerType<GhostSensorEntity>( "GhostSensorEntity",
 		new SensorEntityTypesConverter<GhostSensorEntity>() );
 
-	//Register standard SensorCallbacks
-	Value::registerType<ApplyImpulseSensorCallback>( "ApplyImpulseSensorCallback",
-		new ApplyImpulseSensorCallbackConverter() );
+	//Register standard Callbacks
+	Value::registerType<ApplyImpulseCallback>( "ApplyImpulseCallback",
+		new ApplyImpulseCallbackConverter() );
 }
 
 void PulsarEngine::setGravity( irr::core::vector3df direction )

@@ -1,7 +1,8 @@
 #include "ScriptToolKit.h"
 #include "PulsarEngine.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 ScriptToolKit::ScriptToolKit() : IToolKit()
 {
@@ -11,7 +12,6 @@ ScriptToolKit::ScriptToolKit() : IToolKit()
 ScriptToolKit::~ScriptToolKit()
 {
 	m_pLuaState = 0;
-	m_mScriptStack.clear();
 	m_iIDCounter = 0;
 }
 
@@ -20,6 +20,12 @@ void ScriptToolKit::init( Value initParam )
 	m_pLuaState = luaL_newstate();
 	luaL_openlibs( m_pLuaState );
 
+	luaL_dostring( m_pLuaState, "TickScripts = {}" );
+	luaL_loadstring( m_pLuaState,
+		"if next( TickScripts ) then \
+		for y, x in pairs( TickScripts ) do x() end end" );
+	lua_setglobal( m_pLuaState, "Pulsar.executeTickScripts" );
+
 	LuaBinding::registerAll();
 
 	m_pConsoleWindow = PulsarEngine::getInstance()->getConsoleWindow();
@@ -27,9 +33,8 @@ void ScriptToolKit::init( Value initParam )
 
 void ScriptToolKit::tickUpdate()
 {
-	for( std::map<int, String>::iterator x = m_mScriptStack.begin();
-		x != m_mScriptStack.end(); x++ )
-		executeString( x->second );
+	lua_getglobal( m_pLuaState, "Pulsar.executeTickScripts" );
+	lua_call( m_pLuaState, 0, 0 );
 }
 
 void ScriptToolKit::executeString( String sString )
@@ -45,17 +50,26 @@ void ScriptToolKit::executeFile( String sFileName )
 int ScriptToolKit::addTickScript( String sScript )
 {
 	m_iIDCounter++;
-	m_mScriptStack.insert( std::make_pair( m_iIDCounter, sScript ) );
+
+	lua_getglobal( m_pLuaState, "TickScripts" );
+	lua_pushinteger( m_pLuaState, m_iIDCounter );
+	luaL_loadstring( m_pLuaState, sScript.c_str() );
+	lua_settable( m_pLuaState, -3 );
+
 	return m_iIDCounter;
 }
 
 void ScriptToolKit::removeTickScript( int iID )
 {
-	m_mScriptStack.erase( iID );
+	lua_getglobal( m_pLuaState, "TickScripts" );
+	lua_pushinteger( m_pLuaState, iID );
+	lua_pushnil( m_pLuaState );
+	lua_settable( m_pLuaState, -3 );
 }
 
 void ScriptToolKit::clearScriptStack()
 {
-	m_mScriptStack.clear();
+	executeString( "TickScripts = {}" );
 }
 
+}

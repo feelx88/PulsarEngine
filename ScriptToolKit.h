@@ -81,7 +81,6 @@ class ScriptToolKit : public pulsar::IToolKit
 
 protected:
 
-	std::map<int, String> m_mScriptStack;
 	int m_iIDCounter;
 	lua_State *m_pLuaState;
 	irr::gui::IGUIWindow *m_pConsoleWindow;

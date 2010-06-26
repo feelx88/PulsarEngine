@@ -25,7 +25,6 @@
     <File Name="ValueFactory.h"/>
     <File Name="IObject.cpp"/>
     <File Name="changes.txt"/>
-    <File Name="ConstraintToolKit.cpp"/>
     <File Name="Build/pulsar_defs.lua"/>
     <File Name="Build/config.xml"/>
     <VirtualDirectory Name="Entities">
@@ -51,6 +50,7 @@
       <File Name="PulsarEventReceiver.cpp"/>
       <File Name="PulsarEventReceiver.h"/>
       <File Name="ScriptToolKit.h"/>
+      <File Name="ConstraintToolKit.cpp"/>
     </VirtualDirectory>
     <File Name="StandardConverters.h"/>
     <File Name="ICallback.h"/>
@@ -144,4 +144,8 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
   </Settings>
+  <VirtualDirectory Name="MultiBouncer">
+    <File Name="MultiBouncer/MultiBouncerGame.h"/>
+    <File Name="MultiBouncer/MultiBouncerGame.cpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>

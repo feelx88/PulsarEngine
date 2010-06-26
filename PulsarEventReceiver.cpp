@@ -121,11 +121,32 @@ void PulsarEventReceiver::lockMouse( bool bLock )
 	}*/
 }
 
+void PulsarEventReceiver::addButtonCallback( irr::EKEY_CODE key, ICallback *cb )
+{
+	m_Callbacks.insert( std::make_pair( key, cb ) );
+}
+
+void PulsarEventReceiver::clearButtonCallbacks( irr::EKEY_CODE key )
+{
+	m_Callbacks.erase( key );
+}
+
 bool PulsarEventReceiver::OnEvent( const SEvent &evt )
 {
 	if ( evt.EventType == EET_KEY_INPUT_EVENT )
 	{
 		m_bKeyStates[evt.KeyInput.Key] = evt.KeyInput.PressedDown;
+
+		//Process the Callbacks
+		std::pair<std::multimap<irr::EKEY_CODE, ICallback*>::iterator,
+			std::multimap<irr::EKEY_CODE, ICallback*>::iterator> keyCB
+			= m_Callbacks.equal_range( evt.KeyInput.Key );
+
+		if( keyCB.first != m_Callbacks.end() )
+		{
+			for( ; keyCB.first != keyCB.second; keyCB.first++ )
+				(*keyCB.first).second->onTrigger( 0 );
+		}
 
 		if ( m_pGUI->getFocus() == m_pConsoleInput )
 		{

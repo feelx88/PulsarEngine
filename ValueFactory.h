@@ -272,7 +272,10 @@ public:
 			m_mTypeAliases.find( typeid( T ).name() );
 		if( x != m_mTypeAliases.end() )
 			return x->second;
-		return typeid( T ).name();
+		else if( String( typeid( T ).name() ).find( "P" ) )
+			return "Unknown*";
+		else
+			return "Unknown";
 	}
 
 	static bool isSupported( String sTypeName )

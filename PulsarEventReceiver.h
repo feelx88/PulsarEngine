@@ -4,6 +4,7 @@
 #include "IEventReceiver.h" // Base class: irr::IEventReceiver
 #include "IToolKit.h"
 #include "ScriptToolKit.h"
+#include "ICallback.h"
 
 namespace pulsar
 {
@@ -94,6 +95,18 @@ public:
 	void lockMouse( bool bLock = true );
 
 	/**
+	 * @brief Adds a callback which gets called when a button is pressed.
+	 * @param cb The Callback to call.
+	 */
+	void addButtonCallback( irr::EKEY_CODE key, ICallback *cb );
+
+	/**
+	 * @brief Clears all callbacks of the sepcified key.
+	 * @param key Key which callbacks should get deleted.
+	 */
+	void clearButtonCallbacks( irr::EKEY_CODE key );
+
+	/**
 	 * @brief irr::EventReceiver::OnEvent()
 	 * Override this method to process events on your own.
 	 * @param evt
@@ -120,6 +133,8 @@ protected:
 	irr::gui::IGUIEditBox *m_pConsoleInput;
 	irr::gui::IGUIButton *m_pConsoleSendButton;
 	unsigned int m_iCurOutputLine;
+
+	std::multimap<irr::EKEY_CODE, ICallback*> m_Callbacks;
 
 };
 

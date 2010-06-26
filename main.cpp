@@ -1,10 +1,19 @@
+#include "MultiBouncer/MultiBouncerGame.h"
+
+int main( int argc, char **argv )
+{
+	MultiBouncerGame *game = new MultiBouncerGame();
+	return game->run();
+}
+
+/*
 #include "PulsarEngine.h"
 #include <iostream>
 
 #include "Irrlicht_using.h"
 
 using namespace pulsar;
-
+*/
 /*
 Test entities:
 <?xml version="1.0" encoding="UTF-8"?>
@@ -73,7 +82,7 @@ Test entities:
 	</GhostSensorEntity>
 </Section>
 */
-
+/*
 int main( int argc, char **argv )
 {
 	//Initialize the Engine with the configuration file config.cml
@@ -100,6 +109,8 @@ int main( int argc, char **argv )
 		dynamic_cast<PulsarEventReceiver*>( pEngine->getToolKit( "EventReceiver" ) );
 	EntityToolKit *pEntity =
 		dynamic_cast<EntityToolKit*>( pEngine->getToolKit( "Entity" ) );
+	ConstraintToolKit *pConstraint =
+		dynamic_cast<ConstraintToolKit*>( pEngine->getToolKit( "Constraint" ) );
 	CameraToolKit *pCam =
 		dynamic_cast<CameraToolKit*>( pEngine->getToolKit( "Camera" ) );
 
@@ -178,3 +189,4 @@ int main( int argc, char **argv )
 
 	return 0;
 }
+*/

@@ -1,6 +1,7 @@
 #include "PulsarEngine.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 //use irrlicht namespaces
 #include "Irrlicht_using.h"
@@ -22,7 +23,10 @@ PulsarEngine *PulsarEngine::getInstance()
 
 }
 
-PulsarEngine::PulsarEngine() : IObject(), m_bSimulate( false )
+PulsarEngine::PulsarEngine() : IObject(), m_bSimulate( false ), m_pDevice( 0 ),
+	m_pBulletWorld( 0 ), m_pMainConfiguration( 0 ), m_pVideoDriver( 0 ),
+	m_pSceneManager( 0 ), m_pGUI( 0 ), m_pConsoleInput( 0 ), m_pConsoleOutput( 0 ),
+	m_pConsoleSendButton( 0 ), m_pConsoleWindow( 0 ), m_pTimer( 0 )
 {
 	setInfo( P_PULSARENGINE, P_PULSARENGINE, 1 );
 
@@ -230,6 +234,9 @@ void PulsarEngine::registerTypes()
 	Value::registerType<GhostSensorEntity>( "GhostSensorEntity",
 		new SensorEntityTypesConverter<GhostSensorEntity>() );
 
+	//Register Constraints
+	//Value::registerType<btTypedConstraint*>( " )
+
 	//Register standard Callbacks
 	Value::registerType<ApplyImpulseCallback>( "ApplyImpulseCallback",
 		new ApplyImpulseCallbackConverter() );
@@ -330,3 +337,5 @@ void PulsarEngine::updateAction( btCollisionWorld *collisionWorld, btScalar delt
 		}
 	}*/
 }
+
+} //namespace pulsar

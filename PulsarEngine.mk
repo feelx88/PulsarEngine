@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Felix Müller
-Date                   :=22.06.2010
+Date                   :=26.06.2010
 CodeLitePath           :="/home/feelx/.codelite"
 LinkerName             :=g++
 ArchiveTool            :=ar rcus
@@ -48,8 +48,8 @@ LibPath                := "$(LibraryPathSwitch)." "$(LibraryPathSwitch)../bullet
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix) $(IntermediateDirectory)/ConfigStorage$(ObjectSuffix) $(IntermediateDirectory)/ValueFactory$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine$(ObjectSuffix) $(IntermediateDirectory)/IObject$(ObjectSuffix) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) $(IntermediateDirectory)/Entity$(ObjectSuffix) $(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix) \
-	$(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix) $(IntermediateDirectory)/SensorEntity$(ObjectSuffix) $(IntermediateDirectory)/CameraToolKit$(ObjectSuffix) $(IntermediateDirectory)/EntityToolKit$(ObjectSuffix) $(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix) $(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix) $(IntermediateDirectory)/ConfigStorage$(ObjectSuffix) $(IntermediateDirectory)/ValueFactory$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine$(ObjectSuffix) $(IntermediateDirectory)/IObject$(ObjectSuffix) $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) $(IntermediateDirectory)/Entity$(ObjectSuffix) $(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix) $(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix) \
+	$(IntermediateDirectory)/SensorEntity$(ObjectSuffix) $(IntermediateDirectory)/CameraToolKit$(ObjectSuffix) $(IntermediateDirectory)/EntityToolKit$(ObjectSuffix) $(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix) $(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -116,14 +116,6 @@ $(IntermediateDirectory)/IObject$(DependSuffix): IObject.cpp
 
 $(IntermediateDirectory)/IObject$(PreprocessSuffix): IObject.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/IObject$(PreprocessSuffix) "/home/feelx/devel/Project0012/IObject.cpp"
-
-$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix): ConstraintToolKit.cpp $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix): ConstraintToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
-
-$(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix): ConstraintToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
 
 $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix): DynamicEntity.cpp $(IntermediateDirectory)/DynamicEntity$(DependSuffix)
 	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/DynamicEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) $(IncludePath)
@@ -197,6 +189,22 @@ $(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix): PulsarEventReceiver
 $(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix): PulsarEventReceiver.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix) "/home/feelx/devel/Project0012/PulsarEventReceiver.cpp"
 
+$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix): ConstraintToolKit.cpp $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix): ConstraintToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
+
+$(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix): ConstraintToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
+
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix): MultiBouncer/MultiBouncerGame.cpp $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix): MultiBouncer/MultiBouncerGame.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) -MF$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix) -MM "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp"
+
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix): MultiBouncer/MultiBouncerGame.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix) "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp"
+
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
 ##
@@ -221,9 +229,6 @@ clean:
 	$(RM) $(IntermediateDirectory)/IObject$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/IObject$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/IObject$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/DynamicEntity$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/DynamicEntity$(PreprocessSuffix)
@@ -251,6 +256,12 @@ clean:
 	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 
 

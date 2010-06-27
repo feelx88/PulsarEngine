@@ -155,6 +155,7 @@ public:
 		Value *val = new Value( 0, Value::getTypeName<T>() );
 		T *tmp = new T( value );
 		val->set( *tmp );
+		val->setAutoDestroy( true );
 
 		m_mValues.insert( std::make_pair( sName, val ) );
 

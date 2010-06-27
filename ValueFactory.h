@@ -187,15 +187,15 @@ public:
 		else if( getTypeName<T>() != m_sTypeName )
 			throw "Invalid Conversion!";
 
-		/*if( m_Value )
+		if( m_Value && m_Generated )
 		{
 			if( m_pGenerator )
 				m_pGenerator->destruct( m_Value );
 			else
 				delete static_cast<T*>( m_Value );
-		}*/
+		}
 
-		m_Value = static_cast<void*>( &val );//static_cast<void*>( new T( val ) );
+		m_Value = static_cast<void*>( &val );
 		m_Generated = false;
 	}
 
@@ -207,15 +207,14 @@ public:
 		else if( getTypeName<T>() != m_sTypeName )
 			throw "Invalid Conversion!";
 
-		/*if( m_Value )
+		if( m_Value && m_Generated )
 		{
 			if( m_pGenerator )
 				m_pGenerator->destruct( m_Value );
 			else
 				delete static_cast<T*>( m_Value );
-		}*/
+		}
 
-		//m_Value = static_cast<void*>( const_cast<T*>( &val ) );//
 		m_Value = static_cast<void*>( new T( val ) );
 
 		m_Generated = true;
@@ -269,6 +268,11 @@ public:
 			m_Value = m_pGenerator->parseValues( pData );
 			m_Generated = true;
 		}
+	}
+
+	void setAutoDestroy( bool autoDestroy )
+	{
+		m_Generated = autoDestroy;
 	}
 
 	template <class T>

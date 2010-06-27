@@ -120,7 +120,7 @@ class Value : public IObject
 public:
 
 	template <class T>
-	Value( T& val )
+	Value( T& val ) : m_Generated( false )
 	{
 		setClassName( P_VALUE );
 		m_Value = static_cast<void*>( &val );
@@ -129,7 +129,7 @@ public:
 	}
 
 	template <class T>
-	Value( const T& val )
+	Value( const T& val ) : m_Generated( false )
 	{
 		setClassName( P_VALUE );
 		m_Value = static_cast<void*>( new T( val ) );
@@ -137,7 +137,7 @@ public:
 		m_pGenerator = getGenerator( m_sTypeName );
 	}
 
-	Value( void *val, String sTypeName )
+	Value( void *val, String sTypeName ) : m_Generated( false )
 	{
 		setClassName( P_VALUE );
 		m_Value = val;
@@ -145,7 +145,7 @@ public:
 		m_pGenerator = getGenerator( m_sTypeName );
 	}
 
-	Value() : m_pGenerator( 0 ), m_Value( 0 )
+	Value() : m_pGenerator( 0 ), m_Value( 0 ), m_Generated( false )
 	{
 		setClassName( P_VALUE );
 		m_sTypeName = "Nil";
@@ -153,6 +153,7 @@ public:
 
 	Value *copy()
 	{
+		m_Generated = true;
 		if( m_pGenerator )
 			return new Value( this->m_pGenerator->copy( m_Value ), m_sTypeName );
 		else
@@ -161,8 +162,8 @@ public:
 
 	~Value()
 	{
-		/*if( m_Value && m_pGenerator )
-			m_pGenerator->destruct( m_Value );*/
+		if( m_Value && m_pGenerator && m_Generated )
+			m_pGenerator->destruct( m_Value );
 	}
 
 	String getTypeName()
@@ -195,6 +196,7 @@ public:
 		}*/
 
 		m_Value = static_cast<void*>( &val );//static_cast<void*>( new T( val ) );
+		m_Generated = false;
 	}
 
 	template <class T>
@@ -215,6 +217,8 @@ public:
 
 		//m_Value = static_cast<void*>( const_cast<T*>( &val ) );//
 		m_Value = static_cast<void*>( new T( val ) );
+
+		m_Generated = true;
 	}
 
 	template <class T>
@@ -242,9 +246,10 @@ public:
 	{
 		if( m_pGenerator )
 		{
-			if( m_Value )
+			if( m_Value && m_Generated )
 				m_pGenerator->destruct( m_Value );
 			m_Value = m_pGenerator->parseString( sParseString );
+			m_Generated = true;
 		}
 	}
 
@@ -259,9 +264,10 @@ public:
 	{
 		if( m_pGenerator )
 		{
-			if( m_Value )
+			if( m_Value && m_Generated )
 				m_pGenerator->destruct( m_Value );
 			m_Value = m_pGenerator->parseValues( pData );
+			m_Generated = true;
 		}
 	}
 
@@ -311,6 +317,8 @@ public:
 private:
 
 	void *m_Value;
+
+	bool m_Generated;
 
 	String m_sTypeName;
 	ValueGeneratorBase *m_pGenerator;

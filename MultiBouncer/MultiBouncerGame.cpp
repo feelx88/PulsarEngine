@@ -20,14 +20,16 @@ void MultiBouncerGame::init()
 	m_Engine = PulsarEngine::getInstance();
 	m_Engine->init( "config.xml" );
 
+	//Add a light, complicated version...
 	m_Engine->getIrrlichtDevice()->getSceneManager()->
 		addLightSceneNode( 0, Vector( 0, 100, 0 ) );
 
-	CameraToolKit *pCam =
+	//Add a camera
+	CameraToolKit *cam =
 		dynamic_cast<CameraToolKit*>( m_Engine->getToolKit( "Camera" ) );
-	pCam->addCamera( 1 );
-	pCam->setCameraPosition( 1, Vector( 0, 10, -50 ) );
-	pCam->setCameraTarget( 1, Vector( 0, 0, 0 ) );
+	cam->addCamera( ID_CAMERA_PRIMARY );
+	cam->setCameraPosition( ID_CAMERA_PRIMARY, Vector( 0, 10, -50 ) );
+	cam->setCameraTarget( ID_CAMERA_PRIMARY, Vector( 0, 0, 0 ) );
 }
 
 void MultiBouncerGame::initGUI()

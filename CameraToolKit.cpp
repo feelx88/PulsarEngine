@@ -2,7 +2,8 @@
 #include "PulsarEngine.h"
 #include "Irrlicht_using.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 CameraToolKit::CameraToolKit() : IToolKit()
 {
@@ -62,4 +63,6 @@ void CameraToolKit::setCameraUpVector( unsigned int iID, Vector up )
 
 	if ( pCamera )
 		pCamera->setUpVector( up );
+}
+
 }

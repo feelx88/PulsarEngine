@@ -2,7 +2,8 @@
 #include "PulsarEngine.h"
 #include "Irrlicht_using.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 EntityToolKit::EntityToolKit() : IToolKit()
 {
@@ -93,4 +94,6 @@ DynamicEntity* EntityToolKit::getDynamicEntityInRay( Vector from, Vector to )
 	if( callback.hasHit() )
 		return static_cast<ContactPointStorage*>( callback.m_collisionObject->getUserPointer() )->getEntity();
 	return 0;
+}
+
 }

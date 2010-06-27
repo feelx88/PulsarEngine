@@ -3,7 +3,8 @@
 #include <fstream>
 
 #include "Irrlicht_using.h"
-using namespace pulsar;
+namespace pulsar
+{
 
 ConfigStorage::ConfigStorage( bool bAllowDuplicates )
 	: IObject(),
@@ -303,7 +304,7 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 	} //read()
 }
 
-Vector pulsar::parseStringToVector( String sVector )
+Vector parseStringToVector( String sVector )
 {
 	int iFirst, iLast;
 	float fX = 0.0f;
@@ -324,4 +325,6 @@ Vector pulsar::parseStringToVector( String sVector )
 	}
 
 	return vector3df( fX, fY, fZ );
+}
+
 }

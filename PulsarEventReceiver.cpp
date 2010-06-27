@@ -2,7 +2,8 @@
 #include "Irrlicht_using.h"
 #include "PulsarEngine.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 PulsarEventReceiver::PulsarEventReceiver()
 {
@@ -233,4 +234,6 @@ bool PulsarEventReceiver::OnEvent( const SEvent &evt )
 	} //EET_GUI_EVENT
 
 	return false;
+}
+
 }

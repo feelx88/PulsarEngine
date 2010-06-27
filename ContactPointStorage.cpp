@@ -1,6 +1,7 @@
 #include "ContactPointStorage.h"
 #include "DynamicEntity.h"
-using namespace pulsar;
+namespace pulsar
+{
 
 ContactPointStorage::ContactPointStorage( DynamicEntity *pEntity ) :
 	IObject(), m_pEntity( pEntity ),
@@ -70,4 +71,6 @@ Vector ContactPointStorage::getContactPointOther( btRigidBody* pBody, int iIndex
 void ContactPointStorage::clearContactPoints()
 {
 	m_mContactPoints.clear();
+}
+
 }

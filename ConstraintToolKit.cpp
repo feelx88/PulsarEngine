@@ -1,7 +1,8 @@
 #include "ConstraintToolKit.h"
 #include "PulsarEngine.h"
 
-using namespace pulsar;
+namespace pulsar
+{
 
 ConstraintToolKit::ConstraintToolKit() : IToolKit()
 {
@@ -166,6 +167,8 @@ btSliderConstraint *ConstraintToolKit::lockWithSlider( unsigned int iID, Entity 
 	m_mConstraints.insert( std::make_pair( iID, pSlider ) );
 
 	return pSlider;
+}
+
 }
 
 

@@ -159,6 +159,8 @@ void PulsarEngine::initConsole()
 
 	m_pConsoleOutput->setAutoScrollEnabled( true );
 	m_pConsoleWindow->getCloseButton()->setVisible( false );
+
+	showConsoleWindow( m_pMainConfiguration->get<bool>( "ShowConsole", false ) );
 }
 
 void PulsarEngine::initLua()

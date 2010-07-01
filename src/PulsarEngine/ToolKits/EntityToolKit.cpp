@@ -1,6 +1,6 @@
 #include "EntityToolKit.h"
-#include "PulsarEngine.h"
-#include "Irrlicht_using.h"
+#include "../PulsarEngine.h"
+#include "../Irrlicht_using.h"
 
 namespace pulsar
 {

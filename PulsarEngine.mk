@@ -48,8 +48,8 @@ LibPath                := "$(LibraryPathSwitch)." "$(LibraryPathSwitch)../bullet
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects=$(IntermediateDirectory)/main$(ObjectSuffix) $(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix) $(IntermediateDirectory)/ConfigStorage$(ObjectSuffix) $(IntermediateDirectory)/ValueFactory$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine$(ObjectSuffix) $(IntermediateDirectory)/IObject$(ObjectSuffix) $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) $(IntermediateDirectory)/Entity$(ObjectSuffix) $(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix) $(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix) \
-	$(IntermediateDirectory)/SensorEntity$(ObjectSuffix) $(IntermediateDirectory)/CameraToolKit$(ObjectSuffix) $(IntermediateDirectory)/EntityToolKit$(ObjectSuffix) $(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix) $(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) 
+Objects=$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(ObjectSuffix) $(IntermediateDirectory)/ToolKits_ScriptToolKit$(ObjectSuffix) $(IntermediateDirectory)/ToolKits_EntityToolKit$(ObjectSuffix) $(IntermediateDirectory)/ToolKits_CameraToolKit$(ObjectSuffix) $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(ObjectSuffix) $(IntermediateDirectory)/Entities_SensorEntity$(ObjectSuffix) $(IntermediateDirectory)/Entities_GhostSensorEntity$(ObjectSuffix) $(IntermediateDirectory)/Entities_DynamicEntity$(ObjectSuffix) $(IntermediateDirectory)/Entities_GraphicalEntity$(ObjectSuffix) \
+	$(IntermediateDirectory)/Entities_Entity$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine_IObject$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine_ValueFactory$(ObjectSuffix) $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(ObjectSuffix) $(IntermediateDirectory)/src_main$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -60,7 +60,7 @@ $(OutputFile): makeDirStep $(Objects)
 	@$(MakeDirCommand) $(@D)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 	@echo Executing Post Build commands ...
-	mv $(IntermediateDirectory)/$(ProjectName) MultiBouncer/$(ProjectName)
+	mv $(IntermediateDirectory)/$(ProjectName) src/MultiBouncer/$(ProjectName)
 	@echo Done
 
 makeDirStep:
@@ -72,141 +72,141 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/main$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/main.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/main$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/main$(DependSuffix): main.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/main$(ObjectSuffix) -MF$(IntermediateDirectory)/main$(DependSuffix) -MM "/home/feelx/devel/Project0012/main.cpp"
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix): src/MultiBouncer/MultiBouncerGame.cpp $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/MultiBouncer/MultiBouncerGame.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix): src/MultiBouncer/MultiBouncerGame.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) -MF$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/MultiBouncer/MultiBouncerGame.cpp"
 
-$(IntermediateDirectory)/main$(PreprocessSuffix): main.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main$(PreprocessSuffix) "/home/feelx/devel/Project0012/main.cpp"
+$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix): src/MultiBouncer/MultiBouncerGame.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/MultiBouncer/MultiBouncerGame.cpp"
 
-$(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix): ContactPointStorage.cpp $(IntermediateDirectory)/ContactPointStorage$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ContactPointStorage.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ContactPointStorage$(DependSuffix): ContactPointStorage.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix) -MF$(IntermediateDirectory)/ContactPointStorage$(DependSuffix) -MM "/home/feelx/devel/Project0012/ContactPointStorage.cpp"
+$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(ObjectSuffix): src/PulsarEngine/ToolKits/ConstraintToolKit.cpp $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ConstraintToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(DependSuffix): src/PulsarEngine/ToolKits/ConstraintToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ConstraintToolKit.cpp"
 
-$(IntermediateDirectory)/ContactPointStorage$(PreprocessSuffix): ContactPointStorage.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ContactPointStorage$(PreprocessSuffix) "/home/feelx/devel/Project0012/ContactPointStorage.cpp"
+$(IntermediateDirectory)/ToolKits_ConstraintToolKit$(PreprocessSuffix): src/PulsarEngine/ToolKits/ConstraintToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ConstraintToolKit.cpp"
 
-$(IntermediateDirectory)/ConfigStorage$(ObjectSuffix): ConfigStorage.cpp $(IntermediateDirectory)/ConfigStorage$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ConfigStorage.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ConfigStorage$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ConfigStorage$(DependSuffix): ConfigStorage.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ConfigStorage$(ObjectSuffix) -MF$(IntermediateDirectory)/ConfigStorage$(DependSuffix) -MM "/home/feelx/devel/Project0012/ConfigStorage.cpp"
+$(IntermediateDirectory)/ToolKits_ScriptToolKit$(ObjectSuffix): src/PulsarEngine/ToolKits/ScriptToolKit.cpp $(IntermediateDirectory)/ToolKits_ScriptToolKit$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ScriptToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ToolKits_ScriptToolKit$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ToolKits_ScriptToolKit$(DependSuffix): src/PulsarEngine/ToolKits/ScriptToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ToolKits_ScriptToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ToolKits_ScriptToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ScriptToolKit.cpp"
 
-$(IntermediateDirectory)/ConfigStorage$(PreprocessSuffix): ConfigStorage.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConfigStorage$(PreprocessSuffix) "/home/feelx/devel/Project0012/ConfigStorage.cpp"
+$(IntermediateDirectory)/ToolKits_ScriptToolKit$(PreprocessSuffix): src/PulsarEngine/ToolKits/ScriptToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ToolKits_ScriptToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/ScriptToolKit.cpp"
 
-$(IntermediateDirectory)/ValueFactory$(ObjectSuffix): ValueFactory.cpp $(IntermediateDirectory)/ValueFactory$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ValueFactory.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ValueFactory$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ValueFactory$(DependSuffix): ValueFactory.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ValueFactory$(ObjectSuffix) -MF$(IntermediateDirectory)/ValueFactory$(DependSuffix) -MM "/home/feelx/devel/Project0012/ValueFactory.cpp"
+$(IntermediateDirectory)/ToolKits_EntityToolKit$(ObjectSuffix): src/PulsarEngine/ToolKits/EntityToolKit.cpp $(IntermediateDirectory)/ToolKits_EntityToolKit$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/EntityToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ToolKits_EntityToolKit$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ToolKits_EntityToolKit$(DependSuffix): src/PulsarEngine/ToolKits/EntityToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ToolKits_EntityToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ToolKits_EntityToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/EntityToolKit.cpp"
 
-$(IntermediateDirectory)/ValueFactory$(PreprocessSuffix): ValueFactory.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ValueFactory$(PreprocessSuffix) "/home/feelx/devel/Project0012/ValueFactory.cpp"
+$(IntermediateDirectory)/ToolKits_EntityToolKit$(PreprocessSuffix): src/PulsarEngine/ToolKits/EntityToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ToolKits_EntityToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/EntityToolKit.cpp"
 
-$(IntermediateDirectory)/PulsarEngine$(ObjectSuffix): PulsarEngine.cpp $(IntermediateDirectory)/PulsarEngine$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/PulsarEngine.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/PulsarEngine$(DependSuffix): PulsarEngine.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine$(DependSuffix) -MM "/home/feelx/devel/Project0012/PulsarEngine.cpp"
+$(IntermediateDirectory)/ToolKits_CameraToolKit$(ObjectSuffix): src/PulsarEngine/ToolKits/CameraToolKit.cpp $(IntermediateDirectory)/ToolKits_CameraToolKit$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/CameraToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ToolKits_CameraToolKit$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ToolKits_CameraToolKit$(DependSuffix): src/PulsarEngine/ToolKits/CameraToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ToolKits_CameraToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ToolKits_CameraToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/CameraToolKit.cpp"
 
-$(IntermediateDirectory)/PulsarEngine$(PreprocessSuffix): PulsarEngine.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine$(PreprocessSuffix) "/home/feelx/devel/Project0012/PulsarEngine.cpp"
+$(IntermediateDirectory)/ToolKits_CameraToolKit$(PreprocessSuffix): src/PulsarEngine/ToolKits/CameraToolKit.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ToolKits_CameraToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/CameraToolKit.cpp"
 
-$(IntermediateDirectory)/IObject$(ObjectSuffix): IObject.cpp $(IntermediateDirectory)/IObject$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/IObject.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/IObject$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/IObject$(DependSuffix): IObject.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/IObject$(ObjectSuffix) -MF$(IntermediateDirectory)/IObject$(DependSuffix) -MM "/home/feelx/devel/Project0012/IObject.cpp"
+$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(ObjectSuffix): src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(DependSuffix): src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(ObjectSuffix) -MF$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp"
 
-$(IntermediateDirectory)/IObject$(PreprocessSuffix): IObject.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/IObject$(PreprocessSuffix) "/home/feelx/devel/Project0012/IObject.cpp"
+$(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(PreprocessSuffix): src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp"
 
-$(IntermediateDirectory)/DynamicEntity$(ObjectSuffix): DynamicEntity.cpp $(IntermediateDirectory)/DynamicEntity$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/DynamicEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/DynamicEntity$(DependSuffix): DynamicEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/DynamicEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/DynamicEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/DynamicEntity.cpp"
+$(IntermediateDirectory)/Entities_SensorEntity$(ObjectSuffix): src/PulsarEngine/Entities/SensorEntity.cpp $(IntermediateDirectory)/Entities_SensorEntity$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/SensorEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entities_SensorEntity$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Entities_SensorEntity$(DependSuffix): src/PulsarEngine/Entities/SensorEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entities_SensorEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entities_SensorEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/SensorEntity.cpp"
 
-$(IntermediateDirectory)/DynamicEntity$(PreprocessSuffix): DynamicEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/DynamicEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/DynamicEntity.cpp"
+$(IntermediateDirectory)/Entities_SensorEntity$(PreprocessSuffix): src/PulsarEngine/Entities/SensorEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entities_SensorEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/SensorEntity.cpp"
 
-$(IntermediateDirectory)/Entity$(ObjectSuffix): Entity.cpp $(IntermediateDirectory)/Entity$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/Entity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entity$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Entity$(DependSuffix): Entity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entity$(DependSuffix) -MM "/home/feelx/devel/Project0012/Entity.cpp"
+$(IntermediateDirectory)/Entities_GhostSensorEntity$(ObjectSuffix): src/PulsarEngine/Entities/GhostSensorEntity.cpp $(IntermediateDirectory)/Entities_GhostSensorEntity$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GhostSensorEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entities_GhostSensorEntity$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Entities_GhostSensorEntity$(DependSuffix): src/PulsarEngine/Entities/GhostSensorEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entities_GhostSensorEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entities_GhostSensorEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GhostSensorEntity.cpp"
 
-$(IntermediateDirectory)/Entity$(PreprocessSuffix): Entity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entity$(PreprocessSuffix) "/home/feelx/devel/Project0012/Entity.cpp"
+$(IntermediateDirectory)/Entities_GhostSensorEntity$(PreprocessSuffix): src/PulsarEngine/Entities/GhostSensorEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entities_GhostSensorEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GhostSensorEntity.cpp"
 
-$(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix): GhostSensorEntity.cpp $(IntermediateDirectory)/GhostSensorEntity$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/GhostSensorEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/GhostSensorEntity$(DependSuffix): GhostSensorEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/GhostSensorEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/GhostSensorEntity.cpp"
+$(IntermediateDirectory)/Entities_DynamicEntity$(ObjectSuffix): src/PulsarEngine/Entities/DynamicEntity.cpp $(IntermediateDirectory)/Entities_DynamicEntity$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/DynamicEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entities_DynamicEntity$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Entities_DynamicEntity$(DependSuffix): src/PulsarEngine/Entities/DynamicEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entities_DynamicEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entities_DynamicEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/DynamicEntity.cpp"
 
-$(IntermediateDirectory)/GhostSensorEntity$(PreprocessSuffix): GhostSensorEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/GhostSensorEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/GhostSensorEntity.cpp"
+$(IntermediateDirectory)/Entities_DynamicEntity$(PreprocessSuffix): src/PulsarEngine/Entities/DynamicEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entities_DynamicEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/DynamicEntity.cpp"
 
-$(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix): GraphicalEntity.cpp $(IntermediateDirectory)/GraphicalEntity$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/GraphicalEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/GraphicalEntity$(DependSuffix): GraphicalEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/GraphicalEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/GraphicalEntity.cpp"
+$(IntermediateDirectory)/Entities_GraphicalEntity$(ObjectSuffix): src/PulsarEngine/Entities/GraphicalEntity.cpp $(IntermediateDirectory)/Entities_GraphicalEntity$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GraphicalEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entities_GraphicalEntity$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Entities_GraphicalEntity$(DependSuffix): src/PulsarEngine/Entities/GraphicalEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entities_GraphicalEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entities_GraphicalEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GraphicalEntity.cpp"
 
-$(IntermediateDirectory)/GraphicalEntity$(PreprocessSuffix): GraphicalEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/GraphicalEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/GraphicalEntity.cpp"
+$(IntermediateDirectory)/Entities_GraphicalEntity$(PreprocessSuffix): src/PulsarEngine/Entities/GraphicalEntity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entities_GraphicalEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/GraphicalEntity.cpp"
 
-$(IntermediateDirectory)/SensorEntity$(ObjectSuffix): SensorEntity.cpp $(IntermediateDirectory)/SensorEntity$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/SensorEntity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/SensorEntity$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/SensorEntity$(DependSuffix): SensorEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/SensorEntity$(ObjectSuffix) -MF$(IntermediateDirectory)/SensorEntity$(DependSuffix) -MM "/home/feelx/devel/Project0012/SensorEntity.cpp"
+$(IntermediateDirectory)/Entities_Entity$(ObjectSuffix): src/PulsarEngine/Entities/Entity.cpp $(IntermediateDirectory)/Entities_Entity$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/Entity.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/Entities_Entity$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Entities_Entity$(DependSuffix): src/PulsarEngine/Entities/Entity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/Entities_Entity$(ObjectSuffix) -MF$(IntermediateDirectory)/Entities_Entity$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/Entity.cpp"
 
-$(IntermediateDirectory)/SensorEntity$(PreprocessSuffix): SensorEntity.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SensorEntity$(PreprocessSuffix) "/home/feelx/devel/Project0012/SensorEntity.cpp"
+$(IntermediateDirectory)/Entities_Entity$(PreprocessSuffix): src/PulsarEngine/Entities/Entity.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Entities_Entity$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/Entities/Entity.cpp"
 
-$(IntermediateDirectory)/CameraToolKit$(ObjectSuffix): CameraToolKit.cpp $(IntermediateDirectory)/CameraToolKit$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/CameraToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/CameraToolKit$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/CameraToolKit$(DependSuffix): CameraToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/CameraToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/CameraToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/CameraToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(ObjectSuffix): src/PulsarEngine/ConfigStorage.cpp $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ConfigStorage.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(DependSuffix): src/PulsarEngine/ConfigStorage.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ConfigStorage.cpp"
 
-$(IntermediateDirectory)/CameraToolKit$(PreprocessSuffix): CameraToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/CameraToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/CameraToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_ConfigStorage$(PreprocessSuffix): src/PulsarEngine/ConfigStorage.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ConfigStorage.cpp"
 
-$(IntermediateDirectory)/EntityToolKit$(ObjectSuffix): EntityToolKit.cpp $(IntermediateDirectory)/EntityToolKit$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/EntityToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/EntityToolKit$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/EntityToolKit$(DependSuffix): EntityToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/EntityToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/EntityToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/EntityToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(ObjectSuffix): src/PulsarEngine/ContactPointStorage.cpp $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ContactPointStorage.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(DependSuffix): src/PulsarEngine/ContactPointStorage.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ContactPointStorage.cpp"
 
-$(IntermediateDirectory)/EntityToolKit$(PreprocessSuffix): EntityToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/EntityToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/EntityToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(PreprocessSuffix): src/PulsarEngine/ContactPointStorage.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ContactPointStorage.cpp"
 
-$(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix): ScriptToolKit.cpp $(IntermediateDirectory)/ScriptToolKit$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ScriptToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ScriptToolKit$(DependSuffix): ScriptToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ScriptToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/ScriptToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_IObject$(ObjectSuffix): src/PulsarEngine/IObject.cpp $(IntermediateDirectory)/PulsarEngine_IObject$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/IObject.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine_IObject$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PulsarEngine_IObject$(DependSuffix): src/PulsarEngine/IObject.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine_IObject$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine_IObject$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/IObject.cpp"
 
-$(IntermediateDirectory)/ScriptToolKit$(PreprocessSuffix): ScriptToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ScriptToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/ScriptToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_IObject$(PreprocessSuffix): src/PulsarEngine/IObject.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine_IObject$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/IObject.cpp"
 
-$(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix): PulsarEventReceiver.cpp $(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/PulsarEventReceiver.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix): PulsarEventReceiver.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix) -MM "/home/feelx/devel/Project0012/PulsarEventReceiver.cpp"
+$(IntermediateDirectory)/PulsarEngine_ValueFactory$(ObjectSuffix): src/PulsarEngine/ValueFactory.cpp $(IntermediateDirectory)/PulsarEngine_ValueFactory$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/ValueFactory.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine_ValueFactory$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PulsarEngine_ValueFactory$(DependSuffix): src/PulsarEngine/ValueFactory.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine_ValueFactory$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine_ValueFactory$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/ValueFactory.cpp"
 
-$(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix): PulsarEventReceiver.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix) "/home/feelx/devel/Project0012/PulsarEventReceiver.cpp"
+$(IntermediateDirectory)/PulsarEngine_ValueFactory$(PreprocessSuffix): src/PulsarEngine/ValueFactory.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine_ValueFactory$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/ValueFactory.cpp"
 
-$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix): ConstraintToolKit.cpp $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix): ConstraintToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix) -MF$(IntermediateDirectory)/ConstraintToolKit$(DependSuffix) -MM "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(ObjectSuffix): src/PulsarEngine/PulsarEngine.cpp $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/PulsarEngine/PulsarEngine.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(DependSuffix): src/PulsarEngine/PulsarEngine.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(ObjectSuffix) -MF$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/PulsarEngine/PulsarEngine.cpp"
 
-$(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix): ConstraintToolKit.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix) "/home/feelx/devel/Project0012/ConstraintToolKit.cpp"
+$(IntermediateDirectory)/PulsarEngine_PulsarEngine$(PreprocessSuffix): src/PulsarEngine/PulsarEngine.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/PulsarEngine/PulsarEngine.cpp"
 
-$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix): MultiBouncer/MultiBouncerGame.cpp $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix)
-	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix): MultiBouncer/MultiBouncerGame.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix) -MF$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix) -MM "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp"
+$(IntermediateDirectory)/src_main$(ObjectSuffix): src/main.cpp $(IntermediateDirectory)/src_main$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "/home/feelx/devel/Project0012/src/main.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/src_main$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_main$(DependSuffix): src/main.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MT$(IntermediateDirectory)/src_main$(ObjectSuffix) -MF$(IntermediateDirectory)/src_main$(DependSuffix) -MM "/home/feelx/devel/Project0012/src/main.cpp"
 
-$(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix): MultiBouncer/MultiBouncerGame.cpp
-	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix) "/home/feelx/devel/Project0012/MultiBouncer/MultiBouncerGame.cpp"
+$(IntermediateDirectory)/src_main$(PreprocessSuffix): src/main.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_main$(PreprocessSuffix) "/home/feelx/devel/Project0012/src/main.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
@@ -214,57 +214,57 @@ $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix): Multi
 ## Clean
 ##
 clean:
-	$(RM) $(IntermediateDirectory)/main$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/main$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/main$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ContactPointStorage$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ContactPointStorage$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ContactPointStorage$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ConfigStorage$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ConfigStorage$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ConfigStorage$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ValueFactory$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ValueFactory$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ValueFactory$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEngine$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEngine$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEngine$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/IObject$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/IObject$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/IObject$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/DynamicEntity$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/DynamicEntity$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/DynamicEntity$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/Entity$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/Entity$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/Entity$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/GhostSensorEntity$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/GhostSensorEntity$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/GhostSensorEntity$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/GraphicalEntity$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/GraphicalEntity$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/GraphicalEntity$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/SensorEntity$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/SensorEntity$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/SensorEntity$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/CameraToolKit$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/CameraToolKit$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/CameraToolKit$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/EntityToolKit$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/EntityToolKit$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/EntityToolKit$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ScriptToolKit$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ScriptToolKit$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ScriptToolKit$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/PulsarEventReceiver$(PreprocessSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/ConstraintToolKit$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/MultiBouncer_MultiBouncerGame$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ConstraintToolKit$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ScriptToolKit$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ScriptToolKit$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_ScriptToolKit$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_EntityToolKit$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_EntityToolKit$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_EntityToolKit$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_CameraToolKit$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_CameraToolKit$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_CameraToolKit$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/ToolKits_PulsarEventReceiver$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_SensorEntity$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_SensorEntity$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_SensorEntity$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GhostSensorEntity$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GhostSensorEntity$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GhostSensorEntity$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_DynamicEntity$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_DynamicEntity$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_DynamicEntity$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GraphicalEntity$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GraphicalEntity$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_GraphicalEntity$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_Entity$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_Entity$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/Entities_Entity$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ConfigStorage$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ContactPointStorage$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_IObject$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_IObject$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_IObject$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ValueFactory$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ValueFactory$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_ValueFactory$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/PulsarEngine_PulsarEngine$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/src_main$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/src_main$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/src_main$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 
 

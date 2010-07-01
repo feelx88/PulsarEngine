@@ -1,9 +1,9 @@
 #ifndef __entity__
 #define __entity__
 
-#include "IObject.h"
-#include "ICallback.h"
-#include "ConfigStorage.h"
+#include "../IObject.h"
+#include "../ICallback.h"
+#include "../ConfigStorage.h"
 #include <irrlicht.h>
 
 namespace pulsar

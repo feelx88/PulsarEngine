@@ -1,10 +1,10 @@
 #ifndef __pulsareventreceiver__
 #define __pulsareventreceiver__
 
-#include "IEventReceiver.h" // Base class: irr::IEventReceiver
+#include <IEventReceiver.h> // Base class: irr::IEventReceiver
 #include "IToolKit.h"
 #include "ScriptToolKit.h"
-#include "ICallback.h"
+#include "../ICallback.h"
 
 namespace pulsar
 {

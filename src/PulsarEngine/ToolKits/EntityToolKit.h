@@ -2,10 +2,10 @@
 #define __EntityToolKit__
 
 #include "IToolKit.h" // Base class: pulsar::IToolKit
-#include "Entity.h"
-#include "DynamicEntity.h"
-#include "ValueFactory.h"
-#include "StandardConverters.h"
+#include "../Entities/Entity.h"
+#include "../Entities/DynamicEntity.h"
+#include "../ValueFactory.h"
+#include "../StandardConverters.h"
 
 namespace pulsar
 {

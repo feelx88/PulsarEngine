@@ -9,20 +9,20 @@
 #include "ConfigStorage.h"
 #include "ContactPointStorage.h"
 
-#include "Entity.h"
-#include "GraphicalEntity.h"
-#include "DynamicEntity.h"
-#include "SensorEntity.h"
-#include "GhostSensorEntity.h"
+#include "Entities/Entity.h"
+#include "Entities/GraphicalEntity.h"
+#include "Entities/DynamicEntity.h"
+#include "Entities/SensorEntity.h"
+#include "Entities/GhostSensorEntity.h"
 
 #include "StandardCallbacks.h"
 
-#include "IToolKit.h"
-#include "PulsarEventReceiver.h"
-#include "ScriptToolKit.h"
-#include "EntityToolKit.h"
-#include "ConstraintToolKit.h"
-#include "CameraToolKit.h"
+#include "ToolKits/IToolKit.h"
+#include "ToolKits/PulsarEventReceiver.h"
+#include "ToolKits/ScriptToolKit.h"
+#include "ToolKits/EntityToolKit.h"
+#include "ToolKits/ConstraintToolKit.h"
+#include "ToolKits/CameraToolKit.h"
 
 namespace pulsar
 {

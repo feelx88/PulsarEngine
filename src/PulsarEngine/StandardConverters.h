@@ -4,7 +4,7 @@
 
 #include "ValueFactory.h"
 #include "ConfigStorage.h"
-#include "DynamicEntity.h"
+#include "Entities/DynamicEntity.h"
 #include "StandardCallbacks.h"
 
 namespace pulsar

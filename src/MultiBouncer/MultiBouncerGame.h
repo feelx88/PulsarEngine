@@ -1,7 +1,7 @@
 #ifndef __multibouncergame__
 #define __multibouncergame__
 
-#include "PulsarEngine.h"
+#include "../PulsarEngine/PulsarEngine.h"
 
 struct MultiBouncerGame
 {

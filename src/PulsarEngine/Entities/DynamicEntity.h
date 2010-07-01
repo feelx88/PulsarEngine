@@ -2,7 +2,7 @@
 #define __dynamicentity__
 
 #include "GraphicalEntity.h"
-#include "ContactPointStorage.h"
+#include "../ContactPointStorage.h"
 
 namespace pulsar
 {

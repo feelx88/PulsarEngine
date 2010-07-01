@@ -1,6 +1,6 @@
 #include "MultiBouncerGame.h"
 
-#include "Irrlicht_using.h"
+#include "../PulsarEngine/Irrlicht_using.h"
 
 using namespace pulsar;
 
@@ -44,7 +44,6 @@ int MultiBouncerGame::run()
 
 	ConfigStorage *p = new ConfigStorage();
 	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	p->get<DynamicEntity>( "lol" ).setPosition( Vector() );
 
 	m_Engine->setSimulationState( true );
 

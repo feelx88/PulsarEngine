@@ -1,5 +1,5 @@
 #include "ScriptToolKit.h"
-#include "PulsarEngine.h"
+#include "../PulsarEngine.h"
 
 namespace pulsar
 {

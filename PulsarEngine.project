@@ -5,63 +5,63 @@
       <![CDATA[00030001N0005Debug0000000000000001N0017MultiBouncerDebug0000000000000001N0007Release000000000000]]>
     </Plugin>
   </Plugins>
+  <VirtualDirectory Name="src">
+    <VirtualDirectory Name="MultiBouncer">
+      <VirtualDirectory Name="bouncers">
+        <File Name="src/MultiBouncer/bouncers/StandardBouncer.xml"/>
+      </VirtualDirectory>
+      <File Name="src/MultiBouncer/MultiBouncerGame.cpp"/>
+      <File Name="src/MultiBouncer/config.xml"/>
+      <File Name="src/MultiBouncer/pulsar_defs.lua"/>
+      <File Name="src/MultiBouncer/MultiBouncerGame.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="PulsarEngine">
+      <VirtualDirectory Name="ToolKits">
+        <File Name="src/PulsarEngine/ToolKits/PulsarEventReceiver.h"/>
+        <File Name="src/PulsarEngine/ToolKits/ConstraintToolKit.cpp"/>
+        <File Name="src/PulsarEngine/ToolKits/ScriptToolKit.h"/>
+        <File Name="src/PulsarEngine/ToolKits/ConstraintToolKit.h"/>
+        <File Name="src/PulsarEngine/ToolKits/ScriptToolKit.cpp"/>
+        <File Name="src/PulsarEngine/ToolKits/IToolKit.h"/>
+        <File Name="src/PulsarEngine/ToolKits/EntityToolKit.h"/>
+        <File Name="src/PulsarEngine/ToolKits/EntityToolKit.cpp"/>
+        <File Name="src/PulsarEngine/ToolKits/CameraToolKit.h"/>
+        <File Name="src/PulsarEngine/ToolKits/CameraToolKit.cpp"/>
+        <File Name="src/PulsarEngine/ToolKits/PulsarEventReceiver.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="Entities">
+        <File Name="src/PulsarEngine/Entities/Entity.h"/>
+        <File Name="src/PulsarEngine/Entities/SensorEntity.cpp"/>
+        <File Name="src/PulsarEngine/Entities/GhostSensorEntity.cpp"/>
+        <File Name="src/PulsarEngine/Entities/GhostSensorEntity.h"/>
+        <File Name="src/PulsarEngine/Entities/GraphicalEntity.h"/>
+        <File Name="src/PulsarEngine/Entities/SensorEntity.h"/>
+        <File Name="src/PulsarEngine/Entities/DynamicEntity.h"/>
+        <File Name="src/PulsarEngine/Entities/DynamicEntity.cpp"/>
+        <File Name="src/PulsarEngine/Entities/GraphicalEntity.cpp"/>
+        <File Name="src/PulsarEngine/Entities/Entity.cpp"/>
+      </VirtualDirectory>
+      <File Name="src/PulsarEngine/PulsarEngine.h"/>
+      <File Name="src/PulsarEngine/StandardConverters.h"/>
+      <File Name="src/PulsarEngine/LuaBinding.h"/>
+      <File Name="src/PulsarEngine/IObject.h"/>
+      <File Name="src/PulsarEngine/ConfigStorage.cpp"/>
+      <File Name="src/PulsarEngine/ContactPointStorage.h"/>
+      <File Name="src/PulsarEngine/ICallback.h"/>
+      <File Name="src/PulsarEngine/Irrlicht_using.h"/>
+      <File Name="src/PulsarEngine/ContactPointStorage.cpp"/>
+      <File Name="src/PulsarEngine/IObject.cpp"/>
+      <File Name="src/PulsarEngine/StandardCallbacks.h"/>
+      <File Name="src/PulsarEngine/ConfigStorage.h"/>
+      <File Name="src/PulsarEngine/ValueFactory.h"/>
+      <File Name="src/PulsarEngine/ValueFactory.cpp"/>
+      <File Name="src/PulsarEngine/PulsarEngine.cpp"/>
+    </VirtualDirectory>
+    <File Name="src/main.cpp"/>
+  </VirtualDirectory>
   <Description/>
   <Dependencies/>
-  <VirtualDirectory Name="src">
-    <File Name="main.cpp"/>
-    <File Name="Build/main.lua"/>
-  </VirtualDirectory>
-  <VirtualDirectory Name="PulsarEngine">
-    <File Name="ContactPointStorage.cpp"/>
-    <File Name="LuaBinding.h"/>
-    <File Name="PulsarEngine.h"/>
-    <File Name="IObject.h"/>
-    <File Name="ContactPointStorage.h"/>
-    <File Name="ConfigStorage.cpp"/>
-    <File Name="ConfigStorage.h"/>
-    <File Name="Irrlicht_using.h"/>
-    <File Name="ValueFactory.cpp"/>
-    <File Name="PulsarEngine.cpp"/>
-    <File Name="ValueFactory.h"/>
-    <File Name="IObject.cpp"/>
-    <File Name="changes.txt"/>
-    <File Name="Build/pulsar_defs.lua"/>
-    <File Name="Build/config.xml"/>
-    <VirtualDirectory Name="Entities">
-      <File Name="DynamicEntity.cpp"/>
-      <File Name="Entity.cpp"/>
-      <File Name="Entity.h"/>
-      <File Name="GhostSensorEntity.cpp"/>
-      <File Name="GhostSensorEntity.h"/>
-      <File Name="GraphicalEntity.cpp"/>
-      <File Name="GraphicalEntity.h"/>
-      <File Name="SensorEntity.cpp"/>
-      <File Name="SensorEntity.h"/>
-      <File Name="DynamicEntity.h"/>
-    </VirtualDirectory>
-    <VirtualDirectory Name="ToolKits">
-      <File Name="CameraToolKit.cpp"/>
-      <File Name="CameraToolKit.h"/>
-      <File Name="EntityToolKit.cpp"/>
-      <File Name="EntityToolKit.h"/>
-      <File Name="IToolKit.h"/>
-      <File Name="ConstraintToolKit.h"/>
-      <File Name="ScriptToolKit.cpp"/>
-      <File Name="PulsarEventReceiver.cpp"/>
-      <File Name="PulsarEventReceiver.h"/>
-      <File Name="ScriptToolKit.h"/>
-      <File Name="ConstraintToolKit.cpp"/>
-    </VirtualDirectory>
-    <File Name="StandardConverters.h"/>
-    <File Name="ICallback.h"/>
-    <File Name="StandardCallbacks.h"/>
-  </VirtualDirectory>
   <Dependencies Name="Debug"/>
-  <VirtualDirectory Name="MultiBouncer">
-    <File Name="MultiBouncer/MultiBouncerGame.h"/>
-    <File Name="MultiBouncer/MultiBouncerGame.cpp"/>
-    <File Name="MultiBouncer/bouncers/StandardBouncer.xml"/>
-  </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g;-W" Required="yes" PreCompiledHeader="">
@@ -136,7 +136,7 @@
         <Library Value="boost_system"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./obj" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="MultiBouncer" PauseExecWhenProcTerminates="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./obj" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="src/MultiBouncer" PauseExecWhenProcTerminates="yes"/>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
         <StartupCommands/>
@@ -144,7 +144,7 @@
       <PreBuild/>
       <PostBuild>
         <Command Enabled="no">doxygen doxyfile</Command>
-        <Command Enabled="yes">mv $(IntermediateDirectory)/$(ProjectName) MultiBouncer/$(ProjectName)</Command>
+        <Command Enabled="yes">mv $(IntermediateDirectory)/$(ProjectName) src/MultiBouncer/$(ProjectName)</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>

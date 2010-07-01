@@ -2,7 +2,7 @@
 #define __constrainttoolkit__
 
 #include "IToolKit.h" // Base class: pulsar::IToolKit
-#include "Entity.h"
+#include "../Entities/Entity.h"
 
 namespace pulsar
 {

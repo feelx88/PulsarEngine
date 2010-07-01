@@ -1,5 +1,5 @@
 #include "GhostSensorEntity.h"
-#include "Irrlicht_using.h"
+#include "../Irrlicht_using.h"
 
 using namespace pulsar;
 

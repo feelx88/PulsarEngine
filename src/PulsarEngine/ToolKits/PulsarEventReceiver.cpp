@@ -1,6 +1,6 @@
 #include "PulsarEventReceiver.h"
-#include "Irrlicht_using.h"
-#include "PulsarEngine.h"
+#include "../Irrlicht_using.h"
+#include "../PulsarEngine.h"
 
 namespace pulsar
 {

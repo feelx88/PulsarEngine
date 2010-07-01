@@ -1,8 +1,8 @@
 #ifndef __itoolkit__
 #define __itoolkit__
 
-#include "IObject.h" // Base class: pulsar::IObject
-#include "ValueFactory.h"
+#include "../IObject.h" // Base class: pulsar::IObject
+#include "../ValueFactory.h"
 
 namespace pulsar
 {

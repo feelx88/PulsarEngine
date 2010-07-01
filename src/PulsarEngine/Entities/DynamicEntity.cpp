@@ -2,7 +2,7 @@
 
 using namespace pulsar;
 
-#include "Irrlicht_using.h"
+#include "../Irrlicht_using.h"
 
 DynamicEntity::DynamicEntity( unsigned int iID, float fMass, vector3df pos,
 	vector3df rot ) : GraphicalEntity( iID, pos, rot ), m_pRigidBody( 0 )

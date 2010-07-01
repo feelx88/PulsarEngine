@@ -2,10 +2,10 @@
 ## Auto Generated makefile by CodeLite IDE
 ## any manual changes will be erased      
 ##
-## Debug
+## MultiBouncerDebug
 ProjectName            :=PulsarEngine
-ConfigurationName      :=Debug
-IntermediateDirectory  :=./Build
+ConfigurationName      :=MultiBouncerDebug
+IntermediateDirectory  :=./obj
 OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := "/home/feelx/devel/Project0012"
 ProjectPath            := "/home/feelx/devel/Project0012"
@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Felix Müller
-Date                   :=27.06.2010
+Date                   :=01.07.2010
 CodeLitePath           :="/home/feelx/.codelite"
 LinkerName             :=g++
 ArchiveTool            :=ar rcus
@@ -59,9 +59,12 @@ all: $(OutputFile)
 $(OutputFile): makeDirStep $(Objects)
 	@$(MakeDirCommand) $(@D)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
+	@echo Executing Post Build commands ...
+	mv $(IntermediateDirectory)/$(ProjectName) MultiBouncer/$(ProjectName)
+	@echo Done
 
 makeDirStep:
-	@test -d ./Build || $(MakeDirCommand) ./Build
+	@test -d ./obj || $(MakeDirCommand) ./obj
 
 PreBuild:
 

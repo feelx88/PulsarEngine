@@ -9,14 +9,21 @@ namespace pulsar
 ConfigStorage::ConfigStorage( bool bAllowDuplicates )
 	: IObject(),
 		m_bAllowDuplicates( bAllowDuplicates ), m_sSectionLabel ( "Section" ),
-		m_bAlwaysGetRecursive( false )
+		m_bAlwaysGetRecursive( true )
 {
 	setClassName( P_CONFIGSTORAGE );
 }
 
 ConfigStorage::~ConfigStorage()
 {
+	for( ValueMap::iterator x = m_mValues.begin(); x != m_mValues.end(); x++ )
+		delete x->second;
 	m_mValues.clear();
+
+	for( std::map<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
+		x != m_mSubSections.end(); x++ )
+		delete x->second;
+	m_mSubSections.clear();
 }
 
 ConfigStorage *ConfigStorage::setValue( String sName, Value *value )
@@ -47,6 +54,7 @@ ConfigStorage *ConfigStorage::deleteValue( String sName )
 	ValueMap::iterator x = m_mValues.find( sName );
 	if( x != m_mValues.end() )
 	{
+		delete x->second;
 		m_mValues.erase( sName );
 		std::cout << "Deleting: " << sName.c_str() << std::endl;
 	}

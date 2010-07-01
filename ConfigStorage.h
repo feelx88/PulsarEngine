@@ -148,7 +148,7 @@ public:
 		String sOperation = "Adding: ";
 		if( !m_bAllowDuplicates && varExists( sName ) )
 		{
-			m_mValues.erase( sName );
+			deleteValue( sName );
 			sOperation = "Changing: ";
 		}
 
@@ -176,7 +176,7 @@ public:
 		String sOperation = "Adding: ";
 		if( !m_bAllowDuplicates && varExists( sName ) )
 		{
-			m_mValues.erase( sName );
+			deleteValue( sName );
 			sOperation = "Changing: ";
 		}
 

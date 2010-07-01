@@ -42,11 +42,16 @@ int MultiBouncerGame::run()
 	if( !m_Engine )
 		return EXIT_FAILURE;
 
+	ConfigStorage *p = new ConfigStorage();
+	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	delete p;
+
 	m_Engine->setSimulationState( true );
 
 	while( m_Engine->run() )
 	{
 		m_Engine->beginDrawing();
+
 		m_Engine->endDrawing();
 	}
 

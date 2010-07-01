@@ -2,7 +2,7 @@
 <CodeLite_Project Name="PulsarEngine" InternalType="Console">
   <Plugins>
     <Plugin Name="qmake">
-      <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
+      <![CDATA[00030001N0005Debug0000000000000001N0017MultiBouncerDebug0000000000000001N0007Release000000000000]]>
     </Plugin>
   </Plugins>
   <Description/>
@@ -57,6 +57,11 @@
     <File Name="StandardCallbacks.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
+  <VirtualDirectory Name="MultiBouncer">
+    <File Name="MultiBouncer/MultiBouncerGame.h"/>
+    <File Name="MultiBouncer/MultiBouncerGame.cpp"/>
+    <File Name="MultiBouncer/bouncers/StandardBouncer.xml"/>
+  </VirtualDirectory>
   <Settings Type="Executable">
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g;-W" Required="yes" PreCompiledHeader="">
@@ -82,7 +87,7 @@
         <Library Value="boost_system"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Build" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./obj" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
         <StartupCommands/>
@@ -90,6 +95,56 @@
       <PreBuild/>
       <PostBuild>
         <Command Enabled="no">doxygen doxyfile</Command>
+        <Command Enabled="no">mv obj/PulsarEngine Build/PulsarEngine</Command>
+      </PostBuild>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="MultiBouncerDebug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-W" Required="yes" PreCompiledHeader="">
+        <IncludePath Value="."/>
+        <IncludePath Value="../irrlicht/include"/>
+        <IncludePath Value="../bullet/src"/>
+        <IncludePath Value="../lua/src"/>
+      </Compiler>
+      <Linker Options="" Required="yes">
+        <LibraryPath Value="../bullet/lib"/>
+        <LibraryPath Value="../irrlicht/lib/Linux"/>
+        <LibraryPath Value="../lua/lib"/>
+        <LibraryPath Value="../boost/lib"/>
+        <Library Value="Irrlicht"/>
+        <Library Value="GL"/>
+        <Library Value="Xrandr"/>
+        <Library Value="lua"/>
+        <Library Value="BulletSoftBody"/>
+        <Library Value="BulletDynamics"/>
+        <Library Value="BulletCollision"/>
+        <Library Value="LinearMath"/>
+        <Library Value="boost_filesystem"/>
+        <Library Value="boost_system"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./obj" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="MultiBouncer" PauseExecWhenProcTerminates="yes"/>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild>
+        <Command Enabled="no">doxygen doxyfile</Command>
+        <Command Enabled="yes">mv $(IntermediateDirectory)/$(ProjectName) MultiBouncer/$(ProjectName)</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
@@ -144,8 +199,4 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
   </Settings>
-  <VirtualDirectory Name="MultiBouncer">
-    <File Name="MultiBouncer/MultiBouncerGame.h"/>
-    <File Name="MultiBouncer/MultiBouncerGame.cpp"/>
-  </VirtualDirectory>
 </CodeLite_Project>

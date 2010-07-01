@@ -2,9 +2,10 @@
 #include "PulsarEngine.h"
 #include "EntityToolKit.h"
 
-using namespace pulsar;
-
 #include "Irrlicht_using.h"
+
+namespace pulsar
+{
 
 IrrlichtDevice *Entity::s_pDevice = 0;
 btDynamicsWorld *Entity::s_pWorld = 0;
@@ -34,9 +35,9 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 
 Entity::~Entity()
 {
-	this->getWorld()->removeAction( this );
+	getWorld()->removeAction( this );
 	delete this->m_pConfig;
-	this->s_pEntityToolKit->deleteEntity( this->m_iID );
+	s_pEntityToolKit->deleteEntity( m_iID );
 }
 
 void Entity::loadFromValues( ConfigStorage *pConf )
@@ -118,4 +119,6 @@ btCollisionShape* Entity::getFromShapePool( String sName, Vector size )
 	std::cout << "Adding to ShapePool: " << poolString << std::endl;
 
 	return shape;
+}
+
 }

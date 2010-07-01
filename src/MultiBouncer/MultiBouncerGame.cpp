@@ -44,7 +44,7 @@ int MultiBouncerGame::run()
 
 	ConfigStorage *p = new ConfigStorage();
 	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	delete p;
+	p->get<DynamicEntity>( "lol" ).setPosition( Vector() );
 
 	m_Engine->setSimulationState( true );
 

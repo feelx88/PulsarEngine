@@ -9,7 +9,7 @@ namespace pulsar
 ConfigStorage::ConfigStorage( bool bAllowDuplicates )
 	: IObject(),
 		m_bAllowDuplicates( bAllowDuplicates ), m_sSectionLabel ( "Section" ),
-		m_bAlwaysGetRecursive( true )
+		m_bAlwaysGetRecursive( false )
 {
 	setClassName( P_CONFIGSTORAGE );
 }

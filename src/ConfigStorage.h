@@ -12,6 +12,10 @@ Vector parseStringToVector( String sVector );
 
 struct ValueNotFoundException
 {
+	ValueNotFoundException( String name )
+	{
+		std::cout << "Value not found: " << name << std::endl;
+	}
 };
 
 class ConfigStorage : public IObject
@@ -43,7 +47,7 @@ public:
 		{
 			return x->second->getAs<T>();
 		}
-		throw new ValueNotFoundException();
+		throw new ValueNotFoundException( sName );
 	}
 
 	template <class T>
@@ -61,7 +65,7 @@ public:
 			if( x->second->varExists( sName ) )
 				return x->second->getRecursive<T>( sName );
 		}
-		throw new ValueNotFoundException();
+		throw new ValueNotFoundException( sName );
 	}
 
 	template <class T>
@@ -126,8 +130,8 @@ public:
 			sOperation = "Changing: ";
 		}
 
-		Value *val = new Value( 0, Value::getTypeName<T>() );
-		val->set( value );
+		Value *val = new Value( value );//0, Value::getTypeName<T>() );
+		//val->set( value );
 
 		m_mValues.insert( std::make_pair( sName, val ) );
 
@@ -152,9 +156,9 @@ public:
 			sOperation = "Changing: ";
 		}
 
-		Value *val = new Value( 0, Value::getTypeName<T>() );
-		T *tmp = new T( value );
-		val->set( *tmp );
+		Value *val = new Value( *new T( value ) );//0, Value::getTypeName<T>() );
+		/*T *tmp = new T( value );
+		val->set( *tmp );*/
 		val->setAutoDestroy( true );
 
 		m_mValues.insert( std::make_pair( sName, val ) );

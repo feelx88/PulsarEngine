@@ -150,7 +150,7 @@ protected:
 	unsigned int m_iCurOutputLine;
 
 	//bullet members
-	btDynamicsWorld *m_pBulletWorld;
+	btDiscreteDynamicsWorld *m_pBulletWorld;
 	bool m_bSimulate;
 
 	//needed to let Irrlicht Calculate it's fps

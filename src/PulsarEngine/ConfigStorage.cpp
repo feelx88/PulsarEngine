@@ -17,12 +17,18 @@ ConfigStorage::ConfigStorage( bool bAllowDuplicates )
 ConfigStorage::~ConfigStorage()
 {
 	for( ValueMap::iterator x = m_mValues.begin(); x != m_mValues.end(); x++ )
-		delete x->second;
+	{
+		if( x->second )
+			delete x->second;
+	}
 	m_mValues.clear();
 
 	for( std::map<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
 		x != m_mSubSections.end(); x++ )
-		delete x->second;
+	{
+		if( x->second )
+			delete x->second;
+	}
 	m_mSubSections.clear();
 }
 
@@ -121,7 +127,7 @@ ConfigStorage *ConfigStorage::addSubSection( String sName, ConfigStorage *pSubSe
 {
 	Value *val = new Value( pSubSection );
 	setValue( sName, val );
-	this->m_mSubSections[sName] = pSubSection;
+	this->m_mSubSections.insert( std::make_pair( sName, pSubSection ) );
 
 	return this;
 }
@@ -134,7 +140,7 @@ ConfigStorage *ConfigStorage::getSubSection( String sName )
 	if( x != m_mSubSections.end() )
 		return x->second;
 
-	return this;
+	return 0;
 }
 
 String ConfigStorage::toXMLString( int iLevel )

@@ -248,7 +248,7 @@ private:
 
 	std::deque<String> m_qReadQueue;
 
-	std::map<String, ConfigStorage*> m_mSubSections;
+	std::multimap<String, ConfigStorage*> m_mSubSections;
 
 	bool m_bAllowDuplicates;
 	bool m_bAlwaysGetRecursive;

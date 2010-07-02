@@ -42,8 +42,16 @@ int MultiBouncerGame::run()
 	if( !m_Engine )
 		return EXIT_FAILURE;
 
-	ConfigStorage *p = new ConfigStorage();
+	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
+
+	ConfigStorage *p = new ConfigStorage( true );
 	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+
+	PulsarEventReceiver *evt = dynamic_cast<PulsarEventReceiver*>( m_Engine->getToolKit( "EventReceiver" ) );
 
 	m_Engine->setSimulationState( true );
 

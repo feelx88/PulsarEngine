@@ -33,7 +33,20 @@ public:
 	 */
 	void clear()
 	{
+		for( ValueMap::iterator x = m_mValues.begin(); x != m_mValues.end(); x++ )
+		{
+			if( x->second )
+				delete x->second;
+		}
 		m_mValues.clear();
+
+		for( std::map<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
+			x != m_mSubSections.end(); x++ )
+		{
+			if( x->second )
+				delete x->second;
+		}
+		m_mSubSections.clear();
 	}
 
 	template <class T>
@@ -207,6 +220,8 @@ public:
 	bool varExists( String sName );
 
 	ConfigStorage *append( ConfigStorage *pConf );
+
+	ConfigStorage *appendCopy( ConfigStorage *pConf );
 
 	ConfigStorage *parseXMLFile( String sFileName, String sSubSectionName = "" );
 

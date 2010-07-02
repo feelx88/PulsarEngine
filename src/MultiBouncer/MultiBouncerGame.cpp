@@ -46,12 +46,13 @@ int MultiBouncerGame::run()
 
 	ConfigStorage *p = new ConfigStorage( true );
 	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
-	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+
+	ConfigStorage *q = new ConfigStorage( true );
+	q->append( p );
 
 	PulsarEventReceiver *evt = dynamic_cast<PulsarEventReceiver*>( m_Engine->getToolKit( "EventReceiver" ) );
+
+	p->get<DynamicEntity>( "Bouncer" ).setPosition( Vector( 0, 10, 0 ) );
 
 	m_Engine->setSimulationState( true );
 

@@ -16,20 +16,7 @@ ConfigStorage::ConfigStorage( bool bAllowDuplicates )
 
 ConfigStorage::~ConfigStorage()
 {
-	for( ValueMap::iterator x = m_mValues.begin(); x != m_mValues.end(); x++ )
-	{
-		if( x->second )
-			delete x->second;
-	}
-	m_mValues.clear();
-
-	for( std::map<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
-		x != m_mSubSections.end(); x++ )
-	{
-		if( x->second )
-			delete x->second;
-	}
-	m_mSubSections.clear();
+	clear();
 }
 
 ConfigStorage *ConfigStorage::setValue( String sName, Value *value )
@@ -83,6 +70,16 @@ bool ConfigStorage::varExists( String sName )
 }
 
 ConfigStorage *ConfigStorage::append( ConfigStorage *pConf )
+{
+	for( ValueMap::iterator x = pConf->m_mValues.begin();
+		x != pConf->m_mValues.end(); x++ )
+	{
+		setValue( x->first, x->second );
+	}
+	return this;
+}
+
+ConfigStorage *ConfigStorage::appendCopy( ConfigStorage *pConf )
 {
 	for( ValueMap::iterator x = pConf->m_mValues.begin();
 		x != pConf->m_mValues.end(); x++ )

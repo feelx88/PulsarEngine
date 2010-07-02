@@ -42,7 +42,7 @@ Entity::~Entity()
 
 void Entity::loadFromValues( ConfigStorage *pConf )
 {
-	this->m_pConfig->append( pConf );
+	this->m_pConfig->appendCopy( pConf );
 }
 
 void Entity::loadFromFile( String sFileName, String sNodeName )

@@ -24,8 +24,7 @@ void PulsarEventReceiver::init( Value initParam )
 	PulsarEngine *pEngine = PulsarEngine::getInstance();
 	this->m_pDevice = pEngine->getIrrlichtDevice();
 	this->m_pGUI = this->m_pDevice->getGUIEnvironment();
-	this->m_pScriptToolKit =
-		dynamic_cast<ScriptToolKit*>( pEngine->getToolKit( "Script" ) );
+	this->m_pScriptToolKit = pEngine->getToolKit<ScriptToolKit>( "Script" );
 
 	this->m_iScreenWidth = pEngine->getScreenWidth();
 	this->m_iScreenHeight = pEngine->getScreenHeight();

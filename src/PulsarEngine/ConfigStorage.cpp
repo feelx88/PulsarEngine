@@ -144,6 +144,9 @@ String ConfigStorage::toXMLString( int iLevel )
 {
 	String out = "";
 
+	if( iLevel == 0 )
+		out += "<?xml version=\"1.0\"?>\n\n";
+
 	String sTab = "";
 
 	for( int x = 0; x < iLevel; x++ )
@@ -162,28 +165,34 @@ String ConfigStorage::toXMLString( int iLevel )
 		{
 			ConfigStorage *pConf = x->second->getAs<ConfigStorage*>();
 
-			out += sTab + "<" + pConf->m_sSectionLabel
-				+ " Name=\"" + x->first + "\">\n";
+			if( pConf )
+			{
+				out += sTab + "<" + pConf->m_sSectionLabel
+					+ " Name=\"" + String( x->first ) + "\">\n";
 
-			out += pConf->toXMLString( iLevel + 1 );
+				out += pConf->toXMLString( iLevel + 1 );
 
-			out += sTab + "</" + pConf->m_sSectionLabel + ">\n";
+				out += sTab + "</" + pConf->m_sSectionLabel + ">\n";
+			}
 		}
 		else if( x->second->toString() == "" )
 		{
 			ConfigStorage *pConf = x->second->toValues();
 
-			out += sTab + "<" + pConf->m_sSectionLabel
-				+ " Name=\"" + x->first + "\">\n";
+			if( pConf )
+			{
+				out += sTab + "<" + pConf->m_sSectionLabel
+					+ " Name=\"" + String( x->first ) + "\">\n";
 
-			out += pConf->toXMLString( iLevel + 1 );
+				out += pConf->toXMLString( iLevel + 1 );
 
-			out += sTab + "</" + pConf->m_sSectionLabel + ">\n";
+				out += sTab + "</" + pConf->m_sSectionLabel + ">\n";
+			}
 		}
 		else
 		{
 			String sType = x->second->getTypeName();
-			out += sTab + "<" + sType + " Name=\"" + x->first + "\""
+			out += sTab + "<" + sType + " Name=\"" + String( x->first ) + "\""
 				+ ">" + x->second->toString() + "</" + sType + ">\n";
 		}
 	}
@@ -233,16 +242,14 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 				}
 				else //<Entity ...><...><...></Entity>
 				{
-					ConfigStorage *pConf = new ConfigStorage();
-					pConf->parseXMLReader( pXML );
+					ConfigStorage pConf;
+					pConf.parseXMLReader( pXML );
 
 					Value *val = new Value( 0, sCurrentNodeType );
-					val->parseValues( pConf );
+					val->parseValues( &pConf );
 					setValue( sCurrentNodeName, val );
 
 					bElementOpened = false;
-
-					delete pConf;
 				}
 			}
 		} //node type text
@@ -281,9 +288,9 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 						else
 							sType = "String";
 
-						Value val( 0, sType );
-						val.parseString( sAttrValue );
-						pConf->set( sAttrName, val );
+						Value tmp( 0, sType );
+						tmp.parseString( sAttrValue );
+						pConf->set( sAttrName, tmp );
 					}
 
 					val = new Value( 0, sCurrentNodeType );

@@ -38,8 +38,6 @@ public:
 
 	void init( String sConfigFileName );
 
-	IToolKit *getToolKit( String sName );
-
 	//IEventReceiver OnEvent()
 	bool OnEvent( const irr::SEvent &evt );
 
@@ -84,7 +82,13 @@ public:
 		m_bSimulate = bSimulate;
 	}
 
-	void addToolKit( String sName, IToolKit *pToolKit );
+	void addToolKit( String name, IToolKit *pToolKit );
+
+	template <class T>
+	T *getToolKit( String name )
+	{
+		return dynamic_cast<T*>( m_mToolKits[name] );
+	}
 
 	void log( Value sValue );
 

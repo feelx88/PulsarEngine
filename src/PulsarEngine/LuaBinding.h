@@ -27,8 +27,7 @@ public:
 		S_PULSARENGINE = PulsarEngine::getInstance();
 
 		S_LUASTATE =
-			dynamic_cast<ScriptToolKit*>( S_PULSARENGINE->getToolKit( "Script" ) )
-			->getLuaState();
+			S_PULSARENGINE->getToolKit<ScriptToolKit>( "Script" )->getLuaState();
 
 		luaL_Reg pulsar[] =
 		{
@@ -330,7 +329,7 @@ public:
 	static int pulsar_getEventReceiver( lua_State *pS )
 	{
 		LuaBinding::pushPointer<PulsarEventReceiver>( pS,
-			dynamic_cast<PulsarEventReceiver*>( S_PULSARENGINE->getToolKit( "EventReceiver" ) ),
+			S_PULSARENGINE->getToolKit<PulsarEventReceiver>( "EventReceiver" ),
 			PULSAREVENTRECEIVER );
 		return 1;
 	}
@@ -338,7 +337,7 @@ public:
 	static int pulsar_getScriptToolKit( lua_State *pS )
 	{
 		LuaBinding::pushPointer<ScriptToolKit>( pS,
-			dynamic_cast<ScriptToolKit*>( S_PULSARENGINE->getToolKit( "Script" ) ),
+			S_PULSARENGINE->getToolKit<ScriptToolKit>( "Script" ),
 			SCRIPTTOOLKIT );
 		return 1;
 	}
@@ -346,7 +345,7 @@ public:
 	static int pulsar_getEntityToolKit( lua_State *pS )
 	{
 		LuaBinding::pushPointer<EntityToolKit>( pS,
-			dynamic_cast<EntityToolKit*>( S_PULSARENGINE->getToolKit( "Entity" ) ),
+			S_PULSARENGINE->getToolKit<EntityToolKit>( "Entity" ),
 			ENTITYTOOLKIT );
 		return 1;
 	}
@@ -354,7 +353,7 @@ public:
 	static int pulsar_getConstraintToolKit( lua_State *pS )
 	{
 		LuaBinding::pushPointer<ConstraintToolKit>( pS,
-			dynamic_cast<ConstraintToolKit*>( S_PULSARENGINE->getToolKit( "Constraint" ) ),
+			S_PULSARENGINE->getToolKit<ConstraintToolKit>( "Constraint" ),
 			CONSTRAINTTOOLKIT );
 		return 1;
 	}
@@ -362,7 +361,7 @@ public:
 	static int pulsar_getCameraToolKit( lua_State *pS )
 	{
 		LuaBinding::pushPointer<CameraToolKit>( pS,
-			dynamic_cast<CameraToolKit*>( S_PULSARENGINE->getToolKit( "Camera" ) ),
+			S_PULSARENGINE->getToolKit<CameraToolKit>( "Camera" ),
 			CAMERATOOLKIT );
 		return 1;
 	}

@@ -63,15 +63,6 @@ void PulsarEngine::init( String sConfigFileName )
 	initStandardToolKits();
 }
 
-IToolKit *PulsarEngine::getToolKit( String sName )
-{
-	std::map<String, IToolKit*>::iterator x = this->m_mToolKits.find( sName );
-	if( x != this->m_mToolKits.end() )
-		return x->second;
-	else
-		return 0;
-}
-
 void PulsarEngine::loadConfig( String sConfigFileName )
 {
 	m_pMainConfiguration = new ConfigStorage();
@@ -199,15 +190,14 @@ void PulsarEngine::initOpenAL()
 
 void PulsarEngine::initStandardToolKits()
 {
-	getToolKit( "EventReceiver" )->init( Value() );
-	getToolKit( "Script" )->init( Value() );
-	getToolKit( "Entity" )->init( Value() );
-	getToolKit( "Constraint" )->init( Value() );
-	getToolKit( "Camera" )->init( Value() );
+	m_mToolKits["EventReceiver"]->init( Value() );
+	m_mToolKits["Script"]->init( Value() );
+	m_mToolKits["Entity"]->init( Value() );
+	m_mToolKits["Constraint"]->init( Value() );
+	m_mToolKits["Camera"]->init( Value() );
 
 	//Load Pulsar definitions for lua
-	dynamic_cast<ScriptToolKit*>( getToolKit( "Script" ) )
-		->executeFile( "pulsar_defs.lua" );
+	getToolKit<ScriptToolKit>( "Script" )->executeFile( "pulsar_defs.lua" );
 }
 
 void PulsarEngine::registerTypes()
@@ -301,9 +291,9 @@ void PulsarEngine::showConsoleWindow( bool bVisible )
 	m_pConsoleWindow->setVisible( bVisible );
 }
 
-void PulsarEngine::addToolKit( String sName, IToolKit *pToolKit )
+void PulsarEngine::addToolKit( String name, IToolKit *pToolKit )
 {
-	this->m_mToolKits.insert( std::make_pair( sName, pToolKit ) );
+	m_mToolKits[name] = pToolKit;
 }
 
 void PulsarEngine::log( Value sValue )

@@ -25,8 +25,7 @@ void MultiBouncerGame::init()
 		addLightSceneNode( 0, Vector( 0, 100, 0 ) );
 
 	//Add a camera
-	CameraToolKit *cam =
-		dynamic_cast<CameraToolKit*>( m_Engine->getToolKit( "Camera" ) );
+	CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>( "Camera" );
 	cam->addCamera( ID_CAMERA_PRIMARY );
 	cam->setCameraPosition( ID_CAMERA_PRIMARY, Vector( 0, 10, -50 ) );
 	cam->setCameraTarget( ID_CAMERA_PRIMARY, Vector( 0, 0, 0 ) );
@@ -46,13 +45,15 @@ int MultiBouncerGame::run()
 
 	ConfigStorage *p = new ConfigStorage( true );
 	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->setAlwaysGetRecursive();
 
 	ConfigStorage *q = new ConfigStorage( true );
 	q->append( p );
 
-	PulsarEventReceiver *evt = dynamic_cast<PulsarEventReceiver*>( m_Engine->getToolKit( "EventReceiver" ) );
+	PulsarEventReceiver *evt =
+		m_Engine->getToolKit<PulsarEventReceiver>( "EventReceiver" );
 
-	p->get<DynamicEntity>( "Bouncer" ).setPosition( Vector( 0, 10, 0 ) );
+	p->get<DynamicEntity>( "StandardBouncer" ).applyImpulse( Vector( 0, 100, 0 ) );
 
 	m_Engine->setSimulationState( true );
 

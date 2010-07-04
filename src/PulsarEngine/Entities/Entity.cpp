@@ -27,8 +27,8 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 	getWorld()->addAction( this );
 
 	if( !this->s_pEntityToolKit )
-		this->s_pEntityToolKit = dynamic_cast<EntityToolKit*>(
-			PulsarEngine::getInstance()->getToolKit( "Entity" ) );
+		this->s_pEntityToolKit =
+			PulsarEngine::getInstance()->getToolKit<EntityToolKit>( "Entity" );
 
 	this->m_iID = this->s_pEntityToolKit->addEntity( iID, this );
 }

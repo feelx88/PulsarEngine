@@ -122,9 +122,12 @@ ConfigStorage *ConfigStorage::parseXMLFile( String sFileName, String sSubSection
 
 ConfigStorage *ConfigStorage::addSubSection( String sName, ConfigStorage *pSubSection )
 {
-	Value *val = new Value( pSubSection );
-	setValue( sName, val );
-	this->m_mSubSections.insert( std::make_pair( sName, pSubSection ) );
+	if( pSubSection )
+	{
+		Value *val = new Value( *pSubSection );
+		setValue( sName, val );
+		this->m_mSubSections.insert( std::make_pair( sName, pSubSection ) );
+	}
 
 	return this;
 }

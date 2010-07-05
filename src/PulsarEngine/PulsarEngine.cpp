@@ -214,7 +214,7 @@ void PulsarEngine::registerTypes()
 	Value::registerType<String>( P_STRING, new StringConverter() );
 	Value::registerType<Vector>( P_VECTOR, new VectorConverter() );
 
-	Value::registerType<ConfigStorage*>( "ConfigStorage", 0 );
+	Value::registerType<ConfigStorage>( "ConfigStorage", 0 );
 
 	//Register standard Entitys
 	Value::registerType<GraphicalEntity>( "GraphicalEntity",

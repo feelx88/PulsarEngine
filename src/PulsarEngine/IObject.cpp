@@ -2,9 +2,7 @@
 
 using namespace pulsar;
 
-unsigned int IObject::s_iIDCounter = 8192;
-std::map<unsigned int, IObject*> IObject::s_mObjects;
-std::stack<unsigned int> IObject::s_Unused;
+std::deque<IObject*> IObject::s_mObjects;
 
 std::ostream& operator<<( std::ostream& out, String str )
 {

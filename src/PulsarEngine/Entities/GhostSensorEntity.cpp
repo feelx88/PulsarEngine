@@ -92,11 +92,11 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 			currentTriggers.insert( entity );
 
 			if( this->m_Callback )
-				this->m_Callback->onTrigger( entity );
+				this->m_Callback->onTrigger( new Value( entity ) );
 
 			if( m_TriggeringEntities.find( entity ) == m_TriggeringEntities.end()
 				&& this->m_onEnterCallback )
-				this->m_onEnterCallback->onTrigger( entity );
+				this->m_onEnterCallback->onTrigger( new Value( entity ) );
 
 			m_TriggeringEntities.erase( entity );
 		}
@@ -106,7 +106,7 @@ void GhostSensorEntity::updateAction(btCollisionWorld* collisionWorld, btScalar 
 		x != m_TriggeringEntities.end(); x++ )
 	{
 		if( this->m_onLeaveCallback )
-			this->m_onLeaveCallback->onTrigger( *x );
+			this->m_onLeaveCallback->onTrigger( new Value( *x ) );
 	}
 
 	m_TriggeringEntities.swap( currentTriggers );

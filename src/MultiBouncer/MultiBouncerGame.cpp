@@ -53,8 +53,6 @@ int MultiBouncerGame::run()
 	PulsarEventReceiver *evt =
 		m_Engine->getToolKit<PulsarEventReceiver>( "EventReceiver" );
 
-	p->get<DynamicEntity>( "StandardBouncer" ).applyImpulse( Vector( 0, 100, 0 ) );
-
 	m_Engine->setSimulationState( true );
 
 	while( m_Engine->run() )

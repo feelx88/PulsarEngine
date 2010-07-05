@@ -16,9 +16,9 @@ struct ApplyImpulseCallback : public ICallback
 	{
 	}
 
-	void onTrigger( Entity* entity )
+	void onTrigger( Value *val )
 	{
-		DynamicEntity *dyn = dynamic_cast<DynamicEntity*>( entity );
+		DynamicEntity *dyn = val->getAs<DynamicEntity*>();
 		if( dyn )
 		{
 			dyn->applyImpulse( m_Direction, m_Offset );

@@ -98,13 +98,13 @@ public:
 	 * @brief Adds a callback which gets called when a button is pressed.
 	 * @param cb The Callback to call.
 	 */
-	void addButtonCallback( irr::EKEY_CODE key, ICallback *cb );
+	void addKeyPressedCallback( irr::EKEY_CODE key, ICallback *cb );
 
 	/**
 	 * @brief Clears all callbacks of the sepcified key.
 	 * @param key Key which callbacks should get deleted.
 	 */
-	void clearButtonCallbacks( irr::EKEY_CODE key );
+	void clearKeyPressedCallbacks( irr::EKEY_CODE key );
 
 	/**
 	 * @brief irr::EventReceiver::OnEvent()

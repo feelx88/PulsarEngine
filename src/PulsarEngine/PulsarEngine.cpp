@@ -28,7 +28,7 @@ PulsarEngine::PulsarEngine() : IObject(), m_bSimulate( false ), m_pDevice( 0 ),
 	m_pSceneManager( 0 ), m_pGUI( 0 ), m_pConsoleInput( 0 ), m_pConsoleOutput( 0 ),
 	m_pConsoleSendButton( 0 ), m_pConsoleWindow( 0 ), m_pTimer( 0 )
 {
-	setInfo( P_PULSARENGINE, P_PULSARENGINE, 1 );
+	setInfo( P_PULSARENGINE, P_PULSARENGINE );
 
 	//intialise the value factory
 	registerTypes();

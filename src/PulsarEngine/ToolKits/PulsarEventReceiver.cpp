@@ -121,12 +121,12 @@ void PulsarEventReceiver::lockMouse( bool bLock )
 	}*/
 }
 
-void PulsarEventReceiver::addButtonCallback( irr::EKEY_CODE key, ICallback *cb )
+void PulsarEventReceiver::addKeyPressedCallback( irr::EKEY_CODE key, ICallback *cb )
 {
 	m_Callbacks.insert( std::make_pair( key, cb ) );
 }
 
-void PulsarEventReceiver::clearButtonCallbacks( irr::EKEY_CODE key )
+void PulsarEventReceiver::clearKeyPressedCallbacks( irr::EKEY_CODE key )
 {
 	m_Callbacks.erase( key );
 }

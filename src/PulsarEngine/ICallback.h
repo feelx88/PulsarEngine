@@ -4,7 +4,7 @@
 namespace pulsar
 {
 
-class Entity;
+class Value;
 
 /**
  * @class ICallback
@@ -13,13 +13,15 @@ class Entity;
  * @file ICallback.h
  * @brief Generic Callback Interface.
  */
-struct ICallback
+struct ICallback : public IObject
 {
 	/**
 	 * @brief This method gets called if an Entity activates the sensor.
-	 * @param pE The triggering Entity.
+	 * @param val Value which can hold needed parameters
 	 */
-	virtual void onTrigger( Entity *pE ) = 0;
+	virtual void onTrigger( Value *val ) = 0;
+
+	virtual ~ICallback(){};
 };
 
 }

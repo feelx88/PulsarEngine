@@ -7,6 +7,7 @@
 #include <typeinfo>
 #include <vector>
 #include <map>
+#include <deque>
 
 #include <irrlicht.h>
 
@@ -57,48 +58,25 @@ public:
 
 	IObject()
 	{
-		if( s_Unused.empty() )
-			m_iObjectID = ++s_iIDCounter;
-		else
-		{
-			m_iObjectID = s_Unused.top();
-			s_Unused.pop();
-		}
-
-		s_mObjects.insert( std::make_pair( m_iObjectID, this ) );
+		s_mObjects.push_back( this );
 	}
 
 	virtual ~IObject()
 	{
-		if( m_iObjectID >= 8192 )
-			s_Unused.push( m_iObjectID );
-
+		s_mObjects.erase(
+			std::find( s_mObjects.begin(), s_mObjects.end(), this ) );
 		m_sName = "";
 		m_sClassName = "";
-		m_iObjectID = -1;
 	}
 
 	String getClassName()
 	{
-		return String( "IObject" );
+		return m_sClassName;
 	}
 
 	String getName()
 	{
 		return m_sName;
-	}
-
-	unsigned int getObjectID()
-	{
-		return m_iObjectID;
-	}
-
-	static IObject *getByObjectID( int iID )
-	{
-		std::map<unsigned int, IObject*>::iterator x = s_mObjects.find( iID );
-		if( x != s_mObjects.end() )
-			return x->second;
-		return 0;
 	}
 
 protected:
@@ -113,35 +91,16 @@ protected:
 		m_sName = sName;
 	}
 
-	void setObjectID( unsigned int iID )
-	{
-		if( iID > 0 )
-		{
-			if( m_iObjectID >= 8192 )
-				s_Unused.push( m_iObjectID );
-
-			s_mObjects.erase( iID );
-
-			m_iObjectID = iID;
-			s_mObjects.insert( std::make_pair( m_iObjectID, this ) );
-		}
-	}
-
-	void setInfo( String sClassName, String sName, unsigned int iID = 0 )
+	void setInfo( String sClassName, String sName )
 	{
 		setClassName( sClassName );
 		setName( sName );
-		setObjectID( iID );
 	}
 
 	String m_sClassName;
 	String m_sName;
-	unsigned int m_iObjectID;
 
-	static std::map<unsigned int, IObject*> s_mObjects;
-	static std::stack<unsigned int> s_Unused;
-
-	static unsigned int s_iIDCounter;
+	static std::deque<IObject*> s_mObjects;
 };
 
 }

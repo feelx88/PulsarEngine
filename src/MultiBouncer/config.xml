@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Section Name="Display">
+	<Int Name="ScreenHeight">768</Int>
+	<Int Name="ScreenWidth">1024</Int>
+	<Int Name="ColorDepth">16</Int>
+	<String Name="Driver">OpenGL</String>
+	<String Name="WindowTitle">Pulsar Test Program</String>
+</Section>
+<Section Name="Console">
+	<Int Name="ConsoleHeight">300</Int>
+	<Int Name="ConsoleWidth">400</Int>
+	<String Name="ConsoleTitle">Pulsar Test Prog</String>
+</Section>
+<Section Name="Game">
+	<Bool Name="ScriptOnly">False</Bool>
+</Section>

@@ -1,3 +1,4 @@
+
 #include "ConfigStorage.h"
 
 #include <fstream>
@@ -7,16 +8,29 @@ namespace pulsar
 {
 
 ConfigStorage::ConfigStorage( bool bAllowDuplicates )
-	: IObject(),
-		m_bAllowDuplicates( bAllowDuplicates ), m_sSectionLabel ( "Section" ),
-		m_bAlwaysGetRecursive( false )
+	: IObject(), m_bAllowDuplicates( bAllowDuplicates ), 
+	m_sSectionLabel ( "Section" ), m_bAlwaysGetRecursive( false ), m_FilterEnabled( false ),
+	m_noSubSections( false )
 {
 	setClassName( P_CONFIGSTORAGE );
+	m_FilterStrings.push_back( m_sSectionLabel );
 }
 
 ConfigStorage::~ConfigStorage()
 {
 	clear();
+}
+
+ConfigStorage& ConfigStorage::addTypeFilter( String typeName )
+{
+	m_FilterEnabled = true;
+	m_FilterStrings.push_back( typeName );
+	return *this;
+}
+
+void ConfigStorage::setTypeFilterStatus( bool status )
+{
+	m_FilterEnabled = status;
 }
 
 ConfigStorage *ConfigStorage::setValue( String sName, Value *value )
@@ -55,7 +69,7 @@ ConfigStorage *ConfigStorage::deleteValue( String sName )
 }
 
 bool ConfigStorage::varExists( String sName )
-{
+{	
 	if( m_mValues.find( sName ) != m_mValues.end() )
 		return true;
 
@@ -120,13 +134,30 @@ ConfigStorage *ConfigStorage::parseXMLFile( String sFileName, String sSubSection
 	return this;
 }
 
+int ConfigStorage::countVars( String sName )
+{
+	int count = 0;
+	count += m_mValues.count( sName );
+	
+	for( std::multimap<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
+		x != m_mSubSections.end(); x++ )
+		count += x->second->countVars( sName );
+	
+	return count;
+}
+
 ConfigStorage *ConfigStorage::addSubSection( String sName, ConfigStorage *pSubSection )
 {
 	if( pSubSection )
 	{
-		Value *val = new Value( *pSubSection );
-		setValue( sName, val );
-		this->m_mSubSections.insert( std::make_pair( sName, pSubSection ) );
+		if( m_noSubSections )
+			append( pSubSection );
+		else
+		{
+			Value *val = new Value( *pSubSection );
+			setValue( sName, val );
+			this->m_mSubSections.insert( std::make_pair( sName, pSubSection ) );
+		}
 	}
 
 	return this;
@@ -141,6 +172,11 @@ ConfigStorage *ConfigStorage::getSubSection( String sName )
 		return x->second;
 
 	return 0;
+}
+
+void ConfigStorage::setNoSubSections( bool enabled )
+{
+	m_noSubSections = enabled;
 }
 
 String ConfigStorage::toXMLString( int iLevel )
@@ -208,7 +244,7 @@ void ConfigStorage::saveToFile( String sFileName, bool bAppend )
 		( bAppend ? std::ios::out | std::ios::app : std::ios::out ) );
 
 	if( !bAppend )
-		out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
+		out << "<?xml version=\"1.0\"?>\n\n";
 
 	out << toXMLString().c_str();
 
@@ -219,10 +255,16 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 	bool bElementOpened = false;
 	String sCurrentNodeName = "";
 	String sCurrentNodeType = "";
+	irr::io::EXML_NODE nodeType = EXN_NONE;
 
 	while( pXML->read() )
 	{
-		if( pXML->getNodeType() == EXN_ELEMENT_END ) //</foo>
+		bool validNode = m_FilterEnabled ? std::count( m_FilterStrings.begin(), 
+			m_FilterStrings.end(), sCurrentNodeType ) : true;
+		
+		nodeType = pXML->getNodeType();
+			
+		if( nodeType == EXN_ELEMENT_END ) //</foo>
 		{
 			if( bElementOpened )
 				bElementOpened = false;
@@ -230,7 +272,7 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 				return;
 		} //node type element_end
 
-		if( pXML->getNodeType() == EXN_TEXT ) //<...>foo</...>
+		if( nodeType == EXN_TEXT ) //<...>foo</...>
 		{
 			if( bElementOpened )
 			{
@@ -243,7 +285,7 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 					val->parseString( sNodeData );
 					setValue( sCurrentNodeName, val );
 				}
-				else //<Entity ...><...><...></Entity>
+				else if( validNode )//<Entity ...><...><...></Entity>
 				{
 					ConfigStorage pConf;
 					pConf.parseXMLReader( pXML );
@@ -257,16 +299,16 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 			}
 		} //node type text
 
-		if( pXML->getNodeType() == EXN_ELEMENT ) //<foo ...>
+		if( nodeType == EXN_ELEMENT ) //<foo ...>
 		{
 			sCurrentNodeName = pXML->getAttributeValueSafe( "Name" );
 			sCurrentNodeType = pXML->getNodeName();
-
-			if( sCurrentNodeName != "" ) //Prevent nameless tags
+		
+			if( sCurrentNodeName != "" ) //Prevent nameless tags and filtered types
 			{
 				Value *val = 0;
 
-				if( pXML->isEmptyElement() ) //<foo ... />
+				if( pXML->isEmptyElement() && validNode ) //<foo ... />
 				{
 					ConfigStorage *pConf = new ConfigStorage();
 
@@ -312,6 +354,10 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 					else //<Section>...</Section>
 					{
 						ConfigStorage *pConf = new ConfigStorage();
+						
+						pConf->m_FilterStrings = m_FilterStrings;
+						pConf->m_FilterEnabled = m_FilterEnabled;
+						
 						pConf->parseXMLReader( pXML );
 
 						pConf->setNodeName( sCurrentNodeName );

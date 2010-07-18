@@ -1,12 +1,24 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 CMAKE_POLICY( SET CMP0015 NEW )
 
-INCLUDE_DIRECTORIES( ../irrlicht/include ../bullet/src ../boost ../lua/src )
-LINK_DIRECTORIES( ../../irrlicht/lib/Linux ../../bullet/lib ../../boost/lib ../../lua/src )
+#include directories
+SET( IRRLICHT_INCLUDE_DIR "../irrlicht/include" )
+SET( BULLET_INCLUDE_DIR "../bullet/src" )
+SET( LUA_INCLUDE_DIR "../lua/src" )
+SET( BOOST_INCLUDE_DIR "../boost" )
+
+#linker directories
+SET( IRRLICHT_LIB_DIR "../irrlicht/lib/Linux" )
+SET( BULLET_LIB_DIR "../bullet/lib" )
+SET( LUA_LIB_DIR "../boost/lib" )
+SET( BOOST_LIB_DIR "../lua/src" )
+
+INCLUDE_DIRECTORIES( ${IRRLICHT_INCLUDE_DIR} ${BULLET_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} )
+LINK_DIRECTORIES(  ${IRRLICHT_LIB_DIR} ${BULLET_LIB_DIR} ${LUA_LIB_DIR} ${BOOST_LIB_DIR} )
 
 PROJECT( PulsarEngine )
 
-ADD_LIBRARY( PulsarEngine
+ADD_LIBRARY( PulsarEngine SHARED
 ### Engine
 src/PulsarEngine/IObject.cpp
 src/PulsarEngine/PulsarEngine.cpp

@@ -48,6 +48,9 @@ public:
 		}
 		m_mSubSections.clear();
 	}
+	
+	ConfigStorage& addTypeFilter( String typeName );
+	void setTypeFilterStatus( bool status );
 
 	template <class T>
 	T& get( String sName )
@@ -234,6 +237,8 @@ public:
 	ConfigStorage *addSubSection( String sName, ConfigStorage *pSubSection );
 
 	ConfigStorage *getSubSection( String sName );
+	
+	void setNoSubSections( bool enabled = true );
 
 	int getNumSubSections()
 	{
@@ -248,6 +253,7 @@ public:
 	void setSectionLabel( String sLabel )
 	{
 		m_sSectionLabel = sLabel;
+		m_FilterStrings.push_back( m_sSectionLabel );
 	}
 
 	void setAlwaysGetRecursive( bool bAlwaysRecursive = true )
@@ -264,6 +270,11 @@ private:
 	std::deque<String> m_qReadQueue;
 
 	std::multimap<String, ConfigStorage*> m_mSubSections;
+	
+	bool m_FilterEnabled;
+	std::deque<String> m_FilterStrings;
+	
+	bool m_noSubSections;
 
 	bool m_bAllowDuplicates;
 	bool m_bAlwaysGetRecursive;

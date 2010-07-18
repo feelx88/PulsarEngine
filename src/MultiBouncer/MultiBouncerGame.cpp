@@ -4,6 +4,11 @@
 
 using namespace pulsar;
 
+enum
+{
+	ID_CAMERA_PRIMARY = 1
+};
+
 MultiBouncerGame::MultiBouncerGame() : m_Engine( 0 )
 {
 	init();
@@ -44,14 +49,15 @@ int MultiBouncerGame::run()
 	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
 
 	ConfigStorage *p = new ConfigStorage( true );
-	p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	//p->parseXMLFile( "bouncers/StandardBouncer.xml" );
 	p->setAlwaysGetRecursive();
-
-	ConfigStorage *q = new ConfigStorage( true );
-	q->append( p );
 
 	PulsarEventReceiver *evt =
 		m_Engine->getToolKit<PulsarEventReceiver>( "EventReceiver" );
+		
+	DynamicEntity *lol = new DynamicEntity( 10.f );
+	lol->loadFromFile( "bouncers/StandardBouncer.xml" );
+	std::cout << lol->getConfig()->countVars( "Mass" ) << std::endl;
 
 	m_Engine->setSimulationState( true );
 

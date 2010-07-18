@@ -12,11 +12,6 @@ struct MultiBouncerGame
 
 private:
 
-	enum
-	{
-		ID_CAMERA_PRIMARY = 1
-	};
-
 	void init();
 	void initGUI();
 

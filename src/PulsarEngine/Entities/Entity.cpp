@@ -21,6 +21,12 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 {
 	setClassName( "Entity" );
 	m_pConfig = new ConfigStorage();
+	m_pConfig->setAlwaysGetRecursive();
+	m_pConfig->setNoSubSections();
+	
+	m_pConfig->addTypeFilter( "Int" ).addTypeFilter( "Float" ).
+		addTypeFilter( "String" ).addTypeFilter( "Vector" );
+	
 	m_pConfig->setCopy<Vector>( "Position", position );
 	m_pConfig->setCopy<Vector>( "Rotation", rotation );
 

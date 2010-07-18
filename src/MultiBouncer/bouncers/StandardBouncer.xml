@@ -1,8 +1,8 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 
 <Section Name="Bouncer">
 	<DynamicEntity Name="StandardBouncer">
-		<String Name="Shape">$Box</Shape>
+		<String Name="Shape">$Box</String>
 		<Vector Name="Size">3,1,3</Vector>
 		<Float Name="Mass">10</Float>
 	</DynamicEntity>

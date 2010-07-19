@@ -161,7 +161,7 @@ struct VectorConverter : public IValueConverter
 	}
 };
 
-//*Entity
+//Entity
 template <class T>
 struct EntityTypesConverter : public IValueConverter
 {
@@ -171,13 +171,20 @@ struct EntityTypesConverter : public IValueConverter
 			return 0;
 
 		T *pE = new T( pConf->get<int>( "ID", 0 ) );
-		pE->loadFromValues( pConf );
+		
+		if( pConf->varExists( "File" ) )
+		{
+			pE->loadFromFile( pConf->get<String>( "File" ) );
+			pE->loadFromValues( pConf );
+		}
+		else
+			pE->loadFromValues( pConf );
 
 		return static_cast<void*>( pE );
 	}
 };
 
-//*SensorEntity
+//SensorEntity
 template <class T>
 struct SensorEntityTypesConverter : public IValueConverter
 {
@@ -187,7 +194,13 @@ struct SensorEntityTypesConverter : public IValueConverter
 			return 0;
 
 		T *pE = new T( pConf->get<int>( "ID", 0 ) );
-		pE->loadFromValues( pConf );
+		if( pConf->varExists( "File" ) )
+		{
+			pE->loadFromFile( pConf->get<String>( "File" ) );
+			pE->loadFromValues( pConf );
+		}
+		else
+			pE->loadFromValues( pConf );
 
 		if( pConf->varExists( "Callback" ) )
 		{

@@ -29,7 +29,7 @@ public:
 	virtual ~Entity();
 
 	virtual void loadFromValues( ConfigStorage *pConf ) = 0;
-	virtual void loadFromFile( String sFileName, String sNodeName ) = 0;
+	virtual void loadFromFile( String sFileName, String sNodeName = "" ) = 0;
 
 	virtual void setPosition( Vector pos ) = 0;
 	virtual Vector getPosition() = 0;

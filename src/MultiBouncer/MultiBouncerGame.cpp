@@ -2,7 +2,10 @@
 
 #include "../PulsarEngine/Irrlicht_using.h"
 
+#include <boost/filesystem.hpp>
+
 using namespace pulsar;
+using namespace boost;
 
 enum
 {
@@ -10,7 +13,7 @@ enum
 };
 
 MultiBouncerGame::MultiBouncerGame() : m_Engine( 0 )
-{
+{	
 	init();
 	initGUI();
 }
@@ -38,7 +41,31 @@ void MultiBouncerGame::init()
 
 void MultiBouncerGame::initGUI()
 {
+	//Check for folders
+	if( !filesystem::exists( "bouncers" ) )
+	{
+		std::cout << "Directory bouncers does not exist!" << std::endl;
+		exit( EXIT_FAILURE );
+	}
+	if( !filesystem::exists( "maps" ) )
+	{
+		std::cout << "Directory maps does not exist!" << std::endl;
+		exit( EXIT_FAILURE );
+	}
+	
+	//Read bouncer and map file names
+	filesystem::directory_iterator end;
+	for( filesystem::directory_iterator x( "bouncers" ); x != end; x++ )
+		m_BouncerFiles.push_back( x->string().c_str() );
+	for( filesystem::directory_iterator x( "maps" ); x != end; x++ )
+		m_BouncerFiles.push_back( x->string().c_str() );
+	
+	//Get gui environment
 	IGUIEnvironment *gui = m_Engine->getIrrlichtDevice()->getGUIEnvironment();
+	
+	m_MainMenu = gui->addWindow( 
+		recti( 0, 0, m_Engine->getScreenWidth(), m_Engine->getScreenHeight() ),
+		false, L"MainMenu" );
 }
 
 int MultiBouncerGame::run()
@@ -49,15 +76,11 @@ int MultiBouncerGame::run()
 	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
 
 	ConfigStorage *p = new ConfigStorage( true );
-	//p->parseXMLFile( "bouncers/StandardBouncer.xml" );
+	p->parseXMLFile( "maps/testmap.xml" );
 	p->setAlwaysGetRecursive();
 
 	PulsarEventReceiver *evt =
 		m_Engine->getToolKit<PulsarEventReceiver>( "EventReceiver" );
-		
-	DynamicEntity *lol = new DynamicEntity( 10.f );
-	lol->loadFromFile( "bouncers/StandardBouncer.xml" );
-	std::cout << lol->getConfig()->countVars( "Mass" ) << std::endl;
 
 	m_Engine->setSimulationState( true );
 

@@ -22,7 +22,7 @@ public:
 	~GraphicalEntity();
 
 	virtual void loadFromValues( ConfigStorage *pConf );
-	virtual void loadFromFile( String sFileName, String sNodeName );
+	virtual void loadFromFile( String sFileName, String sNodeName = "" );
 
 	virtual void loadSceneNodeFromFile( String sModelFileName );
 	virtual void createSceneNodeFromPrimitive(

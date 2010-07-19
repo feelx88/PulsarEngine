@@ -24,7 +24,7 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 	m_pConfig->setAlwaysGetRecursive();
 	m_pConfig->setNoSubSections();
 	
-	m_pConfig->addTypeFilter( "Int" ).addTypeFilter( "Float" ).
+	m_pConfig->addTypeFilter( "Bool" ).addTypeFilter( "Int" ).addTypeFilter( "Float" ).
 		addTypeFilter( "String" ).addTypeFilter( "Vector" );
 	
 	m_pConfig->setCopy<Vector>( "Position", position );

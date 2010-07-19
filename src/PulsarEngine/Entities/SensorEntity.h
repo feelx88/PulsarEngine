@@ -19,7 +19,7 @@ public:
 		return false;
 	}
 
-	virtual void loadFromFile( String sFileName, String sNodeName );
+	virtual void loadFromFile( String sFileName, String sNodeName = "" );
 	virtual void loadFromValues( ConfigStorage* pConf );
 
 	virtual bool isEntityTriggering( Entity *pE ) = 0;

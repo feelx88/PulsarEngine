@@ -57,4 +57,4 @@ src/main.cpp
 src/MultiBouncer/MultiBouncerGame.cpp
 )
 
-TARGET_LINK_LIBRARIES( MultiBouncer PulsarEngine )
+TARGET_LINK_LIBRARIES( MultiBouncer PulsarEngine boost_filesystem )

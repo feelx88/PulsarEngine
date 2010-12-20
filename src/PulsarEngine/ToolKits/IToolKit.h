@@ -27,11 +27,19 @@ class IToolKit : public pulsar::IObject
 	 * @brief Standard destructor.
 	 */
 	virtual ~IToolKit(){};
+	
+	/**
+	 * @brief This method returns the name of the ToolKit.
+	 * This name is used internally in the engine to save its ToolKits.
+	 * @sa PulsarEngine::getToolKit
+	 *
+	 **/
+	virtual String getToolKitClassName() = 0;
 
 	/**
 	 * @brief Initialization method.
-	 * @param initParam If needed, an additional parameter can be passed packed
-	 * in this Value.
+	 * @param initParam If needed, an additional parameter can be passed 
+	 * packed in this Value.
 	 */
 	virtual void init( Value initParam ) = 0;
 
@@ -42,8 +50,8 @@ class IToolKit : public pulsar::IObject
 	virtual void update(){};
 
 	/**
-	 * @brief Update method for something that has to be updated every internal
-	 * tick of the physics Engine.
+	 * @brief Update method for something that has to be updated every 
+	 * internal tick of the physics Engine.
 	 */
 	virtual void tickUpdate(){};
 

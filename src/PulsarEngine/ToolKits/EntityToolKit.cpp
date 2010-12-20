@@ -8,10 +8,16 @@ namespace pulsar
 EntityToolKit::EntityToolKit() : IToolKit()
 {
 	setClassName( "EntityToolKit" );
+	setName( "Entity" );
 }
 
 EntityToolKit::~EntityToolKit()
 {
+}
+
+String EntityToolKit::getToolKitClassName()
+{
+	return typeid( *this ).name();
 }
 
 void EntityToolKit::init( Value initParam )

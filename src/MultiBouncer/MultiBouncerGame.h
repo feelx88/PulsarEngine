@@ -3,6 +3,8 @@
 
 #include "../PulsarEngine/PulsarEngine.h"
 
+#include <boost/filesystem.hpp>
+
 struct MultiBouncerGame
 {
 	MultiBouncerGame();
@@ -14,11 +16,18 @@ private:
 
 	void init();
 	void initGUI();
-
-	std::vector<String> m_BouncerFiles;
-	std::vector<String> m_MapFiles;
+	
+	pulsar::DynamicEntity *createBouncer();
+	pulsar::DynamicEntity *createGoal();
+	pulsar::DynamicEntity *createBall();
 	
 	irr::gui::IGUIWindow *m_MainMenu;
+	irr::gui::IGUIListBox *m_MapList;
+	irr::gui::IGUIButton *m_OkButton;
+	irr::gui::IGUISpinBox *m_PlayerCounter;
+	
+	std::vector<boost::filesystem::path> m_MapFiles;
+	std::vector<pulsar::ConfigStorage*> m_MapData;
 
 	pulsar::PulsarEngine *m_Engine;
 };

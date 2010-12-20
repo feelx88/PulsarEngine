@@ -28,6 +28,13 @@ class ScriptToolKit : public pulsar::IToolKit
 	 * @brief Standard destructor.
 	 */
 	virtual ~ScriptToolKit();
+	
+	/**
+	 * @brief Get the ToolKit's name.
+	 *
+	 * @return String containing "Script".
+	 **/
+	virtual String getToolKitClassName();
 
 	/**
 	 * @brief Initialization function.

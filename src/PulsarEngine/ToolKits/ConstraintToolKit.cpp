@@ -7,10 +7,16 @@ namespace pulsar
 ConstraintToolKit::ConstraintToolKit() : IToolKit()
 {
 	setClassName( "ConstraintToolKit" );
+	setName( "Constraint" );
 }
 
 ConstraintToolKit::~ConstraintToolKit()
 {
+}
+
+String ConstraintToolKit::getToolKitClassName()
+{
+	return typeid( *this ).name();
 }
 
 void ConstraintToolKit::init( Value initValue )

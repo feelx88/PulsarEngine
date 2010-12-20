@@ -27,6 +27,13 @@ public:
 	virtual void tickUpdate();
 
 	/**
+	 * @brief Get the ToolKit's name.
+	 *
+	 * @return String containing "Camera".
+	 **/
+	virtual String getToolKitClassName();
+	
+	/**
 	 * @brief Adds an existing ICameraSceneNode to the ToolKit.
 	 * @param iID ID of the camera.
 	 * @param pCam Pointer to the ICameraSceneNode.

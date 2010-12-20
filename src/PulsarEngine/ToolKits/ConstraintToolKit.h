@@ -21,7 +21,14 @@ public:
 	 * @brief Standard destructor.
 	 */
 	virtual ~ConstraintToolKit();
-
+	
+	/**
+	 * @brief Get the ToolKit's name.
+	 *
+	 * @return String containing "Constraint".
+	 **/
+	virtual String getToolKitClassName();
+	
 	/**
 	 * @brief Initialization method.
 	 * @param initValue Not used.

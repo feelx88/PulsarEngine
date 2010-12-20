@@ -15,6 +15,11 @@ ScriptToolKit::~ScriptToolKit()
 	m_iIDCounter = 0;
 }
 
+String ScriptToolKit::getToolKitClassName()
+{
+	return typeid( *this ).name();
+}
+
 void ScriptToolKit::init( Value initParam )
 {
 	m_pLuaState = luaL_newstate();

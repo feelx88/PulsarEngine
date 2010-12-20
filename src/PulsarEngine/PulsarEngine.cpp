@@ -124,17 +124,17 @@ void PulsarEngine::initIrrlicht()
 			"WindowTitle", "PulsarEngine" ) ).c_str() );
 
 	//add the event receiver as ToolKit
-	addToolKit( "EventReceiver", pEvt );
+	addToolKit( pEvt );
 
 	//Initialize the irrlicht toolkits
 	EntityToolKit *pEntTK = new EntityToolKit();
-	addToolKit( "Entity", pEntTK );
+	addToolKit( pEntTK );
 
 	ConstraintToolKit *pConstTK = new ConstraintToolKit();
-	addToolKit( "Constraint", pConstTK );
+	addToolKit( pConstTK );
 
 	CameraToolKit *pCamTK = new CameraToolKit();
-	addToolKit( "Camera", pCamTK );
+	addToolKit( pCamTK );
 }
 
 void PulsarEngine::initConsole()
@@ -158,7 +158,7 @@ void PulsarEngine::initLua()
 {
 	IToolKit *toolkit = new ScriptToolKit();
 
-	addToolKit( "Script", toolkit );
+	addToolKit( toolkit );
 }
 
 void PulsarEngine::initBullet()
@@ -190,14 +190,14 @@ void PulsarEngine::initOpenAL()
 
 void PulsarEngine::initStandardToolKits()
 {
-	m_mToolKits["EventReceiver"]->init( Value() );
-	m_mToolKits["Script"]->init( Value() );
-	m_mToolKits["Entity"]->init( Value() );
-	m_mToolKits["Constraint"]->init( Value() );
-	m_mToolKits["Camera"]->init( Value() );
+	getToolKit<PulsarEventReceiver>()->init( Value() );
+	getToolKit<ScriptToolKit>()->init( Value() );
+	getToolKit<EntityToolKit>()->init( Value() );
+	getToolKit<ConstraintToolKit>()->init( Value() );
+	getToolKit<CameraToolKit>()->init( Value() );
 
 	//Load Pulsar definitions for lua
-	getToolKit<ScriptToolKit>( "Script" )->executeFile( "pulsar_defs.lua" );
+	getToolKit<ScriptToolKit>()->executeFile( "pulsar_defs.lua" );
 }
 
 void PulsarEngine::registerTypes()
@@ -213,6 +213,7 @@ void PulsarEngine::registerTypes()
 	Value::registerType<bool>( P_BOOL, new BoolConverter() );
 	Value::registerType<String>( P_STRING, new StringConverter() );
 	Value::registerType<Vector>( P_VECTOR, new VectorConverter() );
+	Value::registerType<std::vector<String> >( "StringList", new StringListConverter() );
 
 	Value::registerType<ConfigStorage>( "ConfigStorage", 0 );
 
@@ -291,9 +292,9 @@ void PulsarEngine::showConsoleWindow( bool bVisible )
 	m_pConsoleWindow->setVisible( bVisible );
 }
 
-void PulsarEngine::addToolKit( String name, IToolKit *pToolKit )
+void PulsarEngine::addToolKit( IToolKit *pToolKit )
 {
-	m_mToolKits[name] = pToolKit;
+	m_mToolKits[pToolKit->getToolKitClassName()] = pToolKit;
 }
 
 void PulsarEngine::log( Value sValue )

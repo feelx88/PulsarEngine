@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 
 <Section Name="Display">
 	<Int Name="ScreenHeight">768</Int>
@@ -11,7 +11,12 @@
 	<Int Name="ConsoleHeight">300</Int>
 	<Int Name="ConsoleWidth">400</Int>
 	<String Name="ConsoleTitle">Pulsar Test Prog</String>
+	<Bool Name="ShowConsole">False</Bool>
 </Section>
-<Section Name="Game">
-	<Bool Name="ScriptOnly">False</Bool>
+<Section Name="Input">
+	<String Name="Exit">KEY_ESCAPE</String>
+	<String Name="PlayerLeft1">KEY_A</String>
+	<String Name="PlayerRight1">KEY_S</String>
+	<String Name="PlayerLeft2">KEY_LEFT</String>
+	<String Name="PlayerRight2">KEY_RIGHT</String>
 </Section>

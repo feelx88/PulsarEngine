@@ -7,6 +7,9 @@ namespace pulsar
 
 PulsarEventReceiver::PulsarEventReceiver()
 {
+	setClassName( "PulsarEventReceiver" );
+	setName( "EventReceiver" );
+	
 	//clear key codes
 	for ( int x = 0; x < KEY_KEY_CODES_COUNT; x++ )
 		m_bKeyStates[x] = false;
@@ -19,12 +22,17 @@ PulsarEventReceiver::~PulsarEventReceiver()
 {
 }
 
+String PulsarEventReceiver::getToolKitClassName()
+{
+	return typeid( *this ).name();
+}
+
 void PulsarEventReceiver::init( Value initParam )
 {
 	PulsarEngine *pEngine = PulsarEngine::getInstance();
 	this->m_pDevice = pEngine->getIrrlichtDevice();
 	this->m_pGUI = this->m_pDevice->getGUIEnvironment();
-	this->m_pScriptToolKit = pEngine->getToolKit<ScriptToolKit>( "Script" );
+	this->m_pScriptToolKit = pEngine->getToolKit<ScriptToolKit>();
 
 	this->m_iScreenWidth = pEngine->getScreenWidth();
 	this->m_iScreenHeight = pEngine->getScreenHeight();
@@ -144,8 +152,9 @@ bool PulsarEventReceiver::OnEvent( const SEvent &evt )
 
 		if( keyCB.first != m_Callbacks.end() )
 		{
-			for( ; keyCB.first != keyCB.second; keyCB.first++ )
-				(*keyCB.first).second->onTrigger( 0 );
+			for( std::multimap<irr::EKEY_CODE, ICallback*>::iterator cur = keyCB.first; 
+				cur != keyCB.second; cur++ )
+				(*cur).second->onTrigger( 0 );
 		}
 
 		if ( m_pGUI->getFocus() == m_pConsoleInput )

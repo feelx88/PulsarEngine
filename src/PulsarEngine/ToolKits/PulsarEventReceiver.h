@@ -25,6 +25,13 @@ public:
 	~PulsarEventReceiver();
 
 	/**
+	 * @brief Get the ToolKit's name.
+	 *
+	 * @return String containing "EventReceiver".
+	 **/
+	virtual String getToolKitClassName();
+	
+	/**
 	 * @brief Initialization method.
 	 * @param initParam Not used.
 	 */

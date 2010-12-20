@@ -1,11 +1,13 @@
 #ifndef __standardtypes__
 #define __standardtypes__
 
-
 #include "ValueFactory.h"
 #include "ConfigStorage.h"
 #include "Entities/DynamicEntity.h"
 #include "StandardCallbacks.h"
+
+#include <lua.h>
+#include <lauxlib.h>
 
 namespace pulsar
 {
@@ -159,6 +161,55 @@ struct VectorConverter : public IValueConverter
 		pConf->set<float>( "Z", v.Z );
 		return pConf;
 	}
+};
+
+struct LuaIntConverter : public IValueConverter
+{
+	LuaIntConverter( lua_State *state )
+	{
+		m_State = state;
+	}
+	
+	void *parseString( String str )
+	{
+		lua_getglobal( m_State, str.c_str() );
+		return new int( luaL_checkinteger( m_State, 1 ) );
+	}
+	
+	//TODO: toString
+	
+private:
+	lua_State *m_State;
+};
+
+//std::vector
+struct StringListConverter : public IValueConverter
+{
+    virtual void* parseString( String sInput )
+    {
+	    std::vector<String> *splitted = new std::vector<String>();
+	    sInput.split<std::vector<String> >( *splitted, "," );
+	    return static_cast<void*>( splitted );
+    }
+    
+    virtual String toString( void* pOb )
+    {
+	    if( !pOb )
+		    return "";
+	    
+	    std::vector<String> splitted = *static_cast<std::vector<String>* >( pOb );
+	    String result = "";
+	    int splittedSize = splitted.size();
+	    
+	    for( unsigned int x = 0; x < splittedSize; x++ )
+	    {
+		    result += splitted.at( x );
+		    if( x < splittedSize - 1 )
+			result += ",";
+	    }
+	    
+	    return result;
+    }
 };
 
 //Entity

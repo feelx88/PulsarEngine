@@ -33,6 +33,13 @@ public:
 	virtual ~EntityToolKit();
 
 	/**
+	 * @brief Get the ToolKit's name.
+	 *
+	 * @return String containing "Entity".
+	 **/
+	virtual String getToolKitClassName();
+	
+	/**
 	 * @brief Initializes the toolkit.
 	 * @param initParam Not used.
 	 */

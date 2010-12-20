@@ -14,6 +14,11 @@ CameraToolKit::~CameraToolKit()
 {
 }
 
+String CameraToolKit::getToolKitClassName()
+{
+	return typeid( *this ).name();
+}
+
 void CameraToolKit::init( Value initParam )
 {
 	PulsarEngine *pEngine = PulsarEngine::getInstance();

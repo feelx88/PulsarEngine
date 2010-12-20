@@ -34,7 +34,7 @@ Entity::Entity( unsigned int iID, Vector position, Vector rotation )
 
 	if( !this->s_pEntityToolKit )
 		this->s_pEntityToolKit =
-			PulsarEngine::getInstance()->getToolKit<EntityToolKit>( "Entity" );
+			PulsarEngine::getInstance()->getToolKit<EntityToolKit>();
 
 	this->m_iID = this->s_pEntityToolKit->addEntity( iID, this );
 }

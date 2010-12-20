@@ -24,9 +24,21 @@
 #include "ToolKits/ConstraintToolKit.h"
 #include "ToolKits/CameraToolKit.h"
 
+/** 
+ * @namespace pulsar
+ * @brief Main namespace.
+ * 
+ * Everything related to the Engine is in this namespace.
+ */
 namespace pulsar
 {
 
+/**
+ * @class PulsarEngine
+ * @brief Main class.
+ * 
+ * This class manages every aspect of the engine.
+ */
 class PulsarEngine : public IObject, public btActionInterface
 {
 
@@ -82,12 +94,12 @@ public:
 		m_bSimulate = bSimulate;
 	}
 
-	void addToolKit( String name, IToolKit *pToolKit );
+	void addToolKit( IToolKit *pToolKit );
 
 	template <class T>
-	T *getToolKit( String name )
+	T *getToolKit()
 	{
-		return dynamic_cast<T*>( m_mToolKits[name] );
+		return dynamic_cast<T*>( m_mToolKits[typeid( T ).name()] );
 	}
 
 	void log( Value sValue );
@@ -119,8 +131,6 @@ protected:
 	void loadConfig( String sConfigFileName );
 
 	static PulsarEngine *s_pInstance;
-
-	void initToolKits();
 
 	void initIrrlicht();
 	void initConsole();

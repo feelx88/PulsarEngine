@@ -14,7 +14,7 @@
     Lesser GNU General Public License for more details.
 
     You should have received a copy of the Lesser GNU General Public License
-    along with The PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
+    along with the PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __luabinding__
@@ -33,6 +33,8 @@
 #define DYNAMICENTITY "DynamicEntity"
 #define CONFIGSTORAGE "ConfigStorage"
 #define VECTOR "Vector"
+
+#include "IObject.h"
 
 namespace pulsar
 {
@@ -71,8 +73,10 @@ public:
 
 			{ 0, 0 }
 		};
-
+		
 		luaL_register( S_LUASTATE, PULSAR, pulsar );
+		
+		lua_pop( S_LUASTATE, 1 );
 
 		//PulsarEventReceiver
 		luaL_reg eventReceiver[] =
@@ -89,12 +93,14 @@ public:
 			{ "lockMouse", evt_lockMouse },
 			{ 0, 0 }
 		};
-
+		
 		luaL_register( S_LUASTATE, PULSAREVENTRECEIVER, eventReceiver );
 		luaL_newmetatable( S_LUASTATE, PULSAREVENTRECEIVER );
 		lua_pushliteral( S_LUASTATE, "__index" );
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//ScriptToolKit
 		luaL_reg scriptToolKit[] =
@@ -109,6 +115,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__index" );
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//EntityToolKit
 		luaL_reg entityToolKit[] =
@@ -132,6 +140,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__index" );
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//ConstraintToolKit
 		luaL_reg constraintToolKit[] =
@@ -145,6 +155,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__index" );
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//CameraToolKit
 		luaL_reg cameraToolKit[] =
@@ -161,6 +173,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__index" );
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//Config
 		luaL_Reg config[] =
@@ -194,6 +208,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__call" );
 		lua_pushcfunction( S_LUASTATE, confstore_new );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 
 		//Vector
 		luaL_Reg vector[] =
@@ -248,6 +264,8 @@ public:
 		lua_pushliteral( S_LUASTATE, "__gc" );
 		lua_pushcfunction( S_LUASTATE, vector_gc );
 		lua_rawset( S_LUASTATE, -3 );
+		
+		lua_pop( S_LUASTATE, 2 );
 		//}
 
 		//Entity
@@ -290,7 +308,7 @@ public:
 		lua_pushvalue( S_LUASTATE, -3 );
 		lua_rawset( S_LUASTATE, -3 );
 
-		lua_pop( S_LUASTATE, 3 );
+		lua_pop( S_LUASTATE, 2 );
 	}
 
 	//{ Helper methods

@@ -14,7 +14,7 @@
     Lesser GNU General Public License for more details.
 
     You should have received a copy of the Lesser GNU General Public License
-    along with The PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
+    along with the PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "ScriptToolKit.h"
@@ -23,7 +23,7 @@
 namespace pulsar
 {
 
-ScriptToolKit::ScriptToolKit() : IToolKit()
+ScriptToolKit::ScriptToolKit() : IToolKit(), m_iIDCounter( 0 ), mTickStackSize( 0 )
 {
 	setClassName( "ScriptToolKit" );
 }
@@ -43,22 +43,48 @@ void ScriptToolKit::init( Value initParam )
 {
 	m_pLuaState = luaL_newstate();
 	luaL_openlibs( m_pLuaState );
-
-	luaL_dostring( m_pLuaState, "TickScripts = {}" );
+	
+	//Load Pulsar definitions
+	//luaL_dofile( m_pLuaState, "pulsar_defs.lua" );
+	executeFile( "pulsar_defs.lua" );
+	
+	//Get Pulsar-*
+	lua_getglobal( m_pLuaState, "Pulsar" );
+	
+	//Set Pulsar.TickScripts = {}
+	lua_newtable( m_pLuaState );
+	lua_setfield( m_pLuaState, -2, "TickScripts" );
+	
+	//Set Pulsar.executeTickScripts() = ...
 	luaL_loadstring( m_pLuaState,
-		"if next( TickScripts ) then \
-		for y, x in pairs( TickScripts ) do x() end end" );
-	lua_setglobal( m_pLuaState, "Pulsar.executeTickScripts" );
-
+		"if next( Pulsar.TickScripts ) then \
+		for y, x in pairs( Pulsar.TickScripts ) do x() end end" );
+	lua_setfield( m_pLuaState, -2, "executeTickScripts" );
+	
+	//Pop Pulsar.*
+	lua_pop( m_pLuaState, 1 );
+	
 	LuaBinding::registerAll();
-
+	
 	m_pConsoleWindow = PulsarEngine::getInstance()->getConsoleWindow();
 }
 
 void ScriptToolKit::tickUpdate()
 {
-	lua_getglobal( m_pLuaState, "Pulsar.executeTickScripts" );
-	lua_call( m_pLuaState, 0, 0 );
+	if( mTickStackSize )
+		return;
+	
+	//Get Pulsar.*
+	lua_getglobal( m_pLuaState, "Pulsar" );
+	
+	//Get Pulsar.TickScripts
+	lua_getfield( m_pLuaState, -1, "executeTickScripts" );
+	
+	//Call Pulsar.executeTickScripts
+	lua_pcall( m_pLuaState, 0, LUA_MULTRET, 0 );
+	
+	//Clear Stack
+	lua_pop( m_pLuaState, 1 );
 }
 
 void ScriptToolKit::executeString( String sString )
@@ -74,26 +100,46 @@ void ScriptToolKit::executeFile( String sFileName )
 int ScriptToolKit::addTickScript( String sScript )
 {
 	m_iIDCounter++;
+	mTickStackSize++;
 
-	lua_getglobal( m_pLuaState, "TickScripts" );
+	lua_getglobal( m_pLuaState, "Pulsar" );
+	lua_getfield( m_pLuaState, -1, "TickScripts" );
 	lua_pushinteger( m_pLuaState, m_iIDCounter );
 	luaL_loadstring( m_pLuaState, sScript.c_str() );
 	lua_settable( m_pLuaState, -3 );
+	
+	lua_pop( m_pLuaState, 2 );
 
 	return m_iIDCounter;
 }
 
 void ScriptToolKit::removeTickScript( int iID )
 {
-	lua_getglobal( m_pLuaState, "TickScripts" );
+	mTickStackSize--;
+	lua_getglobal( m_pLuaState, "Pulsar" );
+	lua_getfield( m_pLuaState, -1, "TickScripts" );
+	
 	lua_pushinteger( m_pLuaState, iID );
 	lua_pushnil( m_pLuaState );
 	lua_settable( m_pLuaState, -3 );
+	
+	lua_pop( m_pLuaState, 2 );
 }
 
 void ScriptToolKit::clearScriptStack()
 {
-	executeString( "TickScripts = {}" );
+	mTickStackSize = 0;
+	executeString( "Pulsar.TickScripts = {}" );
+}
+
+irr::EKEY_CODE ScriptToolKit::getPulsarKeyCode( String keyName )
+{
+	lua_getglobal( m_pLuaState, "Pulsar" );
+	lua_getfield( m_pLuaState, -1, "Key" );
+	lua_getfield( m_pLuaState, -1, keyName.c_str() );
+	irr::EKEY_CODE key = (irr::EKEY_CODE)lua_tointeger( m_pLuaState, -1 );
+	lua_pop( m_pLuaState, 3 );
+	return key;
 }
 
 }

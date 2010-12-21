@@ -14,7 +14,7 @@
     Lesser GNU General Public License for more details.
 
     You should have received a copy of the Lesser GNU General Public License
-    along with The PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
+    along with the PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __scripttoolkit__
@@ -95,6 +95,15 @@ class ScriptToolKit : public pulsar::IToolKit
 	 * @brief Clears the tick scripts stack.
 	 */
 	void clearScriptStack();
+	
+	/**
+	 * @brief Get the value of a key code string.
+	 * Only Values from Pulsar.* defined in pulsar_defs.lua are checked.
+	 *
+	 * @param keyname Name of the key.
+	 * @return The code of the specified key.
+	 **/
+	irr::EKEY_CODE getPulsarKeyCode( String keyName );
 
 	/**
 	 * @brief Get the associated lua_State.
@@ -107,7 +116,7 @@ class ScriptToolKit : public pulsar::IToolKit
 
 protected:
 
-	int m_iIDCounter;
+	int m_iIDCounter, mTickStackSize;
 	lua_State *m_pLuaState;
 	irr::gui::IGUIWindow *m_pConsoleWindow;
 

@@ -25,6 +25,9 @@ void MultiBouncerGame::init()
 {
 	m_Engine = PulsarEngine::getInstance();
 	m_Engine->init( "config.xml" );
+	
+	mWinWidth = m_Engine->getScreenWidth();
+	mWindHeight = m_Engine->getScreenHeight();
 
 	//Add a light, complicated version...
 	m_Engine->getIrrlichtDevice()->getSceneManager()->
@@ -63,25 +66,45 @@ void MultiBouncerGame::initGUI()
 	//Get gui environment
 	IGUIEnvironment *gui = m_Engine->getIrrlichtDevice()->getGUIEnvironment();
 	
+	//some defines for easier size definitions
+#define W mWinWidth
+#define H mWindHeight
+#define W2 (W/2)
+#define H2 (H/2)
+#define W4 (W/4)
+#define H4 (H/4)
+	
 	//Add main menu window
 	m_MainMenu = gui->addWindow( 
-		recti( 0, 0, m_Engine->getScreenWidth(), m_Engine->getScreenHeight() ),
+		recti( 20, 20, W - 20, H - 20 ),
 		false, L"MainMenu" );
 	m_MainMenu->getCloseButton()->setVisible( false );
 	m_MainMenu->setDraggable( false );
 	m_MainMenu->setDrawTitlebar( false );
 	
 	//Add the bouncer list
-	m_MapList = gui->addListBox( recti( 10, 30, 160, 200 ), m_MainMenu, -1, true );
+	m_MapList = gui->addListBox( recti( W4, H4, 3 * W4, 3 * H4 ), 
+		m_MainMenu, -1, true );
 	for( unsigned int x = 0; x < m_MapFiles.size(); x++ )
-		m_MapList->addItem( stringw( m_MapData.at( x )->get<String>( "MapName", "No Name!" ) ).c_str() );
+		m_MapList->addItem( stringw( 
+		m_MapData.at( x )->get<String>( "MapName", "No Name!" ) ).c_str() );
 	
-	m_OkButton = gui->addButton( recti( 10, 210, 90, 240 ), m_MainMenu, -1, L"Start" );
+	m_OkButton = gui->addButton( recti( W4, 3 * H4 + 10, W2 - 5, 3 * H4 + 60 ), 
+		m_MainMenu, -1, L"Start" );
 	
-	m_PlayerCounter = gui->addSpinBox( L"Spieleranzahl:", recti( 100, 210, 160, 240 ), true, m_MainMenu );
+	m_PlayerCounter = gui->addSpinBox( L"Spieleranzahl:", 
+		recti( W2 + 4, 3 * H4 + 10, 3 * W4, 3 * H4 + 60 ), true, m_MainMenu );
 	m_PlayerCounter->setDecimalPlaces( 0 );
 	m_PlayerCounter->setRange( 1.f, 32.f );
 	m_PlayerCounter->setValue( 2.f );
+	
+	//undefine sizes
+#undef W
+#undef H
+#undef W2
+#undef H2
+#undef W4
+#undef H4
 	
 	m_MainMenu->setVisible( false );
 }
@@ -105,15 +128,10 @@ int MultiBouncerGame::run()
 		playerLeftString += x;
 		playerRightString += x;
 		
-		lua_getglobal( lua, "Pulsar" );
-		
-		lua_getfield( lua, -1, input->get<String>( playerLeftString, "KEY_F11" ).c_str() );
-		int left = luaL_checkinteger( lua, -1 );
-		lua_pop( lua, 1 );
-		
-		lua_getfield( lua, -1, input->get<String>( playerRightString, "KEY_F11" ).c_str() );
-		int right = luaL_checkinteger( lua, -1 );
-		lua_pop( lua, 2 );
+		int left = m_Engine->getToolKit<ScriptToolKit>()->getPulsarKeyCode( 
+			input->get<String>( playerLeftString, "KEY_F11" ) );
+		int right = m_Engine->getToolKit<ScriptToolKit>()->getPulsarKeyCode( 
+			input->get<String>( playerRightString, "KEY_F11" ) );
 		
 		std::cout << playerLeftString << ": " << left << std::endl
 			<< playerRightString << ": " << right << std::endl;
@@ -132,10 +150,8 @@ int MultiBouncerGame::run()
 		}
 	} exitCallback;
 	
-	lua_getglobal( lua, "Pulsar" );
-	lua_getfield( lua, -1, input->get<String>( "Exit", "" ).c_str() );
-	EKEY_CODE exitKey = (EKEY_CODE)lua_tointeger( lua, -1 );
-	lua_pop( lua, 2 );
+	EKEY_CODE exitKey = m_Engine->getToolKit<ScriptToolKit>()->
+		getPulsarKeyCode( input->get<String>( "Exit", "ESCAPE" ) );
 	
 	evt->addKeyPressedCallback( exitKey, &exitCallback );
 	

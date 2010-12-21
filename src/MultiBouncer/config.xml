@@ -14,9 +14,9 @@
 	<Bool Name="ShowConsole">False</Bool>
 </Section>
 <Section Name="Input">
-	<String Name="Exit">KEY_ESCAPE</String>
-	<String Name="PlayerLeft1">KEY_A</String>
-	<String Name="PlayerRight1">KEY_S</String>
-	<String Name="PlayerLeft2">KEY_LEFT</String>
-	<String Name="PlayerRight2">KEY_RIGHT</String>
+	<String Name="Exit">ESCAPE</String>
+	<String Name="PlayerLeft1">A</String>
+	<String Name="PlayerRight1">S</String>
+	<String Name="PlayerLeft2">LEFT</String>
+	<String Name="PlayerRight2">RIGHT</String>
 </Section>

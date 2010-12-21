@@ -14,7 +14,7 @@
     Lesser GNU General Public License for more details.
 
     You should have received a copy of the Lesser GNU General Public License
-    along with The PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
+    along with the PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __iobject__
@@ -67,6 +67,8 @@ extern "C"
 #define P_SCRIPTTOOLKIT "ScriptToolkit"
 #define P_LUASTATE "lua_StatePointer"
 #define P_IRRLICHTDEVICE "IrrlichtDevicePointer"
+
+#define FASTLOG(x) ( PulsarEngine::getInstance()->log( x ) )
 
 namespace pulsar
 {

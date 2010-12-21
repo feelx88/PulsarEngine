@@ -14,7 +14,7 @@
     Lesser GNU General Public License for more details.
 
     You should have received a copy of the Lesser GNU General Public License
-    along with The PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
+    along with the PulsarEngine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "PulsarEngine.h"
@@ -214,9 +214,6 @@ void PulsarEngine::initStandardToolKits()
 	getToolKit<EntityToolKit>()->init( Value() );
 	getToolKit<ConstraintToolKit>()->init( Value() );
 	getToolKit<CameraToolKit>()->init( Value() );
-
-	//Load Pulsar definitions for lua
-	getToolKit<ScriptToolKit>()->executeFile( "pulsar_defs.lua" );
 }
 
 void PulsarEngine::registerTypes()

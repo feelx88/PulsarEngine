@@ -30,6 +30,8 @@ private:
 	std::vector<pulsar::ConfigStorage*> m_MapData;
 
 	pulsar::PulsarEngine *m_Engine;
+	
+	int mWinWidth, mWindHeight;
 };
 
 #endif // __multibouncergame__

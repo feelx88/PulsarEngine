@@ -24,6 +24,7 @@
 #include "ValueFactory.h"
 #include <irrlicht.h>
 #include <deque>
+#include <iterator>
 
 namespace pulsar
 {
@@ -72,25 +73,27 @@ public:
 	void setTypeFilterStatus( bool status );
 
 	template <class T>
-	T& get( String sName )
+	T& getN( int index, String sName )
 	{
 		if( m_bAlwaysGetRecursive )
-			return getRecursive<T>( sName );
+			return getRecursiveN<T>( index, sName );
 
 		ValueMap::iterator x = m_mValues.find( sName );
 		if( x != m_mValues.end() )
 		{
+			std::advance( x, index );
 			return x->second->getAs<T>();
 		}
 		throw new ValueNotFoundException( sName );
 	}
 
 	template <class T>
-	T &getRecursive( String sName )
+	T &getRecursiveN( int index, String sName )
 	{
 		ValueMap::iterator x = m_mValues.find( sName );
 		if( x != m_mValues.end() )
 		{
+			std::advance( x, index );
 			return x->second->getAs<T>();
 		}
 
@@ -98,17 +101,17 @@ public:
 			x != m_mSubSections.end(); x++ )
 		{
 			if( x->second->varExists( sName ) )
-				return x->second->getRecursive<T>( sName );
+				return x->second->getRecursiveN<T>( index, sName );
 		}
 		throw new ValueNotFoundException( sName );
 	}
 
 	template <class T>
-	T &get( String sName, T &standard )
+	T &getN( int index, String sName, T &standard )
 	{
 		try
 		{
-			return get<T>( sName );
+			return getN<T>( index, sName );
 		}
 		catch( ValueNotFoundException* )
 		{
@@ -117,11 +120,11 @@ public:
 	}
 
 	template <class T>
-	const T& get( String sName, const T& standard )
+	const T& getN( int index, String sName, const T& standard )
 	{
 		try
 		{
-			return get<T>( sName );
+			return getN<T>( index, sName );
 		}
 		catch( ValueNotFoundException* )
 		{
@@ -130,11 +133,11 @@ public:
 	}
 
 	template <class T>
-	T &getRecursive( String sName, T& standard )
+	T &getRecursiveN( int index, String sName, T& standard )
 	{
 		try
 		{
-			return getRecursive<T>( sName );
+			return getRecursiveN<T>( index, sName );
 		}
 		catch( ValueNotFoundException* )
 		{
@@ -143,16 +146,52 @@ public:
 	}
 
 	template <class T>
-	T& getRecursive( String sName, const T& standard )
+	T& getRecursiveN( int index, String sName, const T& standard )
 	{
 		try
 		{
-			return getRecursive<T>( sName );
+			return getRecursiveN<T>( index, sName );
 		}
 		catch( ValueNotFoundException* )
 		{
 			return const_cast<T&>( standard );
 		}
+	}
+	
+	template <class T>
+	T& get( String name )
+	{
+		return getN<T>( 0, name );
+	}
+	
+	template <class T>
+	T& getRecursive( String name )
+	{
+		return getRecursiveN<T>( 0, name );
+	}
+	
+	template <class T>
+	T& get( String name, T &value )
+	{
+		return getN<T>( 0, name, value );
+	}
+	
+	template <class T>
+	T& getRecursive( String name, T &value )
+	{
+		return getRecursiveN<T>( 0, name, value );
+	}
+	
+	template <class T>
+	const T& get( String name, const T &value )
+	{
+		return getN<T>( 0, name, value );
+	}
+	
+	template <class T>
+	const T& getRecursive( String name, const T &value )
+	{
+		return getRecursiveN<T>( 0, name, value );
 	}
 
 	template <class T>
@@ -234,9 +273,14 @@ public:
 		this->m_qReadQueue.push_back( sName );
 		return this;
 	}
-
+	
+	Value *getValueN( int index, String name );
+	Value *getValue( String name );
+	
 	ConfigStorage *setValue( String sName, Value *value );
 
+	ConfigStorage *deleteValueN( int index, String sName );
+	
 	ConfigStorage *deleteValue( String sName );
 
 	bool varExists( String sName );

@@ -30,6 +30,7 @@ void MultiBouncerGame::init()
 	mWindHeight = m_Engine->getScreenHeight();
 
 	//Add a light, complicated version...
+	//TODO: Light management
 	m_Engine->getIrrlichtDevice()->getSceneManager()->
 		addLightSceneNode( 0, Vector( 0, 100, 0 ) );
 
@@ -42,6 +43,7 @@ void MultiBouncerGame::init()
 
 void MultiBouncerGame::initGUI()
 {	
+	//TODO: Filesystem tools
 	//Clear file names
 	m_MapFiles.clear();
 	
@@ -64,6 +66,7 @@ void MultiBouncerGame::initGUI()
 	}
 	
 	//Get gui environment
+	//TODO: Add a better method for gui management
 	IGUIEnvironment *gui = m_Engine->getIrrlichtDevice()->getGUIEnvironment();
 	
 	//some defines for easier size definitions
@@ -109,6 +112,15 @@ void MultiBouncerGame::initGUI()
 	m_MainMenu->setVisible( false );
 }
 
+void MultiBouncerGame::createMap( ConfigStorage *gameConf )
+{
+	String fileName = gameConf->get<String>( "mapfile" );
+	ConfigStorage *map = new ConfigStorage( true );
+	map->parseXMLFile( fileName );
+	
+	gameConf->addSubSection( "Map", map );
+}
+
 int MultiBouncerGame::run()
 {
 	if( !m_Engine )
@@ -118,9 +130,13 @@ int MultiBouncerGame::run()
 	
 	std::vector<EKEY_CODE> leftKeys, rightKeys;
 	
-	lua_State *lua = m_Engine->getToolKit<ScriptToolKit>()->getLuaState();
+	PulsarEventReceiver *evt = m_Engine->getToolKit<PulsarEventReceiver>();
+	
+	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
+	lua_State *lua = scriptTK->getLuaState();
 	
 	//Fill the controls
+	//TODO: Maybe a KeyCodeConverter for <KeyCode> elements?
 	for( int x = 1; x <= 32; x++ )
 	{
 		String playerLeftString = "PlayerLeft";
@@ -128,9 +144,9 @@ int MultiBouncerGame::run()
 		playerLeftString += x;
 		playerRightString += x;
 		
-		int left = m_Engine->getToolKit<ScriptToolKit>()->getPulsarKeyCode( 
+		int left = scriptTK->getPulsarKeyCode( 
 			input->get<String>( playerLeftString, "KEY_F11" ) );
-		int right = m_Engine->getToolKit<ScriptToolKit>()->getPulsarKeyCode( 
+		int right = scriptTK->getPulsarKeyCode( 
 			input->get<String>( playerRightString, "KEY_F11" ) );
 		
 		std::cout << playerLeftString << ": " << left << std::endl
@@ -140,18 +156,26 @@ int MultiBouncerGame::run()
 		rightKeys.push_back( (EKEY_CODE)right );
 	}
 	
-	PulsarEventReceiver *evt =
-		m_Engine->getToolKit<PulsarEventReceiver>();
-	
 	//Create a callback for the quit key
 	struct : public ICallback {
 		virtual void onTrigger( Value* val ){
 			exit( EXIT_SUCCESS );
 		}
 	} exitCallback;
+
+	EKEY_CODE exitKey = scriptTK->getPulsarKeyCode( 
+		input->get<String>( "Exit", "ESCAPE" ) );
 	
-	EKEY_CODE exitKey = m_Engine->getToolKit<ScriptToolKit>()->
-		getPulsarKeyCode( input->get<String>( "Exit", "ESCAPE" ) );
+	ConfigStorage c( true );
+	c.set<int>( "a", 1 );
+	c.set<int>( "a", 2 );
+	c.set<int>( "a", 3 );
+	c.set<int>( "a", 42 );
+	
+	std::cout << c.get<int>( "a" ) << ";" <<
+		c.getN<int>( 1, "a" ) << ";" <<
+		c.getN<int>( 2, "a" ) << ";" <<
+		c.getN<int>( 3, "a" ) << std::endl;
 	
 	evt->addKeyPressedCallback( exitKey, &exitCallback );
 	

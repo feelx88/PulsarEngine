@@ -5,11 +5,12 @@
 
 #include <boost/filesystem.hpp>
 
-struct MultiBouncerGame
+class MultiBouncerGame
 {
+public:
 	MultiBouncerGame();
 	~MultiBouncerGame();
-
+	
 	int run();
 
 private:
@@ -17,9 +18,8 @@ private:
 	void init();
 	void initGUI();
 	
-	pulsar::DynamicEntity *createBouncer();
-	pulsar::DynamicEntity *createGoal();
-	pulsar::DynamicEntity *createBall();
+	void createMap( pulsar::ConfigStorage* gameConf );
+	void createPlayers( pulsar::ConfigStorage *gameConf );
 	
 	irr::gui::IGUIWindow *m_MainMenu;
 	irr::gui::IGUIListBox *m_MapList;

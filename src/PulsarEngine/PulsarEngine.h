@@ -56,13 +56,13 @@ namespace pulsar
  * @class PulsarEngine
  * @brief Main class.
  * 
- * This class manages every aspect of the engine.
+ * This class manages everything related to the engine.
  */
 class PulsarEngine : public IObject, public btActionInterface
 {
 
 public:
-
+	
 	static PulsarEngine *getInstance();
 
 	~PulsarEngine();

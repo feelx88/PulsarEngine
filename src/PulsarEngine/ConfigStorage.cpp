@@ -52,6 +52,23 @@ void ConfigStorage::setTypeFilterStatus( bool status )
 	m_FilterEnabled = status;
 }
 
+Value *ConfigStorage::getValueN( int index, String name )
+{
+	ValueMap::iterator x = m_mValues.find( name );
+	if( x != m_mValues.end() )
+	{
+		std::advance( x, index );
+		return x->second;
+	}
+	else
+		return 0;
+}
+
+Value *ConfigStorage::getValue( String name )
+{
+	return getValueN( 0, name );
+}
+
 ConfigStorage *ConfigStorage::setValue( String sName, Value *value )
 {
 	String sOperation = "Adding: ";
@@ -75,16 +92,22 @@ ConfigStorage *ConfigStorage::setValue( String sName, Value *value )
 	return this;
 }
 
-ConfigStorage *ConfigStorage::deleteValue( String sName )
+ConfigStorage *ConfigStorage::deleteValueN( int index, String sName )
 {
 	ValueMap::iterator x = m_mValues.find( sName );
 	if( x != m_mValues.end() )
 	{
+		std::advance( x, index );
 		delete x->second;
 		m_mValues.erase( sName );
 		std::cout << "Deleting: " << sName.c_str() << std::endl;
 	}
 	return this;
+}
+
+ConfigStorage* ConfigStorage::deleteValue( String sName )
+{
+	deleteValueN( 0, sName );
 }
 
 bool ConfigStorage::varExists( String sName )
@@ -323,7 +346,7 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 			sCurrentNodeName = pXML->getAttributeValueSafe( "Name" );
 			sCurrentNodeType = pXML->getNodeName();
 		
-			if( sCurrentNodeName != "" ) //Prevent nameless tags and filtered types
+			if( sCurrentNodeName != "" ) //Prevent nameless tags
 			{
 				Value *val = 0;
 

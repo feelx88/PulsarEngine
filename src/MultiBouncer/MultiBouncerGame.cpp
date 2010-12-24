@@ -5,6 +5,8 @@
 using namespace pulsar;
 using namespace boost;
 
+#define TEXT_SCORE_ZERO ( L"0 : 0" )
+
 enum
 {
 	ID_CAMERA_PRIMARY = 1,
@@ -101,6 +103,20 @@ void MultiBouncerGame::initGUI()
 	m_PlayerCounter->setRange( 1.f, 32.f );
 	m_PlayerCounter->setValue( 2.f );
 	
+	//Create ingame gui
+	
+	//Upper window for scores etc.
+	mScoreWindow = gui->addWindow( recti( 0, 0, W, 50 ) );
+	mScoreWindow->setDraggable( false );
+	mScoreWindow->setDrawTitlebar( false );
+	mScoreWindow->getCloseButton()->setVisible( false );
+	
+	mScoreCounter = gui->addStaticText( TEXT_SCORE_ZERO, 
+		recti( W4, 0, 3 * W4, 50 ), false, false, mScoreWindow );
+	mScoreCounter->setTextAlignment( irr::gui::EGUIA_CENTER, 
+		irr::gui::EGUIA_CENTER );
+	mScoreCounter->setOverrideColor( SColor( 255, 255, 255, 255 ) );
+	
 	//undefine sizes
 #undef W
 #undef H
@@ -109,7 +125,9 @@ void MultiBouncerGame::initGUI()
 #undef W4
 #undef H4
 	
+	//hide all windows
 	m_MainMenu->setVisible( false );
+	mScoreWindow->setVisible( false );
 }
 
 void MultiBouncerGame::createMap( ConfigStorage *gameConf )
@@ -135,6 +153,8 @@ int MultiBouncerGame::run()
 	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
 	lua_State *lua = scriptTK->getLuaState();
 	
+	int up, down, left, right, numPlayerControls = 0;
+	
 	//Fill the controls
 	//TODO: Maybe a KeyCodeConverter for <KeyCode> elements?
 	for( int x = 1; x <= 32; x++ )
@@ -144,16 +164,28 @@ int MultiBouncerGame::run()
 		playerLeftString += x;
 		playerRightString += x;
 		
-		int left = scriptTK->getPulsarKeyCode( 
-			input->get<String>( playerLeftString, "KEY_F11" ) );
-		int right = scriptTK->getPulsarKeyCode( 
-			input->get<String>( playerRightString, "KEY_F11" ) );
+		try
+		{
+			playerLeftString = input->get<String>( playerLeftString );
+			playerRightString = input->get<String>( playerRightString );
+			left = scriptTK->getPulsarKeyCode( playerLeftString );
+			right = scriptTK->getPulsarKeyCode( playerRightString);
+		}
+		catch( ValueNotFoundException *e )
+		{
+			std::cout << "Ok, there are only " << --x << " player's keys"
+				<< " defined, stop checking now.\n";
+			break;
+		}
 		
-		std::cout << playerLeftString << ": " << left << std::endl
-			<< playerRightString << ": " << right << std::endl;
+		std::cout << "Player " << x << " left: " << playerLeftString 
+			<< "( " << left << ")" << std::endl
+			<< "Player " << x << " right: " << playerRightString 
+			<< "( " << right << " )" << std::endl;
 		
 		leftKeys.push_back( (EKEY_CODE)left );
 		rightKeys.push_back( (EKEY_CODE)right );
+		numPlayerControls++;
 	}
 	
 	//Create a callback for the quit key
@@ -166,17 +198,6 @@ int MultiBouncerGame::run()
 	EKEY_CODE exitKey = scriptTK->getPulsarKeyCode( 
 		input->get<String>( "Exit", "ESCAPE" ) );
 	
-	ConfigStorage c( true );
-	c.set<int>( "a", 1 );
-	c.set<int>( "a", 2 );
-	c.set<int>( "a", 3 );
-	c.set<int>( "a", 42 );
-	
-	std::cout << c.get<int>( "a" ) << ";" <<
-		c.getN<int>( 1, "a" ) << ";" <<
-		c.getN<int>( 2, "a" ) << ";" <<
-		c.getN<int>( 3, "a" ) << std::endl;
-	
 	evt->addKeyPressedCallback( exitKey, &exitCallback );
 	
 	bool running = true;
@@ -187,6 +208,7 @@ int MultiBouncerGame::run()
 	{
 		//Show menu
 		m_MainMenu->setVisible( true );
+		mScoreWindow->setVisible( false );
 		
 		//Store selected MapName
 		int prevSelection = -1;
@@ -204,7 +226,9 @@ int MultiBouncerGame::run()
 			
 			//If a new Map gets selected, change the max player limit
 			if( selection > -1 && prevSelection != selection )
-				m_PlayerCounter->setRange( 1.f, m_MapData.at( selection )->get<int>( "MaxPlayers" ) );
+				m_PlayerCounter->setRange( 1.f, std::min(
+					numPlayerControls, 
+					m_MapData.at( selection )->get<int>( "MaxPlayers" ) ) );
 			
 			prevSelection = selection;
 			
@@ -213,6 +237,7 @@ int MultiBouncerGame::run()
 		
 		//Hide menu
 		m_MainMenu->setVisible( false );
+		mScoreWindow->setVisible( true );
 		
 		//Get the selected file names
 		String selectedMap = m_MapFiles.at( m_MapList->getSelected() ).string().c_str();

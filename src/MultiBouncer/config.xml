@@ -6,6 +6,7 @@
 	<Int Name="ColorDepth">16</Int>
 	<String Name="Driver">OpenGL</String>
 	<String Name="WindowTitle">Pulsar Test Program</String>
+	<String Name="DefaultFont">BitstreamVeraSans20.xml</String>
 </Section>
 <Section Name="Console">
 	<Int Name="ConsoleHeight">300</Int>

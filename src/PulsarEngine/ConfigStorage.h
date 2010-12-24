@@ -30,7 +30,7 @@ namespace pulsar
 {
 Vector parseStringToVector( String sVector );
 
-struct ValueNotFoundException
+struct ValueNotFoundException : public std::exception
 {
 	ValueNotFoundException( String name )
 	{
@@ -78,9 +78,9 @@ public:
 		if( m_bAlwaysGetRecursive )
 			return getRecursiveN<T>( index, sName );
 
-		ValueMap::iterator x = m_mValues.find( sName );
-		if( x != m_mValues.end() )
+		if( index < m_mValues.count( sName ) )
 		{
+			ValueMap::iterator x = m_mValues.find( sName );
 			std::advance( x, index );
 			return x->second->getAs<T>();
 		}
@@ -90,9 +90,9 @@ public:
 	template <class T>
 	T &getRecursiveN( int index, String sName )
 	{
-		ValueMap::iterator x = m_mValues.find( sName );
-		if( x != m_mValues.end() )
+		if( index < m_mValues.count( sName ) )
 		{
+			ValueMap::iterator x = m_mValues.find( sName );
 			std::advance( x, index );
 			return x->second->getAs<T>();
 		}

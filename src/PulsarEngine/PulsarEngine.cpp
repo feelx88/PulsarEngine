@@ -136,6 +136,15 @@ void PulsarEngine::initIrrlicht()
 	m_pGUI = m_pDevice->getGUIEnvironment();
 	m_pTimer = m_pDevice->getTimer();
 	m_pTimer->start();
+	
+	//Load the defined font if available
+	if( m_pMainConfiguration->varExists( "DefaultFont" ) )
+	{
+		IGUISkin *skin = m_pGUI->getSkin();
+		skin->setFont( m_pGUI->getFont( 
+			m_pMainConfiguration->get<String>( "DefaultFont") ) );
+		m_pGUI->setSkin( skin );
+	}
 
 	//Set window title
 	this->m_pDevice->setWindowCaption( stringw(

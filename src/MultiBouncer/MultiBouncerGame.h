@@ -20,9 +20,6 @@ private:
 	void init();
 	void initGUI();
 	
-	void createMap( pulsar::ConfigStorage* gameConf );
-	void createPlayers( pulsar::ConfigStorage *gameConf );
-	
 	//Menu gui items
 	irr::gui::IGUIWindow *m_MainMenu;
 	irr::gui::IGUIListBox *m_MapList;

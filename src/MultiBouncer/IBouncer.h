@@ -7,7 +7,7 @@
  * @class IBouncer
  * @brief Base class for Bouncers.
  **/
-class IBouncer : public pulsar::IObject
+class IBouncer : public pulsar::IObject, public btActionInterface
 {
 public:
 	/**
@@ -52,6 +52,13 @@ public:
 	 * @param rotation The initial rotation of the bouncer.
 	 **/
 	virtual void spawn( Vector position, Vector rotation ) = 0;
+
+	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep){};
+	
+	virtual void debugDraw(btIDebugDraw* debugDrawer){};
+
+protected:
+	irr::ITimer *mTimer;
 };
 
 #endif //_IBOUNCER_H_

@@ -36,7 +36,7 @@ void MultiBouncerGame::init()
 	//Add a light, complicated version...
 	//TODO: Light management
 	m_Engine->getIrrlichtDevice()->getSceneManager()->
-		addLightSceneNode( 0, Vector( 0, 100, 0 ) );
+		addLightSceneNode( 0, Vector( 0, 60, -50 ) );
 
 	//Add a camera
 	CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>();
@@ -132,15 +132,6 @@ void MultiBouncerGame::initGUI()
 	//hide all windows
 	m_MainMenu->setVisible( false );
 	mScoreWindow->setVisible( false );
-}
-
-void MultiBouncerGame::createMap( ConfigStorage *gameConf )
-{
-	String fileName = gameConf->get<String>( "mapfile" );
-	ConfigStorage *map = new ConfigStorage( true );
-	map->parseXMLFile( fileName );
-	
-	gameConf->addSubSection( "Map", map );
 }
 
 int MultiBouncerGame::run()
@@ -242,7 +233,6 @@ int MultiBouncerGame::run()
 	bool running = true;
 	
 	//Loop until the game is cancelled
-	
 	while( m_Engine->run() && running )
 	{
 		//Show menu
@@ -288,24 +278,19 @@ int MultiBouncerGame::run()
 		
 		int numPlayers = (int)m_PlayerCounter->getValue();
 		
-		int numGoals = map.get<int>( "NumGoals", 2 );
-		int numBalls = map.get<int>( "NumBalls", 1 );
+		int numGoals = map.get<int>( "GoalCount", 2 );
+		int numBalls = map.get<int>( "BallCount", 1 );
 		
 		IBouncer *players[numPlayers];
+		Value::createStandardGenerator<SmallFastTestBouncer>();
 
 		for( int x = 0; x < numPlayers; x++ )
 		{
 			players[x] = new SmallFastTestBouncer();
-			callback[x][0]->setBouncer( players[x] );
-			callback[x][1]->setBouncer( players[x] );
-			callback[x][2]->setBouncer( players[x] );
-			callback[x][3]->setBouncer( players[x] );
-			callback[x][4]->setBouncer( players[x] );
-			callback[x][5]->setBouncer( players[x] );
-			callback[x][6]->setBouncer( players[x] );
+			for( int y = 0; y < 7; y++ )
+				callback[x][y]->setBouncer( players[x] );
 
-			Value *player = new Value(
-				static_cast<void*>( players[x] ), "Bouncer" );
+			Value *player = new Value( *(SmallFastTestBouncer*)players[x] );
 			player->setAutoDestroy( true );
 			map.setValue( "Player", player );
 		}

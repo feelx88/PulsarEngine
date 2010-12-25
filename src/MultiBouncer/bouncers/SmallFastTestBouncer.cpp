@@ -1,5 +1,6 @@
 #include "SmallFastTestBouncer.h"
 #include "../../PulsarEngine/ConfigStorage.h"
+#include "../../PulsarEngine/PulsarEngine.h"
 
 using namespace pulsar;
 
@@ -15,11 +16,25 @@ SmallFastTestBouncer::SmallFastTestBouncer() : mDirection( Vector() )
 
 	mBody = new DynamicEntity();
 	mBody->loadFromValues( &bodyConf );
+
+	irr::IrrlichtDevice *dev = PulsarEngine::getInstance()->getIrrlichtDevice();
+
+	mJumpBar = dev->getSceneManager()->addBillboardSceneNode(
+		mBody->getSceneNode(), irr::core::dimension2df( 3, 0.4 ),
+		Vector( 0, 3, 0 ), -1, irr::video::SColor( 255, 255, 0, 0 ),
+		irr::video::SColor( 255, 255, 0, 0 ) );
+	
+	mTimer = dev->getTimer();
+	mJumpTime = mTimer->getRealTime();
+
+	PulsarEngine::getInstance()->getBulletWorld()->addAction( this );
 }
 
 SmallFastTestBouncer::~SmallFastTestBouncer()
 {
-
+	mJumpBar->remove();
+	delete mBody;
+	PulsarEngine::getInstance()->getBulletWorld()->removeAction( this );
 }
 
 void SmallFastTestBouncer::spawn(Vector position, Vector rotation)
@@ -32,16 +47,15 @@ void SmallFastTestBouncer::startAction(int num)
 {
 	if( num == 1 )
 		mBody->applyImpulse( mDirection * 10 );
-	else
-		mBody->setRotation( Vector() );
 }
 
 void SmallFastTestBouncer::jump()
 {
-	float y = static_cast<btRigidBody*>( mBody->getCollisionObject() )->
-		getLinearVelocity().getY();
-	if( y < 0.1 && y > -0.1 )
-		mBody->applyImpulse( Vector( 0, 100, 0 ) );
+	if( mTimer->getRealTime() - mJumpTime > 5000 )
+	{
+		mBody->applyImpulse( Vector( 0, 500, 0 ) );
+		mJumpTime = mTimer->getRealTime();
+	}
 }
 
 void SmallFastTestBouncer::move(bool up, bool down, bool left, bool right)
@@ -55,4 +69,16 @@ void SmallFastTestBouncer::move(bool up, bool down, bool left, bool right)
 	mDirection.set( x, 0, z );
 	
 	mBody->applyImpulse( mDirection );
+}
+
+void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+{
+	float scale = (float)( mTimer->getRealTime() - mJumpTime ) / 5000.f;
+	if( scale < 1.f )
+	{
+		mJumpBar->setSize( irr::core::dimension2df( scale * 3, 0.4f ) );
+		mJumpBar->setColor( irr::video::SColor( 255, 255, 0, 0 ) );
+	}
+	else
+		mJumpBar->setColor( irr::video::SColor( 255, 0, 255, 0 ) );
 }

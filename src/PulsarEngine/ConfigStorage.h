@@ -55,6 +55,7 @@ public:
 	{
 		for( ValueMap::iterator x = m_mValues.begin(); x != m_mValues.end(); x++ )
 		{
+			std::cout << "Deleting " << x->first << std::endl;
 			if( x->second )
 				delete x->second;
 		}
@@ -63,6 +64,7 @@ public:
 		for( std::map<String, ConfigStorage*>::iterator x = m_mSubSections.begin();
 			x != m_mSubSections.end(); x++ )
 		{
+			std::cout << "Deleting " << x->first << std::endl;
 			if( x->second )
 				delete x->second;
 		}

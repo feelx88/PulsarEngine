@@ -8,16 +8,20 @@ class SmallFastTestBouncer : public IBouncer
 {
 
 public:
+	SmallFastTestBouncer();
+	virtual ~SmallFastTestBouncer();
+	
 	virtual void spawn(Vector position, Vector rotation);
 	virtual void startAction(int num);
 	virtual void jump();
 	virtual void move(bool up, bool down, bool left, bool right);
-	SmallFastTestBouncer();
-	virtual ~SmallFastTestBouncer();
 
+	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
 private:
 	pulsar::DynamicEntity *mBody;
 	Vector mDirection;
+	unsigned int mJumpTime;
+	irr::scene::IBillboardSceneNode *mJumpBar;
 };
 
 #endif // SMALLFASTTESTBOUNCER_H

@@ -337,6 +337,12 @@ public:
 		return 0;
 	}
 
+	template <class T>
+	static void createStandardGenerator()
+	{
+		Value::registerType<T>( typeid( T ).name(), 0 );
+	}
+
 private:
 
 	void *m_Value;

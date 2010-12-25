@@ -329,7 +329,8 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 				}
 				else if( validNode )//<Entity ...><...><...></Entity>
 				{
-					ConfigStorage pConf;
+					ConfigStorage pConf( m_bAllowDuplicates );
+					pConf.setAlwaysGetRecursive( m_bAlwaysGetRecursive );
 					pConf.parseXMLReader( pXML );
 
 					Value *val = new Value( 0, sCurrentNodeType );
@@ -395,7 +396,8 @@ void ConfigStorage::parseXMLReader( irr::io::IrrXMLReader *pXML )
 					}
 					else //<Section>...</Section>
 					{
-						ConfigStorage *pConf = new ConfigStorage();
+						ConfigStorage *pConf = new ConfigStorage( m_bAllowDuplicates );
+						pConf->setAlwaysGetRecursive( m_bAlwaysGetRecursive );
 						
 						pConf->m_FilterStrings = m_FilterStrings;
 						pConf->m_FilterEnabled = m_FilterEnabled;

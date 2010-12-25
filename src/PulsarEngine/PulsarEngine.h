@@ -167,6 +167,8 @@ protected:
 	irr::gui::IGUIEnvironment *m_pGUI;
 	irr::ITimer *m_pTimer;
 
+	PulsarEventReceiver *mEventReceiver;
+
 	int m_iScreenWidth, m_iScreenHeight;
 
 	bool m_bKeyStates[irr::KEY_KEY_CODES_COUNT];

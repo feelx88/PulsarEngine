@@ -5,6 +5,8 @@
 
 #include <boost/filesystem.hpp>
 
+#include "bouncers/SmallFastTestBouncer.h"
+
 class MultiBouncerGame
 {
 public:

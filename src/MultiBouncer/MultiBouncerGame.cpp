@@ -5,6 +5,8 @@
 using namespace pulsar;
 using namespace boost;
 
+#include "ControlCallback.h"
+
 #define TEXT_SCORE_ZERO ( L"0 : 0" )
 
 enum
@@ -39,7 +41,7 @@ void MultiBouncerGame::init()
 	//Add a camera
 	CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>();
 	cam->addCamera( ID_CAMERA_PRIMARY );
-	cam->setCameraPosition( ID_CAMERA_PRIMARY, Vector( 0, 10, -50 ) );
+	cam->setCameraPosition( ID_CAMERA_PRIMARY, Vector( 0, 20, -50 ) );
 	cam->setCameraTarget( ID_CAMERA_PRIMARY, Vector( 0, 0, 0 ) );
 }
 
@@ -72,12 +74,12 @@ void MultiBouncerGame::initGUI()
 	IGUIEnvironment *gui = m_Engine->getIrrlichtDevice()->getGUIEnvironment();
 	
 	//some defines for easier size definitions
-#define W mWinWidth
-#define H mWindHeight
-#define W2 (W/2)
-#define H2 (H/2)
-#define W4 (W/4)
-#define H4 (H/4)
+	#define W mWinWidth
+	#define H mWindHeight
+	#define W2 (W/2)
+	#define H2 (H/2)
+	#define W4 (W/4)
+	#define H4 (H/4)
 	
 	//Add main menu window
 	m_MainMenu = gui->addWindow( 
@@ -99,6 +101,8 @@ void MultiBouncerGame::initGUI()
 	
 	m_PlayerCounter = gui->addSpinBox( L"Spieleranzahl:", 
 		recti( W2 + 4, 3 * H4 + 10, 3 * W4, 3 * H4 + 60 ), true, m_MainMenu );
+	m_PlayerCounter->getEditBox()->setTextAlignment( irr::gui::EGUIA_CENTER, 
+		irr::gui::EGUIA_CENTER );
 	m_PlayerCounter->setDecimalPlaces( 0 );
 	m_PlayerCounter->setRange( 1.f, 32.f );
 	m_PlayerCounter->setValue( 2.f );
@@ -118,12 +122,12 @@ void MultiBouncerGame::initGUI()
 	mScoreCounter->setOverrideColor( SColor( 255, 255, 255, 255 ) );
 	
 	//undefine sizes
-#undef W
-#undef H
-#undef W2
-#undef H2
-#undef W4
-#undef H4
+	#undef W
+	#undef H
+	#undef W2
+	#undef H2
+	#undef W4
+	#undef H4
 	
 	//hide all windows
 	m_MainMenu->setVisible( false );
@@ -146,45 +150,80 @@ int MultiBouncerGame::run()
 
 	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
 	
-	std::vector<EKEY_CODE> leftKeys, rightKeys;
-	
 	PulsarEventReceiver *evt = m_Engine->getToolKit<PulsarEventReceiver>();
 	
 	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
 	lua_State *lua = scriptTK->getLuaState();
 	
-	int up, down, left, right, numPlayerControls = 0;
+	int numPlayerControls = 0;
+	ControlCallback *callback[32][7];
 	
 	//Fill the controls
 	//TODO: Maybe a KeyCodeConverter for <KeyCode> elements?
-	for( int x = 1; x <= 32; x++ )
+	for( int x = 0; x < 32; x++ )
 	{
-		String playerLeftString = "PlayerLeft";
-		String playerRightString = "PlayerRight";
-		playerLeftString += x;
-		playerRightString += x;
+		String playerUpString = "PlayerUp-";
+		String playerDownString = "PlayerDown-";
+		String playerLeftString = "PlayerLeft-";
+		String playerRightString = "PlayerRight-";
+		String playerJumpString = "PlayerJump-";
+		String playerAction1String = "PlayerAction1-";
+		String playerAction2String = "PlayerAction2-";
+		playerUpString += x + 1;
+		playerDownString += x + 1;
+		playerLeftString += x + 1;
+		playerRightString += x + 1;
+		playerJumpString += x + 1;
+		playerAction1String += x + 1;
+		playerAction2String += x + 1;
 		
 		try
 		{
+			playerUpString = input->get<String>( playerUpString );
+			playerDownString = input->get<String>( playerDownString );
 			playerLeftString = input->get<String>( playerLeftString );
 			playerRightString = input->get<String>( playerRightString );
-			left = scriptTK->getPulsarKeyCode( playerLeftString );
-			right = scriptTK->getPulsarKeyCode( playerRightString);
+			playerJumpString = input->get<String>( playerJumpString );
+			playerAction1String = input->get<String>( playerAction1String );
+			playerAction2String = input->get<String>( playerAction2String );
+
+			callback[x][0] = new ControlCallback( ControlCallback::UP );
+			callback[x][1] = new ControlCallback( ControlCallback::DOWN );
+			callback[x][2] = new ControlCallback( ControlCallback::LEFT );
+			callback[x][3] = new ControlCallback( ControlCallback::RIGHT );
+			callback[x][4] = new ControlCallback( ControlCallback::JUMP );
+			callback[x][5] = new ControlCallback( ControlCallback::ACTION1 );
+			callback[x][6] = new ControlCallback( ControlCallback::ACTION2 );
+			
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerUpString ),
+				callback[x][0] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerDownString),
+				callback[x][1] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerLeftString ),
+				callback[x][2] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerRightString ),
+				callback[x][3] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerJumpString ),
+				callback[x][4] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerAction1String ),
+				callback[x][5] );
+			evt->addKeyPressedCallback(
+				scriptTK->getPulsarKeyCode( playerAction2String ),
+				callback[x][6] );
 		}
 		catch( ValueNotFoundException *e )
 		{
-			std::cout << "Ok, there are only " << --x << " player's keys"
-				<< " defined, stop checking now.\n";
+			std::cout << "Ok, there are only " << --x << " player's"
+				<< " keys defined, stop checking now.\n";
 			break;
 		}
 		
-		std::cout << "Player " << x << " left: " << playerLeftString 
-			<< "( " << left << ")" << std::endl
-			<< "Player " << x << " right: " << playerRightString 
-			<< "( " << right << " )" << std::endl;
-		
-		leftKeys.push_back( (EKEY_CODE)left );
-		rightKeys.push_back( (EKEY_CODE)right );
 		numPlayerControls++;
 	}
 	
@@ -247,29 +286,30 @@ int MultiBouncerGame::run()
 		map.parseXMLFile( selectedMap );
 		map.setAlwaysGetRecursive();
 		
-		int maxPlayers = map.get<int>( "MaxPlayers", 2 );
 		int numPlayers = (int)m_PlayerCounter->getValue();
 		
 		int numGoals = map.get<int>( "NumGoals", 2 );
 		int numBalls = map.get<int>( "NumBalls", 1 );
 		
-		//Create the players
-		DynamicEntity *playerEntity[numPlayers];
-		
+		IBouncer *players[numPlayers];
+
 		for( int x = 0; x < numPlayers; x++ )
 		{
-			String posString = "PlayerPosition";
-			posString += ( x + 1 );
-			
-			ConfigStorage conf;
-			conf.set<String>( "Shape", "$Box" );
-			conf.set<Vector>( "Size", Vector( 3, 1, 1 ) );
-			conf.set<Vector>( "Position", map.get<Vector>( posString, Vector() ) );
-			
-			playerEntity[x] = new DynamicEntity( 0, 10.0f );
-			playerEntity[x]->loadFromValues( &conf );
+			players[x] = new SmallFastTestBouncer();
+			callback[x][0]->setBouncer( players[x] );
+			callback[x][1]->setBouncer( players[x] );
+			callback[x][2]->setBouncer( players[x] );
+			callback[x][3]->setBouncer( players[x] );
+			callback[x][4]->setBouncer( players[x] );
+			callback[x][5]->setBouncer( players[x] );
+			callback[x][6]->setBouncer( players[x] );
+
+			Value *player = new Value(
+				static_cast<void*>( players[x] ), "Bouncer" );
+			player->setAutoDestroy( true );
+			map.setValue( "Player", player );
 		}
-		
+
 		//Create goals
 		GhostSensorEntity *goalEntity[numGoals];
 		
@@ -286,6 +326,10 @@ int MultiBouncerGame::run()
 			
 			goalEntity[x] = new GhostSensorEntity();
 			goalEntity[x]->loadFromValues( &conf );
+			
+			Value *val = new Value( *goalEntity[x] );
+			val->setAutoDestroy( true );
+			map.setValue( "Goal", val );
 		}
 		
 		//Create Balls
@@ -300,82 +344,17 @@ int MultiBouncerGame::run()
 			conf.set<String>( "Shape", "$Sphere" );
 			conf.set<Vector>( "Size", map.get<Vector>( "BallSize", Vector( 0.5f ) ) );
 			conf.set<Vector>( "Position", map.get<Vector>( posString, Vector() ) );
-			conf.set<float>( "Restitution", 2.f );
+			conf.set<float>( "Restitution", 1.f );
+			conf.set<float>( "Friction", 0.95f );
 			
 			ballEntity[x] = new DynamicEntity( 0, map.get<float>( "BallMass", 10.0f ) );
 			ballEntity[x]->loadFromValues( &conf );
+			
+			Value *val = new Value( *ballEntity[x] );
+			val->setAutoDestroy( true );
+			map.setValue( "Ball", val );
 		}
 		
-		//TODO Make working
-		/*
-		
-		//Create the players
-		ConfigStorage player[numPlayers];
-		DynamicEntity *playerEntity[numPlayers];
-		
-		for( int x = 0; x < numPlayers; x++ )
-		{
-			String posString = "PlayerPosition";
-			posString += ( x + 1 );
-			
-			player[x].setAlwaysGetRecursive();
-			player[x].parseXMLFile( selectedBouncer );
-			
-			playerEntity[x] = &player[x].get<DynamicEntity>( "Bouncer" );
-			playerEntity[x]->reposition( map.get<Vector>( posString, Vector() ) );
-		}
-		
-		//Create the goals
-		int goalCount = map.get<int>( "GoalCount", 2 );
-		
-		ConfigStorage goal[goalCount];
-		
-		for( int x = 0; x < goalCount; x++ )
-		{
-			String posString = "GoalPosition";
-			posString += ( x + 1 );
-			
-			goal[x].parseXMLFile( selectedGoal );
-			goal[x].setAlwaysGetRecursive();
-			
-			if( goal[x].varExists( "GoalParts" ) )
-			{
-				std::vector<String> partNames = 
-					goal[x].get<std::vector<String> >( "GoalParts" );
-					
-				for( int y = 0; y < partNames.size(); y++ )
-				{
-					DynamicEntity &goalPart = goal[x].get<DynamicEntity>( partNames.at( y ) );
-					goalPart.reposition( 
-						map.get<Vector>( posString, Vector() ) + goalPart.getPosition() );
-				}
-			}
-			else
-				goal[x].get<DynamicEntity>( "Goal" ).reposition( 
-					map.get<Vector>( posString, Vector() ) );
-		}
-		
-		//Load the balls
-		int ballCount = map.get<int>( "BallCount", 1 );
-		Confi&player[x].get<DynamicEntity>( "Bouncer" );gStorage ball[ballCount];
-		DynamicEntity *ballEntity[ballCount];
-		
-		for( int x = 0; x < ballCount; x++ )
-		{
-			String posString = "BallPosition";
-			posString += ( x + 1 );
-			
-			String forceString = "BallStartingForce";
-			forceString += ( x + 1 );
-			
-			ball[x].parseXMLFile( selectedBall );
-			ball[x].setAlwaysGetRecursive();
-			
-			ballEntity[x] = &ball[x].get<DynamicEntity>( "Ball" );
-			ballEntity[x]->reposition( map.get<Vector>( posString, Vector() ) );
-			ballEntity[x]->applyForce( map.get<Vector>( forceString, Vector() ) );
-		}
-		*/
 		//Start simulation
 		m_Engine->setSimulationState( true );
 
@@ -384,25 +363,11 @@ int MultiBouncerGame::run()
 		{
 			m_Engine->beginDrawing();
 			
-			//Control the players
-			for( int x = 0; x < numPlayers; x++ )
-			{
-				if( evt->keyState( leftKeys.at( x ) ) )
-					playerEntity[x]->applyForce( Vector( -100, 0, 0 ) );
-					
-				if( evt->keyState( rightKeys.at( x ) ) )
-					playerEntity[x]->applyForce( Vector( 100, 0, 0 ) );
-			}
-			
 			if( evt->keyState( KEY_F12 ) )
 				break;
 
 			m_Engine->endDrawing();
 		}
-		
-		//Delete Entities
-		for( int x = 0; x < numPlayers; x++ )
-			delete playerEntity[x];
 		
 		//Stop simulation
 		m_Engine->setSimulationState( false );

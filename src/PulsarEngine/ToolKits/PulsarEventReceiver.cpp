@@ -164,18 +164,6 @@ bool PulsarEventReceiver::OnEvent( const SEvent &evt )
 	{
 		m_bKeyStates[evt.KeyInput.Key] = evt.KeyInput.PressedDown;
 
-		//Process the Callbacks
-		std::pair<std::multimap<irr::EKEY_CODE, ICallback*>::iterator,
-			std::multimap<irr::EKEY_CODE, ICallback*>::iterator> keyCB
-			= m_Callbacks.equal_range( evt.KeyInput.Key );
-
-		if( keyCB.first != m_Callbacks.end() )
-		{
-			for( std::multimap<irr::EKEY_CODE, ICallback*>::iterator cur = keyCB.first; 
-				cur != keyCB.second; cur++ )
-				(*cur).second->onTrigger( 0 );
-		}
-
 		if ( m_pGUI->getFocus() == m_pConsoleInput )
 		{
 			if ( evt.KeyInput.Key == KEY_RETURN && !evt.KeyInput.PressedDown && String( m_pConsoleInput->getText() ).size() )
@@ -261,6 +249,27 @@ bool PulsarEventReceiver::OnEvent( const SEvent &evt )
 	} //EET_GUI_EVENT
 
 	return false;
+}
+
+void PulsarEventReceiver::callCallbacks()
+{
+	for( int x = 0; x < irr::KEY_KEY_CODES_COUNT; x++ )
+	{
+		if( m_bKeyStates[(EKEY_CODE)x] )
+		{
+			//Process the Callbacks
+			std::pair<std::multimap<irr::EKEY_CODE, ICallback*>::iterator,
+				std::multimap<irr::EKEY_CODE, ICallback*>::iterator> keyCB
+				= m_Callbacks.equal_range( (EKEY_CODE)x );
+
+			if( keyCB.first != m_Callbacks.end() )
+			{
+				for( std::multimap<irr::EKEY_CODE, ICallback*>::iterator cur = keyCB.first;
+					cur != keyCB.second; cur++ )
+					(*cur).second->onTrigger( 0 );
+			}
+		}
+	}
 }
 
 }

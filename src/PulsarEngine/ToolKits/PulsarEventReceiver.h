@@ -139,6 +139,11 @@ public:
 	 */
 	bool OnEvent( const irr::SEvent &evt );
 
+	/**
+	 * @brief Method that calls the callbacks if a key is pressed.
+	 **/
+	void callCallbacks();
+
 protected:
 
 	irr::IrrlichtDevice *m_pDevice;

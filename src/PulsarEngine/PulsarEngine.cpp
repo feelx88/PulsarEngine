@@ -119,8 +119,8 @@ void PulsarEngine::initIrrlicht()
 	m_iScreenWidth = parameters.WindowSize.Width;
 	m_iScreenHeight = parameters.WindowSize.Height;
 
-	PulsarEventReceiver *pEvt = new PulsarEventReceiver();
-	parameters.EventReceiver = pEvt;
+	mEventReceiver = new PulsarEventReceiver();
+	parameters.EventReceiver = mEventReceiver;
 
 	m_pDevice = createDeviceEx( parameters );
 
@@ -152,7 +152,7 @@ void PulsarEngine::initIrrlicht()
 			"WindowTitle", "PulsarEngine" ) ).c_str() );
 
 	//add the event receiver as ToolKit
-	addToolKit( pEvt );
+	addToolKit( mEventReceiver );
 
 	//Initialize the irrlicht toolkits
 	EntityToolKit *pEntTK = new EntityToolKit();
@@ -272,6 +272,10 @@ bool PulsarEngine::run()
 		if( m_pTimer )
 			m_iStartTime = m_GameLoopTime = m_pTimer->getRealTime();
 	}
+
+
+	if( mEventReceiver )
+		mEventReceiver->callCallbacks();
 
 	if ( m_pDevice )
 		return m_pDevice->run();

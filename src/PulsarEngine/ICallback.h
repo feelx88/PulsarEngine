@@ -20,6 +20,8 @@
 #ifndef __icallback__
 #define __icallback__
 
+#include "IObject.h"
+
 namespace pulsar
 {
 

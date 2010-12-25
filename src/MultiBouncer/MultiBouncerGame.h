@@ -12,6 +12,10 @@ class MultiBouncerGame
 public:
 	MultiBouncerGame();
 	~MultiBouncerGame();
+
+	static void addTeamBluePoint();
+	static void addTeamRedPoint();
+	static void resetPoints();
 	
 	int run();
 
@@ -36,6 +40,8 @@ private:
 	pulsar::PulsarEngine *m_Engine;
 	
 	int mWinWidth, mWindHeight;
+
+	static int mTeamRedPoints, mTeamBluePoints;
 };
 
 #endif // __multibouncergame__

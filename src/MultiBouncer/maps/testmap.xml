@@ -5,7 +5,6 @@
 		<!-- Settings -->
 		<String Name="MapName">First TestMap</String>
 		<Int Name="BallCount">1</Int>
-		<Int Name="TeamCount">2</Int>
 		<Int Name="GoalCount">2</Int>
 		<Vector Name="GoalSize">5,5,1</Vector>
 		
@@ -15,9 +14,12 @@
 		<Vector Name="BallPosition1">0,3,0</Vector>
 		<Vector Name="BallStartingForce1">0,0,5000</Vector>
 		
-		<!-- Goal positions -->
-		<Vector Name="GoalPosition1">0,1,-25</Vector>
-		<Vector Name="GoalPosition2">0,1,25</Vector>
+		<!-- Goals -->
+		<GhostSensorEntity Name="RedGoal">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">3,3,1</Vector>
+			<Vector Name="Position">0,1.5,24</Vector> 
+		</GhostSensorEntity>
 		
 		<!-- Player positions -->
 		<Vector Name="PlayerPosition1">0,1,-15</Vector>

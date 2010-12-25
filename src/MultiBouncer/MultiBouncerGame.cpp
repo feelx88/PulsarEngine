@@ -9,6 +9,9 @@ using namespace boost;
 
 #define TEXT_SCORE_ZERO ( L"0 : 0" )
 
+int MultiBouncerGame::mTeamRedPoints = 0;
+int MultiBouncerGame::mTeamBluePoints = 0;
+
 enum
 {
 	ID_CAMERA_PRIMARY = 1,
@@ -23,6 +26,22 @@ MultiBouncerGame::MultiBouncerGame() : m_Engine( 0 )
 MultiBouncerGame::~MultiBouncerGame()
 {
 	delete m_Engine;
+}
+
+void MultiBouncerGame::addTeamRedPoint()
+{
+	mTeamRedPoints++;
+}
+
+void MultiBouncerGame::addTeamBluePoint()
+{
+	mTeamBluePoints++;
+}
+
+void MultiBouncerGame::resetPoints()
+{
+	mTeamRedPoints = 0;
+	mTeamBluePoints = 0;
 }
 
 void MultiBouncerGame::init()
@@ -280,7 +299,27 @@ int MultiBouncerGame::run()
 		
 		int numGoals = map.get<int>( "GoalCount", 2 );
 		int numBalls = map.get<int>( "BallCount", 1 );
-		
+
+		int teamRedStartPointCount = map.get<int>( "TeamRedStartPoints", 1 );
+		int teamBlueStartPointCount = map.get<int>( "TeamBlueStartPoints", 1 );
+
+		Vector teamRedStartPoint[teamRedStartPointCount];
+		Vector teamBlueStartPoint[teamBlueStartPointCount];
+
+		int teamRedPoints = 0, teamBluePoints = 0;
+
+		struct : public ICallback {
+			void onTrigger( Value* ) {
+				MultiBouncerGame::addTeamRedPoint();
+			}
+		} redGoalCallback;
+
+		struct : public ICallback {
+			void onTrigger( Value* ) {
+				MultiBouncerGame::addTeamBluePoint();
+			}
+		} blueGoalCallback;
+
 		IBouncer *players[numPlayers];
 		Value::createStandardGenerator<SmallFastTestBouncer>();
 
@@ -295,28 +334,18 @@ int MultiBouncerGame::run()
 			map.setValue( "Player", player );
 		}
 
-		//Create goals
-		GhostSensorEntity *goalEntity[numGoals];
-		
-		for( int x = 0; x < numGoals; x++ )
+		for( int x = 0; x < map.countVars( "RedGoal" ); x++ )
 		{
-			String posString = "GoalPosition";
-			posString += ( x + 1 );
-			
-			ConfigStorage conf;
-			conf.set<String>( "Shape", "$Box" );
-			conf.set<Vector>( "Size", 
-					  map.get<Vector>( "GoalSize", Vector( 5, 5, 1 ) ) );
-			conf.set<Vector>( "Position", map.get<Vector>( posString, Vector() ) );
-			
-			goalEntity[x] = new GhostSensorEntity();
-			goalEntity[x]->loadFromValues( &conf );
-			
-			Value *val = new Value( *goalEntity[x] );
-			val->setAutoDestroy( true );
-			map.setValue( "Goal", val );
+			map.getN<GhostSensorEntity>( x, "RedGoal" ).
+				setOnEnterCallback( &redGoalCallback );
 		}
-		
+
+		for( int x = 0; x < map.countVars( "BlueGoal" ); x++ )
+		{
+			map.getN<GhostSensorEntity>( x, "BlueGoal" ).
+				setOnEnterCallback( &blueGoalCallback );
+		}
+
 		//Create Balls
 		DynamicEntity *ballEntity[numBalls];
 		
@@ -351,11 +380,17 @@ int MultiBouncerGame::run()
 			if( evt->keyState( KEY_F12 ) )
 				break;
 
+			String points( mTeamRedPoints );
+			points += " : ";
+			points += mTeamBluePoints;
+			mScoreCounter->setText( irr::core::stringw( points ).c_str() );
+
 			m_Engine->endDrawing();
 		}
 		
 		//Stop simulation
 		m_Engine->setSimulationState( false );
+		MultiBouncerGame::resetPoints();
 	}
 
 	return EXIT_SUCCESS;

@@ -17,6 +17,10 @@ public:
 	virtual void move(bool up, bool down, bool left, bool right);
 
 	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep);
+
+	static void addTeamBluePoint();
+	static void addTeamRedPoint();
+	static void resetPoints();
 private:
 	pulsar::DynamicEntity *mBody;
 	Vector mDirection;

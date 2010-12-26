@@ -4,66 +4,118 @@
 	<Section Name="Data">
 		<!-- Settings -->
 		<String Name="MapName">First TestMap</String>
-		<Int Name="BallCount">1</Int>
-		<Int Name="GoalCount">2</Int>
-		<Vector Name="GoalSize">5,5,1</Vector>
 		
 		<Int Name="MaxPlayers">4</Int>
 		
 		<!-- Ball positions -->
-		<Vector Name="BallPosition1">0,3,0</Vector>
-		<Vector Name="BallStartingForce1">0,0,5000</Vector>
+		<Vector Name="BallPosition">0,3,0</Vector>
+		<Vector Name="BallPosition">-2,3,0</Vector>
+		<Vector Name="BallPosition">2,3,0</Vector>
+
+		<!-- Camera settings -->
+		<Vector Name="CameraPosition">0,20,-40</Vector>
+		<Vector Name="CameraTarget">0,0,0</Vector>
+
+		<!-- Light settings -->
+		<Vector Name="LightPosition">0,100,-25</Vector>
+		<Float Name="LightRadius">100</Float>
+		<Int Name="LightColorR">255</Int>
+		<Int Name="LightColorG">255</Int>
+		<Int Name="LightColorB">255</Int>
 		
-		<!-- Goals -->
-		<GhostSensorEntity Name="RedGoal">
-			<String Name="Shape">$Box</String>
-			<Vector Name="Size">3,3,1</Vector>
-			<Vector Name="Position">0,1.5,24</Vector> 
-		</GhostSensorEntity>
+		<!-- Team start positions -->
 		
-		<!-- Player positions -->
-		<Vector Name="PlayerPosition1">0,1,-15</Vector>
-		<Vector Name="PlayerPosition2">0,1,15</Vector>
-		<Vector Name="PlayerPosition3">0,1,-20</Vector>
-		<Vector Name="PlayerPosition4">0,1,20</Vector>
-		
-		<!-- player Directions-->
-		<Vector Name="PlayerDirection1">1,0,0</Vector>
-		<Vector Name="PlayerDirection2">-1,0,0</Vector>
-		<Vector Name="PlayerDirection3">1,0,0</Vector>
-		<Vector Name="PlayerDirection4">-1,0,0</Vector>
 	</Section>
 	<Section Name="Entities">
 		<!-- Map Entities -->
 		<DynamicEntity Name="Floor">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">50,1,50</Vector>
+			<String Name="ModelFileName">models/testmap/testmap_floor.x</String>
 			<Float Name="Restitution">0.1</Float>
-			<Float Name="Friction">0.3</Float>
+			<Float Name="Friction">0.5</Float>
 		</DynamicEntity>
 		<DynamicEntity Name="Wall">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">50,2,1</Vector>
 			<Vector Name="Position">0,1,25</Vector>
+			<Float Name="Friction">0.8</Float>
 			<Float Name="Restitution">0.3</Float>
 		</DynamicEntity>
 		<DynamicEntity Name="Wall">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">50,2,1</Vector>
 			<Vector Name="Position">0,1,-25</Vector>
+			<Float Name="Friction">0.8</Float>
 			<Float Name="Restitution">0.3</Float>
 		</DynamicEntity>
 		<DynamicEntity Name="Wall">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">1,2,50</Vector>
 			<Vector Name="Position">25,1,0</Vector>
+			<Float Name="Friction">0.8</Float>
 			<Float Name="Restitution">0.3</Float>
 		</DynamicEntity>
 		<DynamicEntity Name="Wall">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">1,2,50</Vector>
 			<Vector Name="Position">-25,1,0</Vector>
+			<Float Name="Friction">0.8</Float>
 			<Float Name="Restitution">0.3</Float>
+		</DynamicEntity>
+
+		<!-- Goals -->
+		<GhostSensorEntity Name="RedGoal">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">5,5,1</Vector>
+			<Vector Name="Position">0,2.5,23</Vector>
+		</GhostSensorEntity>
+		<DynamicEntity Name="Post">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,4,2</Vector>
+			<Vector Name="Position">-3,2,23</Vector>
+			<Float Name="Restitution">2</Float>
+		</DynamicEntity>
+		<DynamicEntity Name="Post">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,4,2</Vector>
+			<Vector Name="Position">3,2,23</Vector>
+			<Float Name="Restitution">2</Float>
+		</DynamicEntity>
+
+		<GhostSensorEntity Name="BlueGoal">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">5,5,1</Vector>
+			<Vector Name="Position">0,2.5,-23</Vector>
+			<Float Name="Restitution">2</Float>
+		</GhostSensorEntity>
+		<DynamicEntity Name="Post">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,4,2</Vector>
+			<Vector Name="Position">-3,2,-23</Vector>
+			<Float Name="Restitution">2</Float>
+		</DynamicEntity>
+		<DynamicEntity Name="Post">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,4,2</Vector>
+			<Vector Name="Position">3,2,-23</Vector>
+		</DynamicEntity>
+
+		<DynamicEntity Name="Ball">
+			<String Name="Shape">$Sphere</String>
+			<Vector Name="Size">0.5,0.5,0.5</Vector>
+			<Float Name="Mass">10</Float>
+			<String Name="ModelFileName">models/ball1/ball1.x</String>
+		</DynamicEntity>
+		<DynamicEntity Name="Ball">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,1,1</Vector>
+			<Float Name="Mass">10</Float>
+		</DynamicEntity>
+		<DynamicEntity Name="Ball">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,1,1</Vector>
+			<Float Name="Mass">10</Float>
 		</DynamicEntity>
 	</Section>
 </Section>

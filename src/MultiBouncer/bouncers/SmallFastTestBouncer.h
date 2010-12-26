@@ -23,9 +23,10 @@ public:
 	static void resetPoints();
 private:
 	pulsar::DynamicEntity *mBody;
-	Vector mDirection;
-	unsigned int mJumpTime;
-	irr::scene::IBillboardSceneNode *mJumpBar;
+	bool mTurbo;
+	int mTurboPoints;
+	unsigned int mJumpTime, mTurboTime;
+	irr::scene::IBillboardSceneNode *mJumpBar, *mTurboBar;
 };
 
 #endif // SMALLFASTTESTBOUNCER_H

@@ -41,7 +41,9 @@ private:
 	
 	int mWinWidth, mWindHeight;
 
-	static int mTeamRedPoints, mTeamBluePoints;
+	static pulsar::DynamicEntity **sBall;
+	
+	static int sTeamRedPoints, sTeamBluePoints;
 };
 
 #endif // __multibouncergame__

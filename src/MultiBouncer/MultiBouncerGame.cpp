@@ -9,8 +9,9 @@ using namespace boost;
 
 #define TEXT_SCORE_ZERO ( L"0 : 0" )
 
-int MultiBouncerGame::mTeamRedPoints = 0;
-int MultiBouncerGame::mTeamBluePoints = 0;
+int MultiBouncerGame::sTeamRedPoints = 0;
+int MultiBouncerGame::sTeamBluePoints = 0;
+DynamicEntity **MultiBouncerGame::sBall = 0;
 
 enum
 {
@@ -30,38 +31,27 @@ MultiBouncerGame::~MultiBouncerGame()
 
 void MultiBouncerGame::addTeamRedPoint()
 {
-	mTeamRedPoints++;
+	sTeamRedPoints++;
 }
 
 void MultiBouncerGame::addTeamBluePoint()
 {
-	mTeamBluePoints++;
+	sTeamBluePoints++;
 }
 
 void MultiBouncerGame::resetPoints()
 {
-	mTeamRedPoints = 0;
-	mTeamBluePoints = 0;
+	sTeamRedPoints = 0;
+	sTeamBluePoints = 0;
 }
 
 void MultiBouncerGame::init()
-{
+{	
 	m_Engine = PulsarEngine::getInstance();
 	m_Engine->init( "config.xml" );
 	
 	mWinWidth = m_Engine->getScreenWidth();
 	mWindHeight = m_Engine->getScreenHeight();
-
-	//Add a light, complicated version...
-	//TODO: Light management
-	m_Engine->getIrrlichtDevice()->getSceneManager()->
-		addLightSceneNode( 0, Vector( 0, 60, -50 ) );
-
-	//Add a camera
-	CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>();
-	cam->addCamera( ID_CAMERA_PRIMARY );
-	cam->setCameraPosition( ID_CAMERA_PRIMARY, Vector( 0, 20, -50 ) );
-	cam->setCameraTarget( ID_CAMERA_PRIMARY, Vector( 0, 0, 0 ) );
 }
 
 void MultiBouncerGame::initGUI()
@@ -294,29 +284,58 @@ int MultiBouncerGame::run()
 		ConfigStorage map( true );
 		map.parseXMLFile( selectedMap );
 		map.setAlwaysGetRecursive();
+
+		m_Engine->getIrrlichtDevice()->getSceneManager()->setAmbientLight(
+			SColorf( 0.3f, 0.3f, 0.3f ) );
+
+		//Add lights, complicated version...
+		//TODO: Light management
+		for( int x = 0; x < map.countVars( "LightPosition" ); x++ )
+		{
+			SColor lightColor( 128, map.getN<int>( x, "LightColorR", 255 ),
+				map.getN<int>( x, "LightColorG", 255 ),
+				map.getN<int>( x, "LightColorB", 255 ) );
+			ILightSceneNode *light = m_Engine->getIrrlichtDevice()->getSceneManager()->
+				addLightSceneNode( 0, map.getN<Vector>( x, "LightPosition" ),
+					lightColor, map.getN<float>( x, "LightRadius" ) );
+			light->getLightData().SpecularColor.set( 0.5, 0.5, 0.5 );
+		}
+
+		//Add a camera
+		CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>();
+		cam->addCamera( ID_CAMERA_PRIMARY );
+		cam->setCameraPosition( ID_CAMERA_PRIMARY,
+			map.get<Vector>( "CameraPosition" ) );
+		cam->setCameraTarget( ID_CAMERA_PRIMARY,
+			map.get<Vector>( "CameraTarget" ) );
 		
 		int numPlayers = (int)m_PlayerCounter->getValue();
-		
-		int numGoals = map.get<int>( "GoalCount", 2 );
-		int numBalls = map.get<int>( "BallCount", 1 );
-
-		int teamRedStartPointCount = map.get<int>( "TeamRedStartPoints", 1 );
-		int teamBlueStartPointCount = map.get<int>( "TeamBlueStartPoints", 1 );
-
-		Vector teamRedStartPoint[teamRedStartPointCount];
-		Vector teamBlueStartPoint[teamBlueStartPointCount];
-
-		int teamRedPoints = 0, teamBluePoints = 0;
 
 		struct : public ICallback {
-			void onTrigger( Value* ) {
-				MultiBouncerGame::addTeamRedPoint();
+			void onTrigger( Value* entity ) {
+				for( int x = 0; MultiBouncerGame::sBall[x] != 0; x++ )
+				{
+					if( entity->getAs<Entity*>()->getID() ==
+						MultiBouncerGame::sBall[x]->getID() )
+					{
+						MultiBouncerGame::addTeamRedPoint();
+						MultiBouncerGame::sBall[x]->reposition( Vector( 0, 10, 0 ) );
+					}
+				}	
 			}
 		} redGoalCallback;
 
 		struct : public ICallback {
-			void onTrigger( Value* ) {
-				MultiBouncerGame::addTeamBluePoint();
+			void onTrigger( Value* entity ) {
+				for( int x = 0; MultiBouncerGame::sBall[x] != 0; x++ )
+				{
+					if( entity->getAs<Entity*>()->getID() ==
+						MultiBouncerGame::sBall[x]->getID() )
+					{
+						MultiBouncerGame::addTeamBluePoint();
+						MultiBouncerGame::sBall[x]->reposition( Vector( 0, 10, 0 ) );
+					}
+				}	
 			}
 		} blueGoalCallback;
 
@@ -347,27 +366,19 @@ int MultiBouncerGame::run()
 		}
 
 		//Create Balls
-		DynamicEntity *ballEntity[numBalls];
+		int numBalls = map.countVars( "BallPosition" );
+		DynamicEntity *ballEntity[numBalls + 1];
 		
 		for( int x = 0; x < numBalls; x++ )
 		{
-			String posString = "BallPosition";
-			posString += ( x + 1 );
-			
-			ConfigStorage conf;
-			conf.set<String>( "Shape", "$Sphere" );
-			conf.set<Vector>( "Size", map.get<Vector>( "BallSize", Vector( 0.5f ) ) );
-			conf.set<Vector>( "Position", map.get<Vector>( posString, Vector() ) );
-			conf.set<float>( "Restitution", 1.f );
-			conf.set<float>( "Friction", 0.95f );
-			
-			ballEntity[x] = new DynamicEntity( 0, map.get<float>( "BallMass", 10.0f ) );
-			ballEntity[x]->loadFromValues( &conf );
-			
-			Value *val = new Value( *ballEntity[x] );
-			val->setAutoDestroy( true );
-			map.setValue( "Ball", val );
+			ballEntity[x] = &map.getN<DynamicEntity>( x, "Ball" );
+			ballEntity[x]->reposition(
+				map.getN<Vector>( x, "BallPosition" ) );
 		}
+
+		ballEntity[numBalls] = 0;
+
+		MultiBouncerGame::sBall = ballEntity;
 		
 		//Start simulation
 		m_Engine->setSimulationState( true );
@@ -380,9 +391,9 @@ int MultiBouncerGame::run()
 			if( evt->keyState( KEY_F12 ) )
 				break;
 
-			String points( mTeamRedPoints );
+			String points( sTeamRedPoints );
 			points += " : ";
-			points += mTeamBluePoints;
+			points += sTeamBluePoints;
 			mScoreCounter->setText( irr::core::stringw( points ).c_str() );
 
 			m_Engine->endDrawing();

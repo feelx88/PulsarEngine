@@ -133,7 +133,7 @@ void GraphicalEntity::createSceneNode()
 			m_pSceneNode = getSceneManager()->addCubeSceneNode( 1.0f );
 		else if( sPrimtive == "$Sphere" )
 			m_pSceneNode = getSceneManager()->addSphereSceneNode( 1.0f, 64 );
-
+		
 		if( m_pSceneNode )
 			m_pSceneNode->setScale( m_pConfig->get<Vector>( "Size", Vector( 1.0f ) ) );
 	}
@@ -142,7 +142,7 @@ void GraphicalEntity::createSceneNode()
 		m_pSceneNode = getSceneManager()->addAnimatedMeshSceneNode( getSceneManager()->getMesh(
 			m_pConfig->get<String>( "ModelFileName", "" ) ) );
 	}
-
+	
 	setPosition( m_pConfig->get<Vector>( "Position", Vector() ) );
 	setRotation( m_pConfig->get<Vector>( "Rotation", Vector() ) );
 }

@@ -51,7 +51,6 @@ void DynamicEntity::loadFromValues( ConfigStorage *pConf )
 void DynamicEntity::loadFromFile( String sFileName, String sNodeName )
 {
 	GraphicalEntity::loadFromFile( sFileName, sNodeName );
-
 	createRigidBody();
 }
 

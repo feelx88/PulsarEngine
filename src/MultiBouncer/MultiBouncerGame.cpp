@@ -5,13 +5,7 @@
 using namespace pulsar;
 using namespace boost;
 
-#include "ControlCallback.h"
-
 #define TEXT_SCORE_ZERO ( L"0 : 0" )
-
-int MultiBouncerGame::sTeamRedPoints = 0;
-int MultiBouncerGame::sTeamBluePoints = 0;
-DynamicEntity **MultiBouncerGame::sBall = 0;
 
 enum
 {
@@ -27,22 +21,6 @@ MultiBouncerGame::MultiBouncerGame() : m_Engine( 0 )
 MultiBouncerGame::~MultiBouncerGame()
 {
 	delete m_Engine;
-}
-
-void MultiBouncerGame::addTeamRedPoint()
-{
-	sTeamRedPoints++;
-}
-
-void MultiBouncerGame::addTeamBluePoint()
-{
-	sTeamBluePoints++;
-}
-
-void MultiBouncerGame::resetPoints()
-{
-	sTeamRedPoints = 0;
-	sTeamBluePoints = 0;
 }
 
 void MultiBouncerGame::init()
@@ -97,6 +75,10 @@ void MultiBouncerGame::initGUI()
 	m_MainMenu->getCloseButton()->setVisible( false );
 	m_MainMenu->setDraggable( false );
 	m_MainMenu->setDrawTitlebar( false );
+
+	//Add a checkbox to enable the wiimotes
+	mUseWiimotes = gui->addCheckBox( false, recti( 10, 10, 40, 40 ),
+		m_MainMenu, -1, L"Use Wiimotes?" );
 	
 	//Add the bouncer list
 	m_MapList = gui->addListBox( recti( W4, H4, 3 * W4, 3 * H4 ), 
@@ -143,21 +125,14 @@ void MultiBouncerGame::initGUI()
 	mScoreWindow->setVisible( false );
 }
 
-int MultiBouncerGame::run()
+ControlCallback*** MultiBouncerGame::loadControls( ConfigStorage* input,
+	ScriptToolKit* scriptTK, PulsarEventReceiver *evt )
 {
-	if( !m_Engine )
-		return EXIT_FAILURE;
-
-	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
-	
-	PulsarEventReceiver *evt = m_Engine->getToolKit<PulsarEventReceiver>();
-	
-	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
-	lua_State *lua = scriptTK->getLuaState();
-	
 	int numPlayerControls = 0;
-	ControlCallback *callback[32][7];
-	
+	ControlCallback ***callback = new ControlCallback**[32];
+	for( int x = 0; x < 7; x++ )
+		callback[x] = new ControlCallback*[7];
+
 	//Fill the controls
 	//TODO: Maybe a KeyCodeConverter for <KeyCode> elements?
 	for( int x = 0; x < 32; x++ )
@@ -176,7 +151,7 @@ int MultiBouncerGame::run()
 		playerJumpString += x + 1;
 		playerAction1String += x + 1;
 		playerAction2String += x + 1;
-		
+
 		try
 		{
 			playerUpString = input->get<String>( playerUpString );
@@ -194,7 +169,7 @@ int MultiBouncerGame::run()
 			callback[x][4] = new ControlCallback( ControlCallback::JUMP );
 			callback[x][5] = new ControlCallback( ControlCallback::ACTION1 );
 			callback[x][6] = new ControlCallback( ControlCallback::ACTION2 );
-			
+
 			evt->addKeyPressedCallback(
 				scriptTK->getPulsarKeyCode( playerUpString ),
 				callback[x][0] );
@@ -223,9 +198,26 @@ int MultiBouncerGame::run()
 				<< " keys defined, stop checking now.\n";
 			break;
 		}
-		
+
 		numPlayerControls++;
 	}
+	return callback;
+}
+
+
+int MultiBouncerGame::run()
+{
+	if( !m_Engine )
+		return EXIT_FAILURE;
+
+	ConfigStorage *input = m_Engine->getConfig()->getSubSection( "Input" );
+	
+	PulsarEventReceiver *evt = m_Engine->getToolKit<PulsarEventReceiver>();
+	
+	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
+	lua_State *lua = scriptTK->getLuaState();
+
+	ControlCallback ***callback = loadControls( input, scriptTK, evt );
 	
 	//Create a callback for the quit key
 	struct : public ICallback {
@@ -238,6 +230,39 @@ int MultiBouncerGame::run()
 		input->get<String>( "Exit", "ESCAPE" ) );
 	
 	evt->addKeyPressedCallback( exitKey, &exitCallback );
+
+	//Callbacks for the goals
+	struct : public ICallback {
+		void onTrigger( Value* entity ) {
+			for( int x = 0; balls[x] != 0; x++ )
+			{
+				if( entity->getAs<Entity*>()->getID() ==
+					balls[x]->getID() )
+				{
+					points++;
+					balls[x]->reset();
+				}
+			}
+		}
+		int points;
+		DynamicEntity **balls;
+	} redGoalCallback;
+
+	struct : public ICallback {
+		void onTrigger( Value* entity ) {
+			for( int x = 0; balls[x] != 0; x++ )
+			{
+				if( entity->getAs<Entity*>()->getID() ==
+					balls[x]->getID() )
+				{
+					points++;
+					balls[x]->reset();
+				}
+			}
+		}
+		int points;
+		DynamicEntity **balls;
+	} blueGoalCallback;
 	
 	bool running = true;
 	
@@ -247,6 +272,10 @@ int MultiBouncerGame::run()
 		//Show menu
 		m_MainMenu->setVisible( true );
 		mScoreWindow->setVisible( false );
+
+		//Reset points
+		redGoalCallback.points = 0;
+		blueGoalCallback.points = 0;
 		
 		//Store selected MapName
 		int prevSelection = -1;
@@ -264,9 +293,8 @@ int MultiBouncerGame::run()
 			
 			//If a new Map gets selected, change the max player limit
 			if( selection > -1 && prevSelection != selection )
-				m_PlayerCounter->setRange( 1.f, std::min(
-					numPlayerControls, 
-					m_MapData.at( selection )->get<int>( "MaxPlayers" ) ) );
+				m_PlayerCounter->setRange( 1.f,
+					m_MapData.at( selection )->get<int>( "MaxPlayers" ) );
 			
 			prevSelection = selection;
 			
@@ -282,62 +310,40 @@ int MultiBouncerGame::run()
 		
 		//Load the map
 		ConfigStorage map( true );
-		map.parseXMLFile( selectedMap );
+		map.parseXMLFile( selectedMap, "Map" );
 		map.setAlwaysGetRecursive();
 
-		m_Engine->getIrrlichtDevice()->getSceneManager()->setAmbientLight(
-			SColorf( 0.3f, 0.3f, 0.3f ) );
+		/*m_Engine->getIrrlichtDevice()->getSceneManager()->setAmbientLight(
+			SColorf( 0.3f, 0.3f, 0.3f ) );*/
+
+		std::vector<ILightSceneNode*> lights;
 
 		//Add lights, complicated version...
 		//TODO: Light management
-		for( int x = 0; x < map.countVars( "LightPosition" ); x++ )
+		for( int x = 0; x < map.countVars( "Light" ); x++ )
 		{
-			SColor lightColor( 128, map.getN<int>( x, "LightColorR", 255 ),
-				map.getN<int>( x, "LightColorG", 255 ),
-				map.getN<int>( x, "LightColorB", 255 ) );
-			ILightSceneNode *light = m_Engine->getIrrlichtDevice()->getSceneManager()->
-				addLightSceneNode( 0, map.getN<Vector>( x, "LightPosition" ),
-					lightColor, map.getN<float>( x, "LightRadius" ) );
-			light->getLightData().SpecularColor.set( 0.5, 0.5, 0.5 );
-		}
+			ConfigStorage *light = map.getSubSection( "Data" )->getSubSectionN( x, "Light" );
+			
+			SColor lightColor( 128, light->get<int>( "ColorR", 255 ),
+				light->get<int>( "ColorG", 255 ),
+				light->get<int>( "ColorB", 255 ) );
+			ILightSceneNode *node = m_Engine->getIrrlichtDevice()->getSceneManager()->
+				addLightSceneNode( 0, light->get<Vector>( "Position" ),
+					lightColor, light->get<float>( "Radius" ) );
+			node->getLightData().SpecularColor.set( 0,0,0 );
 
+			lights.push_back( node );
+		}
+		
 		//Add a camera
 		CameraToolKit *cam = m_Engine->getToolKit<CameraToolKit>();
 		cam->addCamera( ID_CAMERA_PRIMARY );
 		cam->setCameraPosition( ID_CAMERA_PRIMARY,
-			map.get<Vector>( "CameraPosition" ) );
+			map.getSubSection( "Data" )->getSubSection( "Camera" )->get<Vector>( "Position" ) );
 		cam->setCameraTarget( ID_CAMERA_PRIMARY,
-			map.get<Vector>( "CameraTarget" ) );
+			map.getSubSection( "Data" )->getSubSection( "Camera" )->get<Vector>( "Target" ) );
 		
 		int numPlayers = (int)m_PlayerCounter->getValue();
-
-		struct : public ICallback {
-			void onTrigger( Value* entity ) {
-				for( int x = 0; MultiBouncerGame::sBall[x] != 0; x++ )
-				{
-					if( entity->getAs<Entity*>()->getID() ==
-						MultiBouncerGame::sBall[x]->getID() )
-					{
-						MultiBouncerGame::addTeamRedPoint();
-						MultiBouncerGame::sBall[x]->reposition( Vector( 0, 10, 0 ) );
-					}
-				}	
-			}
-		} redGoalCallback;
-
-		struct : public ICallback {
-			void onTrigger( Value* entity ) {
-				for( int x = 0; MultiBouncerGame::sBall[x] != 0; x++ )
-				{
-					if( entity->getAs<Entity*>()->getID() ==
-						MultiBouncerGame::sBall[x]->getID() )
-					{
-						MultiBouncerGame::addTeamBluePoint();
-						MultiBouncerGame::sBall[x]->reposition( Vector( 0, 10, 0 ) );
-					}
-				}	
-			}
-		} blueGoalCallback;
 
 		IBouncer *players[numPlayers];
 		Value::createStandardGenerator<SmallFastTestBouncer>();
@@ -351,6 +357,11 @@ int MultiBouncerGame::run()
 			Value *player = new Value( *(SmallFastTestBouncer*)players[x] );
 			player->setAutoDestroy( true );
 			map.setValue( "Player", player );
+
+			if( x % 2 )
+				players[x]->spawn( map.getN<Vector>( x / 2, "RedTeamSpawn" ), Vector() );
+			else
+				players[x]->spawn( map.getN<Vector>( x / 2, "BlueTeamSpawn" ), Vector() );
 		}
 
 		for( int x = 0; x < map.countVars( "RedGoal" ); x++ )
@@ -366,19 +377,18 @@ int MultiBouncerGame::run()
 		}
 
 		//Create Balls
-		int numBalls = map.countVars( "BallPosition" );
+		int numBalls = map.countVars( "Ball" );
 		DynamicEntity *ballEntity[numBalls + 1];
 		
 		for( int x = 0; x < numBalls; x++ )
 		{
 			ballEntity[x] = &map.getN<DynamicEntity>( x, "Ball" );
-			ballEntity[x]->reposition(
-				map.getN<Vector>( x, "BallPosition" ) );
 		}
 
 		ballEntity[numBalls] = 0;
 
-		MultiBouncerGame::sBall = ballEntity;
+		redGoalCallback.balls = ballEntity;
+		blueGoalCallback.balls = ballEntity;
 		
 		//Start simulation
 		m_Engine->setSimulationState( true );
@@ -391,9 +401,9 @@ int MultiBouncerGame::run()
 			if( evt->keyState( KEY_F12 ) )
 				break;
 
-			String points( sTeamRedPoints );
+			String points( redGoalCallback.points );
 			points += " : ";
-			points += sTeamBluePoints;
+			points += blueGoalCallback.points;
 			mScoreCounter->setText( irr::core::stringw( points ).c_str() );
 
 			m_Engine->endDrawing();
@@ -401,8 +411,14 @@ int MultiBouncerGame::run()
 		
 		//Stop simulation
 		m_Engine->setSimulationState( false );
-		MultiBouncerGame::resetPoints();
+
+		for( std::vector<ILightSceneNode*>::iterator x = lights.begin(); x != lights.end(); x++ )
+			( *x )->remove();
 	}
+
+	for( int x = 0; x < 7; x++ )
+		delete[] callback[x];
+	delete[] callback;
 
 	return EXIT_SUCCESS;
 }

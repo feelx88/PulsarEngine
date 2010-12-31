@@ -5,6 +5,7 @@
 	<Int Name="ScreenWidth">1024</Int>
 	<Int Name="ColorDepth">16</Int>
 	<String Name="Driver">OpenGL</String>
+	<Bool Name="StencilBuffer">True</Bool>
 	<String Name="WindowTitle">Pulsar Test Program</String>
 	<String Name="DefaultFont">BitstreamVeraSans20.xml</String>
 </Section>

@@ -106,12 +106,12 @@ ConfigStorage *ConfigStorage::deleteValueN( int index, String sName )
 }
 
 ConfigStorage* ConfigStorage::deleteValue( String sName )
-{
+{	
 	deleteValueN( 0, sName );
 }
 
 bool ConfigStorage::varExists( String sName )
-{	
+{
 	if( m_mValues.find( sName ) != m_mValues.end() )
 		return true;
 
@@ -126,7 +126,7 @@ bool ConfigStorage::varExists( String sName )
 }
 
 ConfigStorage *ConfigStorage::append( ConfigStorage *pConf )
-{
+{	
 	for( ValueMap::iterator x = pConf->m_mValues.begin();
 		x != pConf->m_mValues.end(); x++ )
 	{
@@ -207,12 +207,20 @@ ConfigStorage *ConfigStorage::addSubSection( String sName, ConfigStorage *pSubSe
 
 ConfigStorage *ConfigStorage::getSubSection( String sName )
 {
+	return getSubSectionN( 0, sName );
+}
+
+ConfigStorage* ConfigStorage::getSubSectionN(int index, String sName)
+{
 	std::map<String, ConfigStorage*>::iterator x =
 		m_mSubSections.find( sName );
 
+	std::advance( x, index );
+
 	if( x != m_mSubSections.end() )
 		return x->second;
-
+	else
+		throw new ValueNotFoundException( sName + " (ConfigStorage)" );
 	return 0;
 }
 

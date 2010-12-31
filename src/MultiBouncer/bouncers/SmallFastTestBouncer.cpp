@@ -14,9 +14,13 @@ SmallFastTestBouncer::SmallFastTestBouncer() : mTurbo( false ), mTurboPoints( 3 
 	bodyConf.set<float>( "Mass", 50.f );
 	bodyConf.set<Vector>( "LinearVelocityLimit", Vector( 20.f, 20.f, 20.f ) );
 	bodyConf.set<float>( "AngularFactor", 0.f );
+	bodyConf.set<String>( "ModelFileName", "models/sftbouncer/sftbouncer.x" );
 
 	mBody = new DynamicEntity( 0, 50.f );
 	mBody->loadFromValues( &bodyConf );
+
+	static_cast<irr::scene::IAnimatedMeshSceneNode*>( mBody->getSceneNode() )
+		->addShadowVolumeSceneNode();
 
 	irr::IrrlichtDevice *dev = PulsarEngine::getInstance()->getIrrlichtDevice();
 
@@ -31,7 +35,7 @@ SmallFastTestBouncer::SmallFastTestBouncer() : mTurbo( false ), mTurboPoints( 3 
 		irr::video::SColor( 255, 255, 0, 0 ) );
 	
 	mTimer = dev->getTimer();
-	mJumpTime = mTimer->getRealTime() - 5000;
+	mJumpTime = mTimer->getRealTime() - 2000;
 	mTurboTime = mTimer->getRealTime();
 
 	PulsarEngine::getInstance()->getBulletWorld()->addAction( this );
@@ -40,6 +44,7 @@ SmallFastTestBouncer::SmallFastTestBouncer() : mTurbo( false ), mTurboPoints( 3 
 SmallFastTestBouncer::~SmallFastTestBouncer()
 {
 	mJumpBar->remove();
+	mTurboBar->remove();
 	delete mBody;
 	PulsarEngine::getInstance()->getBulletWorld()->removeAction( this );
 }
@@ -57,7 +62,7 @@ void SmallFastTestBouncer::startAction(int num)
 
 void SmallFastTestBouncer::jump()
 {
-	if( mTimer->getRealTime() - mJumpTime > 5000 )
+	if( mTimer->getRealTime() - mJumpTime > 2000 )
 	{
 		mBody->applyImpulse( Vector( 0, 500, 0 ) );
 		mJumpTime = mTimer->getRealTime();
@@ -78,7 +83,7 @@ void SmallFastTestBouncer::move(bool up, bool down, bool left, bool right)
 
 void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
-	float jumpScale = (float)( mTimer->getRealTime() - mJumpTime ) / 5000.f;
+	float jumpScale = (float)( mTimer->getRealTime() - mJumpTime ) / 2000.f;
 	if( jumpScale < 1.f )
 	{
 		mJumpBar->setSize( irr::core::dimension2df( jumpScale * 3, 0.4f ) );

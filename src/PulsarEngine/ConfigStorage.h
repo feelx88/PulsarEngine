@@ -76,7 +76,7 @@ public:
 
 	template <class T>
 	T& getN( int index, String sName )
-	{
+	{			
 		if( m_bAlwaysGetRecursive )
 			return getRecursiveN<T>( index, sName );
 
@@ -302,6 +302,7 @@ public:
 	ConfigStorage *addSubSection( String sName, ConfigStorage *pSubSection );
 
 	ConfigStorage *getSubSection( String sName );
+	ConfigStorage *getSubSectionN( int index, String sName );
 	
 	void setNoSubSections( bool enabled = true );
 
@@ -327,7 +328,7 @@ public:
 	}
 
 private:
-
+	
 	void parseXMLReader( irr::io::IrrXMLReader *pXML );
 
 	ValueMap m_mValues;

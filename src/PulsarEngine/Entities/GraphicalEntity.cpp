@@ -21,6 +21,8 @@
 
 #include "../Irrlicht_using.h"
 
+#include "../PulsarEngine.h"
+
 using namespace pulsar;
 
 GraphicalEntity::GraphicalEntity( unsigned int iID, Vector pos, Vector rot )
@@ -60,15 +62,15 @@ void GraphicalEntity::createSceneNodeFromPrimitive(
 	switch( primType ) //TODO: Add all primitives
 	{
 		case EPEP_BOX:
-		{
 			m_pConfig->set<String>( "Shape", "$Box" );
 			break;
-		}
 		case EPEP_SPHERE:
-		{
 			m_pConfig->set<String>( "Shape", "$Sphere" );
 			break;
-		}
+		case EPEP_EMPTY:
+			m_pConfig->set<String>( "Shape", "$Empty" );
+			break;
+		
 		default:
 			return;
 	}
@@ -126,21 +128,57 @@ void GraphicalEntity::createSceneNode()
 
 	String sPrimtive = m_pConfig->get<String>( "Shape", "" );
 
+	int parentID = m_pConfig->get<int>( "Parent", 0 );
+	ISceneNode *parent = 0;
+
+	if( parentID )
+	{
+		GraphicalEntity *e = dynamic_cast<GraphicalEntity*> (
+			PulsarEngine::getInstance()->getToolKit<EntityToolKit>()
+			->getEntity( parentID ) );
+		if( e )
+			parent = e->getSceneNode();
+	}
+
 	//Primitive?
 	if( sPrimtive != "" && !m_pConfig->varExists( "ModelFileName" ) )
 	{
+		IAnimatedMesh *mesh = 0;
 		if( sPrimtive == "$Box" )
-			m_pSceneNode = getSceneManager()->addCubeSceneNode( 1.0f );
+			 mesh = new SAnimatedMesh( getSceneManager()->
+				getGeometryCreator()->createCubeMesh(
+				m_pConfig->get<Vector>( "Size", Vector( 1.0f ) ) ) );
 		else if( sPrimtive == "$Sphere" )
-			m_pSceneNode = getSceneManager()->addSphereSceneNode( 1.0f, 64 );
-		
-		if( m_pSceneNode )
-			m_pSceneNode->setScale( m_pConfig->get<Vector>( "Size", Vector( 1.0f ) ) );
+			mesh = new SAnimatedMesh( getSceneManager()->
+				getGeometryCreator()->createSphereMesh(
+				m_pConfig->get<Vector>( "Size", Vector( 1.0f ) ).X ));
+		else if( sPrimtive == "$Empty" )
+			m_pSceneNode = getSceneManager()->addDummyTransformationSceneNode();
+
+		if( mesh )
+			m_pSceneNode = getSceneManager()->addAnimatedMeshSceneNode( mesh );
 	}
 	else
 	{
 		m_pSceneNode = getSceneManager()->addAnimatedMeshSceneNode( getSceneManager()->getMesh(
 			m_pConfig->get<String>( "ModelFileName", "" ) ) );
+	}
+
+	if( m_pSceneNode )
+	{
+		if( parent )
+			m_pSceneNode->setParent( parent );
+
+		if( m_pConfig->get<bool>( "CastShadows", false ) && sPrimtive != "$Empty" )
+		{
+			IAnimatedMeshSceneNode *node =
+				static_cast<IAnimatedMeshSceneNode*>( m_pSceneNode );
+				
+			if( node )
+				node->addShadowVolumeSceneNode();
+		}
+
+		m_pSceneNode->setScale( m_pConfig->get<Vector>( "Scale", Vector( 1.0f ) ) );
 	}
 	
 	setPosition( m_pConfig->get<Vector>( "Position", Vector() ) );

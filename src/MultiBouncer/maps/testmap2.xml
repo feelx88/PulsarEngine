@@ -116,6 +116,7 @@
 			<Bool Name="CastShadows">True</Bool>
 		</DynamicEntity>
 
+		<!--Balls-->
 		<DynamicEntity Name="Ball">
 			<String Name="Shape">$Sphere</String>
 			<Vector Name="Size">0.5,0.5,0.5</Vector>
@@ -136,7 +137,15 @@
 			<Vector Name="Position">-10,13,0</Vector>
 			<Bool Name="CastShadows">True</Bool>
 		</DynamicEntity>
+
+		<!--Borders-->
+		<GhostSensorEntity Name="Border">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">200,1,200</Vector>
+			<Vector Name="Position">0,-10,0</Vector>
+		</GhostSensorEntity>
 		
+		<!--Other-->
 		<DynamicEntity Name="Obstacle">
 			<String Name="Shape">$Box</String>
 			<Vector Name="Size">50,5,10</String>

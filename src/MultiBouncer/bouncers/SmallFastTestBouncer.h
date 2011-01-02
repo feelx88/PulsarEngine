@@ -8,7 +8,7 @@ class SmallFastTestBouncer : public IBouncer
 {
 
 public:
-	SmallFastTestBouncer();
+	SmallFastTestBouncer( int num );
 	virtual ~SmallFastTestBouncer();
 	
 	virtual void spawn(Vector position, Vector rotation);
@@ -26,7 +26,7 @@ private:
 	bool mTurbo;
 	int mTurboPoints;
 	unsigned int mJumpTime, mTurboTime;
-	irr::scene::IBillboardSceneNode *mJumpBar, *mTurboBar;
+	irr::scene::IBillboardSceneNode *mJumpBar, *mTurboBar, *mPlayerNum;
 };
 
 #endif // SMALLFASTTESTBOUNCER_H

@@ -4,7 +4,7 @@
 
 using namespace pulsar;
 
-SmallFastTestBouncer::SmallFastTestBouncer() : mTurbo( false ), mTurboPoints( 3 )
+SmallFastTestBouncer::SmallFastTestBouncer( int num ) : mTurbo( false ), mTurboPoints( 3 )
 {
 	//Create the body
 	ConfigStorage bodyConf;
@@ -33,6 +33,12 @@ SmallFastTestBouncer::SmallFastTestBouncer() : mTurbo( false ), mTurboPoints( 3 
 		0, irr::core::dimension2df( 3, 0.4 ),
 		Vector( 0, 3, 0 ), -1, irr::video::SColor( 255, 255, 0, 0 ),
 		irr::video::SColor( 255, 255, 0, 0 ) );
+
+	irr::video::SColor col( 255, num % 2 ? 255 : 0, 0, num % 2 ? 0 : 255 );
+	mPlayerNum = dev->getSceneManager()->addBillboardTextSceneNode(
+		dev->getGUIEnvironment()->getSkin()->getFont(),
+		irr::core::stringw( num ).c_str(), 0, irr::core::dimension2df( 2, 2 ),
+		Vector(), -1, col, col );
 	
 	mTimer = dev->getTimer();
 	mJumpTime = mTimer->getRealTime() - 2000;
@@ -45,6 +51,7 @@ SmallFastTestBouncer::~SmallFastTestBouncer()
 {
 	mJumpBar->remove();
 	mTurboBar->remove();
+	mPlayerNum->remove();
 	delete mBody;
 	PulsarEngine::getInstance()->getBulletWorld()->removeAction( this );
 }
@@ -53,6 +60,8 @@ void SmallFastTestBouncer::spawn(Vector position, Vector rotation)
 {
 	mBody->setPosition( position );
 	mBody->setRotation( rotation );
+
+	mBody->getConfig()->set<Vector>( "Position", position );
 }
 
 void SmallFastTestBouncer::startAction(int num)
@@ -99,10 +108,11 @@ void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScal
 		mTurboBar->setColor( irr::video::SColor( 255, 255, 0, 0 ) );
 	}
 	else
-		mJumpBar->setColor( irr::video::SColor( 255, 0, 255, 0 ) );
+		mTurboBar->setColor( irr::video::SColor( 255, 0, 255, 0 ) );
 
 	mJumpBar->setPosition( mBody->getPosition() + Vector( 0, 4, 0 ) );
 	mTurboBar->setPosition( mBody->getPosition() + Vector( 0, 4.9, 0 ) );
+	mPlayerNum->setPosition( mBody->getPosition() + Vector( -2.2, 4, 0 ) );
 
 	if( mTurbo )
 	{

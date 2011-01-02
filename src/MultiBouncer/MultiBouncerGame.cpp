@@ -76,9 +76,10 @@ void MultiBouncerGame::initGUI()
 	m_MainMenu->setDraggable( false );
 	m_MainMenu->setDrawTitlebar( false );
 
-	//Add a checkbox to enable the wiimotes
-	mUseWiimotes = gui->addCheckBox( false, recti( 10, 10, 40, 40 ),
-		m_MainMenu, -1, L"Use Wiimotes?" );
+	//Add the reconnect button
+	mReconnectButton = gui->addButton( recti( 10, 10, 410, 60 ),
+		m_MainMenu, -1, L"(Re)connect wiimotes" );
+	mReconnectButton->setVisible( m_Engine->getConfig()->get<bool>( "UseWiimotes", false ) );
 	
 	//Add the bouncer list
 	m_MapList = gui->addListBox( recti( W4, H4, 3 * W4, 3 * H4 ), 
@@ -201,9 +202,28 @@ ControlCallback*** MultiBouncerGame::loadControls( ConfigStorage* input,
 
 		numPlayerControls++;
 	}
+	callback[numPlayerControls] = 0;
 	return callback;
 }
 
+wiimote** MultiBouncerGame::connectWiimotes( int& connected )
+{
+	wiimote **wiimotes;
+	connected = 0;
+	wiimotes = wiiuse_init( 32 );
+	int found = wiiuse_find( wiimotes, 32, 5 );
+	connected = wiiuse_connect( wiimotes, 32 );
+
+	for( int x = 0; x < found; x++ )
+	{
+		wiiuse_set_leds( wiimotes[x], ( x + 1 ) * 16 % 64 );
+		wiiuse_rumble( wiimotes[x], 1 );
+		usleep( 200000 );
+		wiiuse_rumble( wiimotes[x], 0 );
+	}
+
+	return wiimotes;
+}
 
 int MultiBouncerGame::run()
 {
@@ -217,7 +237,28 @@ int MultiBouncerGame::run()
 	ScriptToolKit *scriptTK = m_Engine->getToolKit<ScriptToolKit>();
 	lua_State *lua = scriptTK->getLuaState();
 
-	ControlCallback ***callback = loadControls( input, scriptTK, evt );
+	bool useWiimotes = m_Engine->getConfig()->get<bool>( "UseWiimotes", false);
+	
+	ControlCallback ***callback = 0;
+	wiimote **wiimotes = 0;
+	int connectedWiimotes = 0;
+
+	int maxPlayers = 0;
+	
+	if( !useWiimotes )
+	{
+		callback = loadControls( input, scriptTK, evt );
+		for( ; maxPlayers < 32; maxPlayers++ )
+		{
+			if( callback[maxPlayers] == 0 )
+				break;
+		}
+	}
+	/*else
+	{
+		connectedWiimotes = connectWiimotes( wiimotes );
+		maxPlayers = connectedWiimotes;
+	}*/
 	
 	//Create a callback for the quit key
 	struct : public ICallback {
@@ -263,6 +304,12 @@ int MultiBouncerGame::run()
 		int points;
 		DynamicEntity **balls;
 	} blueGoalCallback;
+
+	struct : public ICallback {
+		void onTrigger(Value* val){
+			static_cast<DynamicEntity*>( val->getAs<Entity*>() )->reset();
+		}
+	} borderCallback;
 	
 	bool running = true;
 	
@@ -292,9 +339,15 @@ int MultiBouncerGame::run()
 				break;
 			
 			//If a new Map gets selected, change the max player limit
-			if( selection > -1 && prevSelection != selection )
-				m_PlayerCounter->setRange( 1.f,
-					m_MapData.at( selection )->get<int>( "MaxPlayers" ) );
+			if( selection > -1 && prevSelection != selection && maxPlayers > 0 )
+				m_PlayerCounter->setRange( 1.f, std::min( maxPlayers, 
+					m_MapData.at( selection )->get<int>( "MaxPlayers" ) ) );
+
+			if( mReconnectButton->isPressed() )
+			{
+				wiimotes = connectWiimotes( connectedWiimotes );
+				maxPlayers = connectedWiimotes;
+			}
 			
 			prevSelection = selection;
 			
@@ -312,9 +365,6 @@ int MultiBouncerGame::run()
 		ConfigStorage map( true );
 		map.parseXMLFile( selectedMap, "Map" );
 		map.setAlwaysGetRecursive();
-
-		/*m_Engine->getIrrlichtDevice()->getSceneManager()->setAmbientLight(
-			SColorf( 0.3f, 0.3f, 0.3f ) );*/
 
 		std::vector<ILightSceneNode*> lights;
 
@@ -350,9 +400,12 @@ int MultiBouncerGame::run()
 
 		for( int x = 0; x < numPlayers; x++ )
 		{
-			players[x] = new SmallFastTestBouncer();
-			for( int y = 0; y < 7; y++ )
-				callback[x][y]->setBouncer( players[x] );
+			players[x] = new SmallFastTestBouncer( x + 1 );
+			if( !useWiimotes )
+			{
+				for( int y = 0; y < 7; y++ )
+					callback[x][y]->setBouncer( players[x] );
+			}
 
 			Value *player = new Value( *(SmallFastTestBouncer*)players[x] );
 			player->setAutoDestroy( true );
@@ -389,22 +442,53 @@ int MultiBouncerGame::run()
 
 		redGoalCallback.balls = ballEntity;
 		blueGoalCallback.balls = ballEntity;
+
+		//Create borders
+		for( int x = 0; x < map.countVars( "Border" ); x++ )
+			map.getN<GhostSensorEntity>( x, "Border" ).setOnEnterCallback( &borderCallback );
 		
 		//Start simulation
 		m_Engine->setSimulationState( true );
 
+		bool toMenu = false;
+		
 		//Standard loop again
-		while( m_Engine->run() )
+		while( m_Engine->run() && !toMenu )
 		{
 			m_Engine->beginDrawing();
 			
 			if( evt->keyState( KEY_F12 ) )
-				break;
-
+				toMenu = true;
+			
 			String points( redGoalCallback.points );
 			points += " : ";
 			points += blueGoalCallback.points;
 			mScoreCounter->setText( irr::core::stringw( points ).c_str() );
+
+			if( useWiimotes )
+			{
+				wiiuse_poll( wiimotes, 32 );
+				for( int x = 0; x < numPlayers; x++ )
+				{
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_B ) )
+						players[x]->jump();
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_ONE ) )
+						players[x]->startAction( 1 );
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_TWO ) )
+						players[x]->startAction( 2 );
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_HOME ) )
+						toMenu = true;
+
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_DOWN ) )
+						players[x]->move( false, false, false, true );
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_UP ) )
+						players[x]->move( false, false, true, false );
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_RIGHT ) )
+						players[x]->move( true, false, false, false );
+					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_LEFT ) )
+						players[x]->move( false, true, false, false );
+				}
+			}
 
 			m_Engine->endDrawing();
 		}
@@ -419,6 +503,8 @@ int MultiBouncerGame::run()
 	for( int x = 0; x < 7; x++ )
 		delete[] callback[x];
 	delete[] callback;
+
+	wiiuse_cleanup( wiimotes, 32 );
 
 	return EXIT_SUCCESS;
 }

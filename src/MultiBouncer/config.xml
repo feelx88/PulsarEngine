@@ -16,6 +16,8 @@
 	<Bool Name="ShowConsole">False</Bool>
 </Section>
 <Section Name="Input">
+	<Bool Name="UseWiimotes">Truxe</Bool>
+	
 	<String Name="Exit">ESCAPE</String>
 	
 	<String Name="PlayerUp-1">W</String>

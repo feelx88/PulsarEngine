@@ -7,6 +7,7 @@
 
 #include "bouncers/SmallFastTestBouncer.h"
 #include "ControlCallback.h"
+#include "../wiiuse_v0.12/src/wiiuse.h"
 
 class MultiBouncerGame
 {
@@ -22,13 +23,13 @@ private:
 	void initGUI();
 	ControlCallback ***loadControls( pulsar::ConfigStorage *input,
 		pulsar::ScriptToolKit *scriptTK, pulsar::PulsarEventReceiver *evt );
+	wiimote **connectWiimotes( int &connected );
 	
 	//Menu gui items
 	irr::gui::IGUIWindow *m_MainMenu;
 	irr::gui::IGUIListBox *m_MapList;
-	irr::gui::IGUIButton *m_OkButton;
+	irr::gui::IGUIButton *m_OkButton, *mReconnectButton;
 	irr::gui::IGUISpinBox *m_PlayerCounter;
-	irr::gui::IGUICheckBox *mUseWiimotes;
 	
 	//Ingame gui items
 	irr::gui::IGUIWindow *mScoreWindow;

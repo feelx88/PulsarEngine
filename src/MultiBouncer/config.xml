@@ -16,31 +16,37 @@
 	<Bool Name="ShowConsole">False</Bool>
 </Section>
 <Section Name="Input">
-	<Bool Name="UseWiimotes">Truxe</Bool>
+	<Bool Name="UseWiimotes">False</Bool>
 	
 	<String Name="Exit">ESCAPE</String>
+
+	<Section Name="Player1">
+		<String Name="Up">W</String>
+		<String Name="Down">S</String>
+		<String Name="Left">A</String>
+		<String Name="Right">D</String>
+		<String Name="Jump">LSHIFT</String>
+		<String Name="Action1">Q</String>
+		<String Name="Action2">E</String>
+	</Section>
 	
-	<String Name="PlayerUp-1">W</String>
-	<String Name="PlayerDown-1">S</String>
-	<String Name="PlayerLeft-1">A</String>
-	<String Name="PlayerRight-1">D</String>
-	<String Name="PlayerJump-1">LSHIFT</String>
-	<String Name="PlayerAction1-1">Q</String>
-	<String Name="PlayerAction2-1">E</String>
-	
-	<String Name="PlayerUp-2">UP</String>
-	<String Name="PlayerDown-2">DOWN</String>
-	<String Name="PlayerLeft-2">LEFT</String>
-	<String Name="PlayerRight-2">RIGHT</String>
-	<String Name="PlayerJump-2">RSHIFT</String>
-	<String Name="PlayerAction1-2">COMMA</String>
-	<String Name="PlayerAction2-2">PERIOD</String>
-	
-	<String Name="PlayerUp-3">NUMPAD5</String>
-	<String Name="PlayerDown-3">NUMPAD2</String>
-	<String Name="PlayerLeft-3">NUMPAD1</String>
-	<String Name="PlayerRight-3">NUMPAD3</String>
-	<String Name="PlayerJump-3">NUMPAD0</String>
-	<String Name="PlayerAction1-3">NUMPAD4</String>
-	<String Name="PlayerAction2-3">NUMPAD6</String>
+	<Section Name="Player2">
+		<String Name="Up">UP</String>
+		<String Name="Down">DOWN</String>
+		<String Name="Left">LEFT</String>
+		<String Name="Right">RIGHT</String>
+		<String Name="Jump">RSHIFT</String>
+		<String Name="Action1">COMMA</String>
+		<String Name="Action2">PERIOD</String>
+	</Section>
+
+	<Section Name="Player3">
+		<String Name="Up">NUMPAD5</String>
+		<String Name="Down">NUMPAD2</String>
+		<String Name="Left">NUMPAD1</String>
+		<String Name="Right">NUMPAD3</String>
+		<String Name="Jump">NUMPAD0</String>
+		<String Name="Action1">NUMPAD4</String>
+		<String Name="Action2">NUMPAD6</String>
+	</Section>
 </Section>

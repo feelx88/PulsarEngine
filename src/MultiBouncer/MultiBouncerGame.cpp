@@ -126,84 +126,51 @@ void MultiBouncerGame::initGUI()
 	mScoreWindow->setVisible( false );
 }
 
-ControlCallback*** MultiBouncerGame::loadControls( ConfigStorage* input,
-	ScriptToolKit* scriptTK, PulsarEventReceiver *evt )
+EKEY_CODE*** MultiBouncerGame::loadControls( ConfigStorage* input,
+	ScriptToolKit* scriptTK )
 {
 	int numPlayerControls = 0;
-	ControlCallback ***callback = new ControlCallback**[32];
-	for( int x = 0; x < 7; x++ )
-		callback[x] = new ControlCallback*[7];
+	EKEY_CODE **codes = new EKEY_CODE*[32];
+	for( int x = 0; x < 32; x++ )
+		codes[x] = new EKEY_CODE[7];
 
 	//Fill the controls
 	//TODO: Maybe a KeyCodeConverter for <KeyCode> elements?
 	for( int x = 0; x < 32; x++ )
 	{
-		String playerUpString = "PlayerUp-";
-		String playerDownString = "PlayerDown-";
-		String playerLeftString = "PlayerLeft-";
-		String playerRightString = "PlayerRight-";
-		String playerJumpString = "PlayerJump-";
-		String playerAction1String = "PlayerAction1-";
-		String playerAction2String = "PlayerAction2-";
-		playerUpString += x + 1;
-		playerDownString += x + 1;
-		playerLeftString += x + 1;
-		playerRightString += x + 1;
-		playerJumpString += x + 1;
-		playerAction1String += x + 1;
-		playerAction2String += x + 1;
+		String sectionName = "Player";
+		sectionName += x + 1;
 
 		try
 		{
-			playerUpString = input->get<String>( playerUpString );
-			playerDownString = input->get<String>( playerDownString );
-			playerLeftString = input->get<String>( playerLeftString );
-			playerRightString = input->get<String>( playerRightString );
-			playerJumpString = input->get<String>( playerJumpString );
-			playerAction1String = input->get<String>( playerAction1String );
-			playerAction2String = input->get<String>( playerAction2String );
+			ConfigStorage *section = input->getSubSection( sectionName );
 
-			callback[x][0] = new ControlCallback( ControlCallback::UP );
-			callback[x][1] = new ControlCallback( ControlCallback::DOWN );
-			callback[x][2] = new ControlCallback( ControlCallback::LEFT );
-			callback[x][3] = new ControlCallback( ControlCallback::RIGHT );
-			callback[x][4] = new ControlCallback( ControlCallback::JUMP );
-			callback[x][5] = new ControlCallback( ControlCallback::ACTION1 );
-			callback[x][6] = new ControlCallback( ControlCallback::ACTION2 );
-
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerUpString ),
-				callback[x][0] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerDownString),
-				callback[x][1] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerLeftString ),
-				callback[x][2] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerRightString ),
-				callback[x][3] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerJumpString ),
-				callback[x][4] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerAction1String ),
-				callback[x][5] );
-			evt->addKeyPressedCallback(
-				scriptTK->getPulsarKeyCode( playerAction2String ),
-				callback[x][6] );
+			codes[x][0] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Up" ) );
+			codes[x][1] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Down" ) );
+			codes[x][2] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Left" ) );
+			codes[x][3] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Right" ) );
+			codes[x][4] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Jump" ) );
+			codes[x][5] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Action1" ) );
+			codes[x][6] = scriptTK->getPulsarKeyCode(
+				section->get<String>( "Action2" ) );
 		}
 		catch( ValueNotFoundException *e )
 		{
-			std::cout << "Ok, there are only " << --x << " player's"
+			std::cout << "Ok, there are only " << x << " player's"
 				<< " keys defined, stop checking now.\n";
 			break;
 		}
 
 		numPlayerControls++;
 	}
-	callback[numPlayerControls] = 0;
-	return callback;
+	codes[numPlayerControls][0] = KEY_KEY_CODES_COUNT;
+	return &codes;
 }
 
 wiimote** MultiBouncerGame::connectWiimotes( int& connected )
@@ -239,7 +206,7 @@ int MultiBouncerGame::run()
 
 	bool useWiimotes = m_Engine->getConfig()->get<bool>( "UseWiimotes", false);
 	
-	ControlCallback ***callback = 0;
+	EKEY_CODE **codes = 0;
 	wiimote **wiimotes = 0;
 	int connectedWiimotes = 0;
 
@@ -247,30 +214,13 @@ int MultiBouncerGame::run()
 	
 	if( !useWiimotes )
 	{
-		callback = loadControls( input, scriptTK, evt );
+		codes = *loadControls( input, scriptTK );
 		for( ; maxPlayers < 32; maxPlayers++ )
 		{
-			if( callback[maxPlayers] == 0 )
+			if( codes[maxPlayers][0] == KEY_KEY_CODES_COUNT )
 				break;
 		}
 	}
-	/*else
-	{
-		connectedWiimotes = connectWiimotes( wiimotes );
-		maxPlayers = connectedWiimotes;
-	}*/
-	
-	//Create a callback for the quit key
-	struct : public ICallback {
-		virtual void onTrigger( Value* val ){
-			exit( EXIT_SUCCESS );
-		}
-	} exitCallback;
-
-	EKEY_CODE exitKey = scriptTK->getPulsarKeyCode( 
-		input->get<String>( "Exit", "ESCAPE" ) );
-	
-	evt->addKeyPressedCallback( exitKey, &exitCallback );
 
 	//Callbacks for the goals
 	struct : public ICallback {
@@ -310,8 +260,22 @@ int MultiBouncerGame::run()
 			static_cast<DynamicEntity*>( val->getAs<Entity*>() )->reset();
 		}
 	} borderCallback;
-	
+
 	bool running = true;
+
+	//Create a callback for the quit key
+	struct : public ICallback {
+		virtual void onTrigger( Value* val ){
+			*running = false;
+		}
+		bool *running;
+	} exitCallback;
+	exitCallback.running = &running;
+
+	EKEY_CODE exitKey = scriptTK->getPulsarKeyCode(
+		input->get<String>( "Exit", "ESCAPE" ) );
+
+	evt->addKeyPressedCallback( exitKey, &exitCallback );
 	
 	//Loop until the game is cancelled
 	while( m_Engine->run() && running )
@@ -328,7 +292,7 @@ int MultiBouncerGame::run()
 		int prevSelection = -1;
 		
 		//Standard loop
-		while( m_Engine->run() )
+		while( m_Engine->run() && running )
 		{
 			m_Engine->beginDrawing();
 			
@@ -353,6 +317,9 @@ int MultiBouncerGame::run()
 			
 			m_Engine->endDrawing();
 		}
+
+		if( !running )
+			break;
 		
 		//Hide menu
 		m_MainMenu->setVisible( false );
@@ -401,11 +368,8 @@ int MultiBouncerGame::run()
 		for( int x = 0; x < numPlayers; x++ )
 		{
 			players[x] = new SmallFastTestBouncer( x + 1 );
-			if( !useWiimotes )
-			{
-				for( int y = 0; y < 7; y++ )
-					callback[x][y]->setBouncer( players[x] );
-			}
+			players[x]->setControls( codes[x][0], codes[x][1], codes[x][2],
+				codes[x][3], codes[x][4], codes[x][5], codes[x][6] );
 
 			Value *player = new Value( *(SmallFastTestBouncer*)players[x] );
 			player->setAutoDestroy( true );
@@ -451,18 +415,29 @@ int MultiBouncerGame::run()
 		m_Engine->setSimulationState( true );
 
 		bool toMenu = false;
+
+		int sleeptime = 0;
 		
 		//Standard loop again
-		while( m_Engine->run() && !toMenu )
+		while( m_Engine->run() && !toMenu && running )
 		{
 			m_Engine->beginDrawing();
 			
 			if( evt->keyState( KEY_F12 ) )
 				toMenu = true;
+
+			if( evt->keyState( KEY_F5 ) )
+				sleeptime = 0;
+			if( evt->keyState( KEY_F6 ) )
+				sleeptime = 40000;
+
+			usleep(sleeptime);
 			
 			String points( redGoalCallback.points );
 			points += " : ";
 			points += blueGoalCallback.points;
+			points += " FPS: ";
+			points += m_Engine->getIrrlichtDevice()->getVideoDriver()->getFPS();
 			mScoreCounter->setText( irr::core::stringw( points ).c_str() );
 
 			if( useWiimotes )
@@ -478,7 +453,6 @@ int MultiBouncerGame::run()
 						players[x]->startAction( 2 );
 					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_HOME ) )
 						toMenu = true;
-
 					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_DOWN ) )
 						players[x]->move( false, false, false, true );
 					if( IS_PRESSED( wiimotes[x], WIIMOTE_BUTTON_UP ) )
@@ -500,10 +474,10 @@ int MultiBouncerGame::run()
 			( *x )->remove();
 	}
 
-	for( int x = 0; x < 7; x++ )
-		delete[] callback[x];
-	delete[] callback;
-
+	for( int x = 0; x < 32; x++ )
+		delete[] codes[x];
+	delete[] codes;
+	
 	wiiuse_cleanup( wiimotes, 32 );
 
 	return EXIT_SUCCESS;

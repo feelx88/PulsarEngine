@@ -1,4 +1,4 @@
- /*
+# /*
     Copyright 2010 Felix Müller
 
     This file is part of the PulsarEngine.
@@ -46,6 +46,44 @@ void EntityToolKit::init( Value initParam )
 		PulsarEngine::getInstance()->getIrrlichtDevice()->getSceneManager();
 }
 
+void EntityToolKit::tickUpdate()
+{
+	int collisionPairCount = mCollisionPairs.size();
+
+	if( collisionPairCount == 0 )
+		return;
+	
+	for ( int x = 0; x < m_pBulletWorld->getDispatcher()->getNumManifolds(); x++)
+	{
+		btPersistentManifold* manifold =
+			m_pBulletWorld->getDispatcher()->getManifoldByIndexInternal( x );
+
+		btCollisionObject *ob0 =
+			static_cast<btCollisionObject*>( manifold->getBody0() );
+		btCollisionObject *ob1 =
+			static_cast<btCollisionObject*>( manifold->getBody1() );
+
+		for( int x = 0; x < collisionPairCount; x++ )
+		{
+			CollisionPairCallbackStorage *storage = mCollisionPairs.at( x );
+			if( ( storage->mObject0 == ob0 || storage->mObject0 == ob1 ) &&
+				( storage->mObject0 == ob1 || storage->mObject1 == ob1 ) )
+				storage->mCallback->onTrigger( new Value( manifold, "btPersistentManifold" ) );
+		}
+
+		/*for ( int y = 0;  y < pManifold->getNumContacts(); y++)
+		{
+			btManifoldPoint& pt = pManifold->getContactPoint( y );
+			static_cast<ContactPointStorage*>( pBody0->getUserPointer() )->addContactPoint( pBody1,
+				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ),
+				Vector( pt.getPositionWorldOnB().getX(), pt.getPositionWorldOnB().getY(), pt.getPositionWorldOnB().getZ() ) );
+			static_cast<ContactPointStorage*>( pBody1->getUserPointer() )->addContactPoint( pBody0,
+				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ),
+				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ) );
+		}*/
+	}
+}
+
 unsigned int EntityToolKit::addEntity( Entity *pEntity )
 {
 	unsigned int iID  = 1;
@@ -83,6 +121,30 @@ Entity *pulsar::EntityToolKit::getEntity( unsigned int iID )
 {
 	return this->m_mEntities[iID];
 }
+
+CollisionPairCallbackStorage* EntityToolKit::addCollisionCallback( Entity* entity0,
+	Entity* entity1, ICallback* callback )
+{
+	btCollisionObject *ob0 = entity0->getCollisionObject();
+	btCollisionObject *ob1 = entity1->getCollisionObject();
+	
+	CollisionPairCallbackStorage *storage =
+		new CollisionPairCallbackStorage( ob0, ob1, callback );
+
+	mCollisionPairs.push_back( storage );
+
+	return storage;
+}
+
+void EntityToolKit::removeCollisionCallback( CollisionPairCallbackStorage* callbackStorage )
+{
+	for( int x = 0; x < mCollisionPairs.size(); x++ )
+	{
+		if( mCollisionPairs.at( x ) == callbackStorage )
+			mCollisionPairs.erase( mCollisionPairs.begin() + x );
+	}
+}
+
 
 bool EntityToolKit::rayHitsEntity( Entity* pE, Vector from, Vector to )
 {

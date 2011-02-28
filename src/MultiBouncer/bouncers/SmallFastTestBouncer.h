@@ -25,8 +25,12 @@ private:
 	pulsar::DynamicEntity *mBody;
 	bool mTurbo;
 	int mTurboPoints;
-	unsigned int mJumpTime, mTurboTime;
+	unsigned int mJumpTime;
 	irr::scene::IBillboardSceneNode *mJumpBar, *mTurboBar, *mPlayerNum;
+
+	float mMoveTime, mTurboTime;
+
+	Vector mDirection;
 };
 
 #endif // SMALLFASTTESTBOUNCER_H

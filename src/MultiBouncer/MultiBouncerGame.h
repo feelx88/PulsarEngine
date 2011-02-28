@@ -6,7 +6,6 @@
 #include <boost/filesystem.hpp>
 
 #include "bouncers/SmallFastTestBouncer.h"
-#include "ControlCallback.h"
 #include "../wiiuse_v0.12/src/wiiuse.h"
 
 class MultiBouncerGame
@@ -21,8 +20,8 @@ private:
 
 	void init();
 	void initGUI();
-	ControlCallback ***loadControls( pulsar::ConfigStorage *input,
-		pulsar::ScriptToolKit *scriptTK, pulsar::PulsarEventReceiver *evt );
+	irr::EKEY_CODE ***loadControls( pulsar::ConfigStorage *input,
+		pulsar::ScriptToolKit *scriptTK );
 	wiimote **connectWiimotes( int &connected );
 	
 	//Menu gui items

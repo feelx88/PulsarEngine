@@ -2,6 +2,8 @@
 #define _IBOUNCER_H_
 
 #include "../PulsarEngine/IObject.h"
+#include "../PulsarEngine/ToolKits/PulsarEventReceiver.h"
+#include "../PulsarEngine/PulsarEngine.h"
 
 /**
  * @class IBouncer
@@ -14,7 +16,12 @@ public:
 	 * @brief Standard constructor.
 	 *
 	 **/
-	IBouncer() : IObject(){};
+	IBouncer() : IObject()
+	{
+		mEventReceiver =
+			static_cast<pulsar::PulsarEventReceiver*>( pulsar::PulsarEngine::getInstance()->
+			getIrrlichtDevice()->getEventReceiver() );
+	};
 	
 	/**
 	 * @brief Standard destructor.
@@ -53,12 +60,44 @@ public:
 	 **/
 	virtual void spawn( Vector position, Vector rotation ) = 0;
 
-	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep){};
+	void setControls( irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left,
+		irr::EKEY_CODE right, irr::EKEY_CODE jump, irr::EKEY_CODE action1,
+		irr::EKEY_CODE action2 )
+	{
+		mKeys[0] = up;
+		mKeys[1] = down;
+		mKeys[2] = left;
+		mKeys[3] = right;
+		mKeys[4] = jump;
+		mKeys[5] = action1;
+		mKeys[6] = action2;
+	}
+
+	virtual void updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
+	{
+		if( mEventReceiver->keyState( mKeys[0] ) )
+			move( true, false, false, false );
+		if( mEventReceiver->keyState( mKeys[1] ) )
+			move( false, true, false, false );
+		if( mEventReceiver->keyState( mKeys[2] ) )
+			move( false, false, true, false );
+		if( mEventReceiver->keyState( mKeys[3] ) )
+			move( false, false, false, true );
+		if( mEventReceiver->keyState( mKeys[4] ) )
+			jump();
+		if( mEventReceiver->keyState( mKeys[5] ) )
+			startAction( 1 );
+		if( mEventReceiver->keyState( mKeys[6] ) )
+			startAction( 2 );
+	};
 	
 	virtual void debugDraw(btIDebugDraw* debugDrawer){};
 
 protected:
 	irr::ITimer *mTimer;
+
+	pulsar::PulsarEventReceiver *mEventReceiver;
+	irr::EKEY_CODE mKeys[7];
 };
 
 #endif //_IBOUNCER_H_

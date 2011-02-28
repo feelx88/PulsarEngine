@@ -26,8 +26,28 @@
 #include "../ValueFactory.h"
 #include "../StandardConverters.h"
 
+#include <deque>
+#include <utility>
+
 namespace pulsar
 {
+
+/**
+ * @struct CollisionPairCallbackStorage
+ * @author Felix Müller
+ * @date 27.02.2011
+ * @file EntityToolkit.h
+ * @brief Struct to save Collision pairs and their callbacks.
+**/
+struct CollisionPairCallbackStorage
+{
+	CollisionPairCallbackStorage( btCollisionObject *ob0, btCollisionObject *ob1, ICallback *cb )
+		: mObject0( ob0 ), mObject1( ob1 ), mCallback( cb ){};
+		
+	btCollisionObject *mObject0;
+	btCollisionObject *mObject1;
+	ICallback *mCallback;
+};
 
 /**
  * @class EntityToolKit
@@ -63,6 +83,8 @@ public:
 	 * @param initParam Not used.
 	 */
 	void init( Value initParam );
+
+	virtual void tickUpdate();
 
 	unsigned int createEntity( ConfigStorage *pData );
 
@@ -105,6 +127,28 @@ public:
 	}
 
 	/**
+	 * @brief Add a collision callback.
+	 * Its onTrigger-method gets called if entity0 and entity1 are in contact
+	 * with each other. The parameter of the onTrigger method is the
+	 * btPersistentManifold of the collision.
+	 *
+	 * @param entity0 First Entity to test for contact.
+	 * @param entity1 Second Entity to test for contact.
+	 * @param callback Collision callback.
+	 * @return Pointer to the created CollisionPairCallbackStorage, can be
+	 * used to remove the callback.
+	**/
+	CollisionPairCallbackStorage *addCollisionCallback( Entity *entity0,
+		Entity *entity1, ICallback *callback );
+
+	/**
+	 * @brief Remove the given Callback.
+	 *
+	 * @param callbackStorage Callback to remove.
+	 **/
+	void removeCollisionCallback( CollisionPairCallbackStorage *callbackStorage );
+
+	/**
 	 * @brief Test if the ray with the specified endpoints hits the specified
 	 * Entity.
 	 * @param pEntity Entity to test for.
@@ -131,6 +175,8 @@ protected:
 	std::map<unsigned int, Entity*> m_mEntities;
 	btDynamicsWorld *m_pBulletWorld;
 	irr::scene::ISceneManager *m_pSceneManager;
+
+	std::vector<CollisionPairCallbackStorage*> mCollisionPairs;
 };
 
 }

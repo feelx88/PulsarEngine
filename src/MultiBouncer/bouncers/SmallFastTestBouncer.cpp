@@ -4,7 +4,8 @@
 
 using namespace pulsar;
 
-SmallFastTestBouncer::SmallFastTestBouncer( int num ) : mTurbo( false ), mTurboPoints( 3 )
+SmallFastTestBouncer::SmallFastTestBouncer( int num ) : mTurbo( false ),
+	mTurboPoints( 3 ), mDirection( Vector() ), mMoveTime( 0.f ), mTurboTime( 0.f )
 {
 	//Create the body
 	ConfigStorage bodyConf;
@@ -42,7 +43,6 @@ SmallFastTestBouncer::SmallFastTestBouncer( int num ) : mTurbo( false ), mTurboP
 	
 	mTimer = dev->getTimer();
 	mJumpTime = mTimer->getRealTime() - 2000;
-	mTurboTime = mTimer->getRealTime();
 
 	PulsarEngine::getInstance()->getBulletWorld()->addAction( this );
 }
@@ -80,18 +80,24 @@ void SmallFastTestBouncer::jump()
 
 void SmallFastTestBouncer::move(bool up, bool down, bool left, bool right)
 {
-	float full = mTurbo && mTurboPoints > 0 ? 5.0f : 1.0f;
-	float x = left ? -full : 0.f + right ? full : 0.f;
-	float z = down ? -full : 0.f + up ? full : 0.f;
+	float full = mTurbo && mTurboPoints > 0 ? 25.0f : 10.0f;
+	float x = left ? -full : 0.f + right ? full : 0.f + mDirection.X;
+	float z = down ? -full : 0.f + up ? full : 0.f + mDirection.Z;
 
-	if( x + z > full )
-		x = z = full / 2.f;
+	if( x > full )
+		x = full;
+	if( z > full )
+		z = full;
 	
-	mBody->applyImpulse( Vector( x, 0, z ) );
+	mDirection.set( x, 0, z );
+	mBody->applyImpulse( mDirection );
 }
 
 void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScalar deltaTimeStep)
 {
+	IBouncer::updateAction( collisionWorld, deltaTimeStep );
+	mDirection.set( 0.f, 0.f, 0.f );
+		
 	float jumpScale = (float)( mTimer->getRealTime() - mJumpTime ) / 2000.f;
 	if( jumpScale < 1.f )
 	{
@@ -102,7 +108,7 @@ void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScal
 		mJumpBar->setColor( irr::video::SColor( 255, 0, 255, 0 ) );
 
 	float turboScale = mTurboPoints / 3.f;
-	if( turboScale < 1.f )
+	if( turboScale < 0.5f )
 	{
 		mTurboBar->setSize( irr::core::dimension2df( turboScale * 3, 0.4f ) );
 		mTurboBar->setColor( irr::video::SColor( 255, 255, 0, 0 ) );
@@ -116,14 +122,22 @@ void SmallFastTestBouncer::updateAction(btCollisionWorld* collisionWorld, btScal
 
 	if( mTurbo )
 	{
-		if( mTurboTime > 0 && mTurboTime % 1000 == 0 )
+		if( mTurboTime >= 1.f && mTurboPoints > 0 )
+		{
 			mTurboPoints--;
+			mTurboTime = 0.f;
+		}
+		else
+			mTurboTime += deltaTimeStep;
 	}
-	/*else
+	else
 	{
-		if( mTurboTime <= 3 && mTurboTime % 1000 == 0 )
+		if( mTurboTime >= 1.f && mTurboPoints <= 3 )
+		{
 			mTurboPoints++;
-	}*/
+			mTurboTime = 0.f;
+		}
+	}
 	
 	mTurbo = false;
 }

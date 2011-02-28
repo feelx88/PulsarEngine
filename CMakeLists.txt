@@ -56,7 +56,6 @@ boost_system
 
 ADD_EXECUTABLE( MultiBouncer
 src/main.cpp
-src/MultiBouncer/ControlCallback.cpp
 src/MultiBouncer/MultiBouncerGame.cpp
 src/MultiBouncer/bouncers/SmallFastTestBouncer.cpp
 )

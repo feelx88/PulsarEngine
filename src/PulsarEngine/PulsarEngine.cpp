@@ -305,7 +305,7 @@ void PulsarEngine::endDrawing()
 
 	m_iStartTime = curTime;
 
-	int dt = m_pTimer->getRealTime() - m_GameLoopTime;
+	unsigned int dt = m_pTimer->getRealTime() - m_GameLoopTime;
 	while( dt >= 32 )
 	{
 		dt -= 32;

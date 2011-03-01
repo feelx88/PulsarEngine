@@ -1,4 +1,4 @@
-# /*
+/*
     Copyright 2010 Felix Müller
 
     This file is part of the PulsarEngine.
@@ -66,21 +66,10 @@ void EntityToolKit::tickUpdate()
 		for( int x = 0; x < collisionPairCount; x++ )
 		{
 			CollisionPairCallbackStorage *storage = mCollisionPairs.at( x );
-			if( ( storage->mObject0 == ob0 || storage->mObject0 == ob1 ) &&
-				( storage->mObject0 == ob1 || storage->mObject1 == ob1 ) )
+			if( ( storage->mObject0 == ob0 && storage->mObject1 == ob1 ) ||
+				( storage->mObject0 == ob1 && storage->mObject1 == ob0 ) )
 				storage->mCallback->onTrigger( new Value( manifold, "btPersistentManifold" ) );
 		}
-
-		/*for ( int y = 0;  y < pManifold->getNumContacts(); y++)
-		{
-			btManifoldPoint& pt = pManifold->getContactPoint( y );
-			static_cast<ContactPointStorage*>( pBody0->getUserPointer() )->addContactPoint( pBody1,
-				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ),
-				Vector( pt.getPositionWorldOnB().getX(), pt.getPositionWorldOnB().getY(), pt.getPositionWorldOnB().getZ() ) );
-			static_cast<ContactPointStorage*>( pBody1->getUserPointer() )->addContactPoint( pBody0,
-				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ),
-				Vector( pt.getPositionWorldOnA().getX(), pt.getPositionWorldOnA().getY(), pt.getPositionWorldOnA().getZ() ) );
-		}*/
 	}
 }
 

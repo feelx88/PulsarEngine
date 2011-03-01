@@ -25,7 +25,6 @@ ADD_LIBRARY( PulsarEngine SHARED
 src/PulsarEngine/IObject.cpp
 src/PulsarEngine/PulsarEngine.cpp
 src/PulsarEngine/ConfigStorage.cpp
-src/PulsarEngine/ContactPointStorage.cpp
 src/PulsarEngine/ValueFactory.cpp
 ### Entities
 src/PulsarEngine/Entities/Entity.cpp

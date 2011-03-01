@@ -21,7 +21,6 @@
 #define __dynamicentity__
 
 #include "GraphicalEntity.h"
-#include "../ContactPointStorage.h"
 
 namespace pulsar
 {
@@ -69,11 +68,6 @@ public:
 
 	bool collidesWith( DynamicEntity* );
 
-	ContactPointStorage* getContactPointStorage()
-	{
-		return m_pContactPoints;
-	}
-
 	virtual btCollisionObject *getCollisionObject()
 	{
 		return m_pRigidBody;
@@ -100,8 +94,6 @@ protected:
 	bool m_bLinearVelocityLimitEnabled, m_bAngularVelocityLimitEnabled;
 
 	bool m_bFrozen;
-
-	ContactPointStorage* m_pContactPoints;
 };
 
 }

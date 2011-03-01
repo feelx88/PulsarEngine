@@ -26,7 +26,6 @@
 #include "ValueFactory.h"
 #include "StandardConverters.h"
 #include "ConfigStorage.h"
-#include "ContactPointStorage.h"
 
 #include "Entities/Entity.h"
 #include "Entities/GraphicalEntity.h"

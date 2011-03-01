@@ -297,8 +297,6 @@ public:
 
 			{ "setRotation", dynamicentity_setRotation },
 
-			{ "collidesWith", dynamicentity_collidesWith },
-
 			{ 0, 0 }
 		};
 
@@ -1156,20 +1154,6 @@ public:
 			DYNAMICENTITY );
 
 		LuaBinding::pushPointer<Vector>( pS, new Vector( pE->getPosition() ), VECTOR );
-
-		return 1;
-	}
-
-	static int dynamicentity_collidesWith( lua_State *pS )
-	{
-		DynamicEntity* pE = LuaBinding::toPointer<DynamicEntity>( pS, 1,
-			DYNAMICENTITY );
-		DynamicEntity* pE2 = LuaBinding::toPointer<DynamicEntity>( pS, 2,
-			DYNAMICENTITY );
-
-		bool col = pE->collidesWith( pE2 );
-
-		lua_pushboolean( pS, col );
 
 		return 1;
 	}

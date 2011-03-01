@@ -164,7 +164,7 @@ Entity* EntityToolKit::getEntityInRay( Vector from, Vector to )
 }
 
 DynamicEntity* EntityToolKit::getDynamicEntityInRay( Vector from, Vector to )
-{;
+{
 	btCollisionWorld::ClosestRayResultCallback callback( Entity::convert( from ), Entity::convert( to ) );
 	m_pBulletWorld->rayTest( Entity::convert( from ), Entity::convert( to ), callback );
 

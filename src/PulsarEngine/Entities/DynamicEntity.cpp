@@ -39,7 +39,6 @@ DynamicEntity::~DynamicEntity()
 		s_colEntityRelations.erase( this->m_pRigidBody );
 	}
 	delete m_pRigidBody;
-	delete m_pContactPoints;
 }
 
 void DynamicEntity::loadFromValues( ConfigStorage *pConf )
@@ -295,16 +294,6 @@ void DynamicEntity::reset()
 	updateParameters();
 }
 
-bool DynamicEntity::collidesWith( DynamicEntity* pOther )
-{
-	if( !this->m_pRigidBody )
-		return false;
-
-	btRigidBody* pBody = dynamic_cast<btRigidBody*>( pOther->getCollisionObject() );
-	return static_cast<ContactPointStorage*>(
-		m_pRigidBody->getUserPointer() )->contactWithOtherBody( pBody );
-}
-
 void DynamicEntity::createRigidBody()
 {
 	if( this->m_pRigidBody )
@@ -351,7 +340,4 @@ void DynamicEntity::createRigidBody()
 	this->s_colEntityRelations[this->m_pRigidBody] = this;
 
 	updateParameters();
-
-	m_pContactPoints = new ContactPointStorage( this );
-	m_pRigidBody->setUserPointer( static_cast<void*>( m_pContactPoints ) );
 }

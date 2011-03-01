@@ -34,7 +34,10 @@ GraphicalEntity::GraphicalEntity( unsigned int iID, Vector pos, Vector rot )
 GraphicalEntity::~GraphicalEntity()
 {
 	if( this->m_pSceneNode )
+	{
+		s_nodeEntityRelations.erase( m_pSceneNode );
 		this->m_pSceneNode->remove();
+	}
 }
 
 void GraphicalEntity::loadFromValues( ConfigStorage *pConf )
@@ -124,7 +127,11 @@ Vector GraphicalEntity::getDirection( vector3df direction )
 void GraphicalEntity::createSceneNode()
 {
 	if( this->m_pSceneNode )
+	{
+		s_nodeEntityRelations.erase( m_pSceneNode );
 		this->m_pSceneNode->remove();
+		m_pSceneNode = 0;
+	}
 
 	String sPrimtive = m_pConfig->get<String>( "Shape", "" );
 
@@ -179,6 +186,8 @@ void GraphicalEntity::createSceneNode()
 		}
 
 		m_pSceneNode->setScale( m_pConfig->get<Vector>( "Scale", Vector( 1.0f ) ) );
+
+		s_nodeEntityRelations[m_pSceneNode] = this;
 	}
 	
 	setPosition( m_pConfig->get<Vector>( "Position", Vector() ) );

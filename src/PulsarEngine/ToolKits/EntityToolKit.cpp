@@ -137,7 +137,7 @@ void EntityToolKit::removeCollisionCallback( CollisionPairCallbackStorage* callb
 
 bool EntityToolKit::rayHitsEntity( Entity* pE, Vector from, Vector to )
 {
-	if( pE->isDynamic() )
+	if( pE->getCollisionObject() )
 	{
 		btCollisionWorld::ClosestRayResultCallback callback( Entity::convert( from ), Entity::convert( to ) );
 		m_pBulletWorld->rayTest( Entity::convert( from ), Entity::convert( to ), callback );
@@ -146,11 +146,10 @@ bool EntityToolKit::rayHitsEntity( Entity* pE, Vector from, Vector to )
 	}
 	else
 	{
-		Vector vtmp;
-		irr::core::triangle3df ttmp;
-		//TODO: re-add
-		/*if( m_pSceneManager->getSceneCollisionManager()->getSceneNodeAndCollisionPointFromRay( line3df( from, to ), vtmp, ttmp )
-			== pE->getSceneNode() )*/
+		ISceneNode *node = m_pSceneManager->getSceneCollisionManager()->
+			getSceneNodeFromRayBB( core::line3d<float>( from, to ) );
+
+		if( Entity::getEntity( node ) == pE )
 			return true;
 	}
 	return false;
@@ -158,18 +157,22 @@ bool EntityToolKit::rayHitsEntity( Entity* pE, Vector from, Vector to )
 
 Entity* EntityToolKit::getEntityInRay( Vector from, Vector to )
 {
-	//TODO: search for userdata pointer in irrlicht scene nodes
-	return 0;
+	ISceneNode *node = m_pSceneManager->getSceneCollisionManager()->
+		getSceneNodeFromRayBB( core::line3d<float>( from, to ) );
+		
+	return Entity::getEntity( node );
 }
 
 DynamicEntity* EntityToolKit::getDynamicEntityInRay( Vector from, Vector to )
-{
-	//Entity* pE = 0;
+{;
 	btCollisionWorld::ClosestRayResultCallback callback( Entity::convert( from ), Entity::convert( to ) );
 	m_pBulletWorld->rayTest( Entity::convert( from ), Entity::convert( to ), callback );
+
+	Entity *pE = 0;
 	if( callback.hasHit() )
-		return static_cast<ContactPointStorage*>( callback.m_collisionObject->getUserPointer() )->getEntity();
-	return 0;
+		pE = Entity::getEntity( callback.m_collisionObject );
+	
+	return dynamic_cast<DynamicEntity*>( pE );
 }
 
 }

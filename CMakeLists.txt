@@ -2,16 +2,16 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 CMAKE_POLICY( SET CMP0015 NEW )
 
 #include directories
-SET( IRRLICHT_INCLUDE_DIR "../irrlicht/include" PATH )
-SET( BULLET_INCLUDE_DIR "../bullet/src" PATH )
-SET( LUA_INCLUDE_DIR "../lua/src" PATH )
-SET( BOOST_INCLUDE_DIR "../boost" PATH )
+SET( IRRLICHT_INCLUDE_DIR "../irrlicht/include" CACHE PATH "Irrlicht include directory" )
+SET( BULLET_INCLUDE_DIR "../bullet/src" CACHE PATH "Bullet include directory" )
+SET( LUA_INCLUDE_DIR "../lua/src" CACHE PATH "Lua include directory" )
+SET( BOOST_INCLUDE_DIR "../boost" CACHE PATH "Boost include directory" )
 
 #linker directories
-SET( IRRLICHT_LIB_DIR "../irrlicht/lib/Linux" PATH )
-SET( BULLET_LIB_DIR "../bullet/lib" PATH )
-SET( LUA_LIB_DIR "../boost/lib" PATH )
-SET( BOOST_LIB_DIR "../lua/src" PATH )
+SET( IRRLICHT_LIB_DIR "../irrlicht/lib/Linux" CACHE PATH "Irrlicht library directory" )
+SET( BULLET_LIB_DIR "../bullet/lib" CACHE PATH "Bullet library directoy" )
+SET( LUA_LIB_DIR "../boost/lib" CACHE PATH "Lua library directory" )
+SET( BOOST_LIB_DIR "../lua/src" CACHE PATH "Boost library directory" )
 
 INCLUDE_DIRECTORIES( ${IRRLICHT_INCLUDE_DIR} ${BULLET_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} )
 LINK_DIRECTORIES( ${IRRLICHT_LIB_DIR} ${BULLET_LIB_DIR} ${LUA_LIB_DIR} ${BOOST_LIB_DIR} )
@@ -57,6 +57,10 @@ ADD_CUSTOM_COMMAND( TARGET spacegame POST_BUILD
 
 #MultiBouncer settings
 
+SET( BUILD_MULTIBOUNCER "ON" CACHE BOOL "Build also the test game" )
+
+IF( BUILD_MULTIBOUNCER )
+
 LINK_DIRECTORIES( "../wiiuse/src/release-" )
 INCLUDE_DIRECTORIES( "../wiiuse/src" )
 
@@ -67,3 +71,5 @@ src/MultiBouncer/bouncers/SmallFastTestBouncer.cpp
 )
 
 TARGET_LINK_LIBRARIES( MultiBouncer wiiuse PulsarEngine boost_filesystem )
+
+ENDIF()

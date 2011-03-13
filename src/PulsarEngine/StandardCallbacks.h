@@ -32,15 +32,15 @@ struct ApplyImpulseCallback : public ICallback
 {
 	ApplyImpulseCallback( Vector direction, Vector offset = Vector() )
 		: m_Direction( direction ), m_Offset( offset )
-	{
-	}
+	{}
 
 	void onTrigger( Value *val )
 	{
-		DynamicEntity *dyn = val->getAs<DynamicEntity*>();
-		if( dyn )
+		if( val )
 		{
-			dyn->applyImpulse( m_Direction, m_Offset );
+			DynamicEntity *dyn = val->getAs<DynamicEntity*>();
+			if( dyn )
+				dyn->applyImpulse( m_Direction, m_Offset );
 		}
 	}
 

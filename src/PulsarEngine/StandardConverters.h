@@ -30,7 +30,7 @@
 
 namespace pulsar
 {
-
+	
 namespace StandardConverters
 {
 
@@ -272,9 +272,10 @@ struct SensorEntityTypesConverter : public IValueConverter
 		else
 			pE->loadFromValues( pConf );
 
-		if( pConf->varExists( "Callback" ) )
+		if( pConf->varExists( "Callback" ) && pE )
 		{
 			pE->setCallback( &pConf->get<ICallback>( "Callback" ) );
+			pConf->getValue( "Callback" )->setAutoDestroy( false );
 		}
 
 		return static_cast<void*>( pE );

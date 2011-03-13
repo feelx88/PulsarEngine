@@ -116,6 +116,15 @@
 			<Bool Name="CastShadows">True</Bool>
 		</DynamicEntity>
 
+		<GhostSensorEntity Name="blub">
+			<String Name="Shape">$Box</String>
+			<Vector Name="Size">1,5,1</Vector>
+			<Vector Name="Position">0,7,0</Vector>
+			<ApplyImpulseCallback Name="Callback">
+				<Vector Name="Direction">0,100,0</Vector>
+			</ApplyImpuseCallback>
+		</GhostSensorEntity>
+
 		<!--Balls-->
 		<DynamicEntity Name="Ball">
 			<String Name="Shape">$Sphere</String>

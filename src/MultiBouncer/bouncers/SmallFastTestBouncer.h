@@ -1,7 +1,7 @@
 #ifndef SMALLFASTTESTBOUNCER_H
 #define SMALLFASTTESTBOUNCER_H
 
-#include "../../home/feelx/devel/PulsarEngine/src/MultiBouncer/IBouncer.h"
+#include "../IBouncer.h"
 #include "../../PulsarEngine/Entities/DynamicEntity.h"
 
 class SmallFastTestBouncer : public IBouncer

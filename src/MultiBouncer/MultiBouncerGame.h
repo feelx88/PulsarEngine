@@ -6,7 +6,7 @@
 #include <boost/filesystem.hpp>
 
 #include "bouncers/SmallFastTestBouncer.h"
-#include "../wiiuse_v0.12/src/wiiuse.h"
+#include <wiiuse.h>
 
 class MultiBouncerGame
 {
